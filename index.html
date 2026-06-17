@@ -299,11 +299,11 @@
             width: 240px;
             height: 240px;
             border-radius: 50%;
-            border: 8px solid #1e293b;
+            border: 6px solid #fbbf24;
             position: relative;
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2), inset 0 0 40px rgba(0,0,0,0.5);
             background: #0f172a;
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.15), inset 0 0 40px rgba(0,0,0,0.5);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
         .roulette-wheel.spinning {
             animation: wheelSpin 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
@@ -325,10 +325,17 @@
             color: white;
             border: 1px solid rgba(255,255,255,0.15);
             text-shadow: 0 0 4px rgba(0,0,0,0.8);
+            transition: all 0.3s ease;
         }
         .roulette-wheel .number.red { background: #ef4444; }
         .roulette-wheel .number.black { background: #1e293b; border-color: #475569; }
         .roulette-wheel .number.green { background: #22c55e; }
+        .roulette-wheel .number.winning {
+            transform: scale(1.3) !important;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
+            border-color: #fbbf24;
+            z-index: 100 !important;
+        }
         
         .roulette-pointer {
             position: absolute;
@@ -337,7 +344,8 @@
             transform: translateX(-50%);
             font-size: 32px;
             z-index: 10;
-            filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
+            color: #fbbf24;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
         }
         
         .win-flash {
@@ -353,20 +361,12 @@
             background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
         }
         
-        .bet-display {
-            background: #0f172a;
-            border-radius: 12px;
-            padding: 10px 16px;
-            border: 1px solid #334155;
-            color: #94a3b8;
-        }
-        
         @media (max-width: 768px) {
             .calendar-day { min-height: 60px; font-size: 12px; }
             .slot-reel { font-size: 48px; width: 60px; padding: 6px 0; }
-            .roulette-wheel-container { width: 180px; height: 180px; }
-            .roulette-wheel { width: 180px; height: 180px; }
-            .roulette-wheel .number { width: 22px; height: 22px; font-size: 8px; }
+            .roulette-wheel-container { width: 200px; height: 200px; }
+            .roulette-wheel { width: 200px; height: 200px; }
+            .roulette-wheel .number { width: 24px; height: 24px; font-size: 8px; }
             .roulette-pointer { font-size: 24px; top: -10px; }
         }
     </style>
@@ -1393,28 +1393,40 @@
             document.getElementById('selected-day-events').classList.remove('hidden');
         }
 
-        // ==================== CASINO FUNCTIONS ====================
-        // Genera la ruota della roulette
+        // ==================== ROULETTE WHEEL ====================
         function generateRouletteWheel() {
             const wheel = document.getElementById('roulette-wheel');
             if (!wheel) return;
             
-            const rouletteOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+            // Numeri in ordine realistico
+            const numbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+            
             const colors = {
-                0: 'green', 32: 'red', 15: 'black', 19: 'red', 4: 'black', 21: 'red', 2: 'black', 25: 'red', 17: 'black', 34: 'red', 6: 'black', 27: 'red', 13: 'black', 36: 'red', 11: 'black', 30: 'red', 8: 'black', 23: 'red', 10: 'black',
-                5: 'red', 24: 'black', 16: 'red', 33: 'black', 1: 'red', 20: 'black', 14: 'red', 31: 'black', 9: 'red', 22: 'black', 18: 'red', 29: 'black', 7: 'red', 28: 'black', 12: 'red', 35: 'black', 3: 'red', 26: 'black'
+                0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black',
+                7: 'red', 8: 'black', 9: 'red', 10: 'black', 11: 'red', 12: 'black',
+                13: 'red', 14: 'black', 15: 'red', 16: 'black', 17: 'red', 18: 'black',
+                19: 'red', 20: 'black', 21: 'red', 22: 'black', 23: 'red', 24: 'black',
+                25: 'red', 26: 'black', 27: 'red', 28: 'black', 29: 'red', 30: 'black',
+                31: 'red', 32: 'black', 33: 'red', 34: 'black', 35: 'red', 36: 'black'
             };
-            const angleStep = 360 / rouletteOrder.length;
+            
             wheel.innerHTML = '';
-            rouletteOrder.forEach((num, index) => {
-                const angle = index * angleStep;
+            
+            const numCount = numbers.length;
+            const angleStep = 360 / numCount;
+            const radius = 85;
+            
+            numbers.forEach((num, index) => {
+                const angle = (index * angleStep) - 90;
+                const rad = angle * Math.PI / 180;
+                const x = radius * Math.cos(rad);
+                const y = radius * Math.sin(rad);
                 const color = colors[num] || 'green';
+                
                 const div = document.createElement('div');
                 div.className = `number ${color}`;
                 div.textContent = num;
-                const radius = 90;
-                const x = radius * Math.sin(angle * Math.PI / 180);
-                const y = -radius * Math.cos(angle * Math.PI / 180);
+                div.dataset.number = num;
                 div.style.cssText = `
                     position: absolute;
                     top: calc(50% + ${y}px - 15px);
@@ -1429,14 +1441,18 @@
                     font-size: 10px;
                     color: white;
                     background: ${color === 'red' ? '#ef4444' : color === 'black' ? '#1e293b' : '#22c55e'};
-                    border: 1px solid rgba(255,255,255,0.15);
+                    border: 2px solid rgba(255,255,255,0.15);
                     text-shadow: 0 0 4px rgba(0,0,0,0.8);
+                    box-shadow: 0 0 8px rgba(0,0,0,0.3);
                     z-index: ${num === 0 ? 2 : 1};
+                    transition: all 0.3s ease;
+                    transform: rotate(${angle}deg);
                 `;
                 wheel.appendChild(div);
             });
         }
 
+        // ==================== CASINO FUNCTIONS ====================
         // Slot Machine Realistica
         async function playSlotRealistic() {
             const bet = parseFloat(document.getElementById('slot-bet').value);
@@ -1452,15 +1468,12 @@
             btn.textContent = '🔄 GIRANDO...';
             
             const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🎰', '⭐'];
-            let spinCount = 0;
             const spinInterval = setInterval(() => {
                 reel1.textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 reel2.textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 reel3.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                spinCount++;
             }, 70);
             
-            // Chiamata al database dopo 1.5 secondi
             setTimeout(async () => {
                 clearInterval(spinInterval);
                 
@@ -1500,7 +1513,7 @@
             }, 1500);
         }
 
-        // Roulette Realistica
+        // Roulette Realistica - Sincronizzata con il database
         async function playRouletteRealistic() {
             const bet = parseFloat(document.getElementById('roulette-bet').value);
             const betType = document.getElementById('roulette-bet-type').value;
@@ -1521,6 +1534,11 @@
             resultDisplay.innerHTML = '🎡 La ruota gira...';
             resultDisplay.className = 'text-center text-lg font-bold text-amber-400 mb-4';
             
+            // Rimuovi evidenziazioni precedenti
+            document.querySelectorAll('.roulette-wheel .number.winning').forEach(el => {
+                el.classList.remove('winning');
+            });
+            
             setTimeout(async () => {
                 const { data, error } = await _supabase.rpc('play_roulette', {
                     p_user_id: currentUser.id,
@@ -1538,8 +1556,18 @@
                     return;
                 }
                 
+                // Mostra il numero vincente
+                const winningNumber = data.winning_number;
                 const colorEmoji = data.color === 'red' ? '🔴' : data.color === 'black' ? '⚫' : '🟢';
-                resultDisplay.innerHTML = `🎯 Numero: <strong>${data.winning_number}</strong> ${colorEmoji}`;
+                
+                // Evidenzia il numero vincente sulla ruota
+                document.querySelectorAll('.roulette-wheel .number').forEach(el => {
+                    if (parseInt(el.dataset.number) === winningNumber) {
+                        el.classList.add('winning');
+                    }
+                });
+                
+                resultDisplay.innerHTML = `🎯 Numero: <strong>${winningNumber}</strong> ${colorEmoji}`;
                 
                 if (data.result === 'win') {
                     resultDisplay.className = 'text-center text-lg font-bold text-green-400 mb-4 win-flash';

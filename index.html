@@ -34,340 +34,93 @@
             --shadow: 0 4px 24px rgba(0,0,0,0.3);
         }
         
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-        
-        .glass {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-        }
-        
+        body { background: var(--bg-primary); color: var(--text-primary); transition: all 0.3s ease; }
+        .glass { background: var(--bg-card); backdrop-filter: blur(12px); border: 1px solid var(--border-color); box-shadow: var(--shadow); }
         .gradient-brand { background: var(--gradient-main); }
         .gradient-gold { background: var(--gradient-gold); }
         
-        .role-badge {
-            font-size: 10px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
+        .role-badge { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 600; letter-spacing: 0.3px; }
         .role-Non-Classificato { background: #e2e8f0; color: #475569; }
         .role-Mercante-anziano { background: #dbeafe; color: #1e40af; }
         .role-Vicepresidente { background: #fef9c3; color: #854d0e; }
         .role-Presidente { background: #fee2e2; color: #991b1b; }
         .role-Gold { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
         
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.2);
-        }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.2); }
         
-        .calendar-day {
-            min-height: 80px;
-            border: 1px solid var(--border-color);
-            padding: 6px;
-            background: var(--bg-card);
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-        .calendar-day.today {
-            background: #eef2ff;
-            border: 2px solid #6366f1;
-        }
-        .calendar-day.has-event {
-            background: #fef3c7;
-        }
-        .calendar-day:hover {
-            transform: scale(1.02);
-            z-index: 2;
-        }
-        .event-dot {
-            width: 8px;
-            height: 8px;
-            background: #6366f1;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        .calendar-day { min-height: 80px; border: 1px solid var(--border-color); padding: 6px; background: var(--bg-card); border-radius: 8px; transition: all 0.2s ease; }
+        .calendar-day.today { background: #eef2ff; border: 2px solid #6366f1; }
+        .calendar-day.has-event { background: #fef3c7; }
+        .calendar-day:hover { transform: scale(1.02); z-index: 2; }
+        .event-dot { width: 8px; height: 8px; background: #6366f1; border-radius: 50%; display: inline-block; }
         
-        .demonic-note {
-            background: #1e1b4b;
-            color: #f0abfc;
-            font-family: monospace;
-            border-left: 4px solid #a855f7;
-            border-radius: 8px;
-        }
+        .demonic-note { background: #1e1b4b; color: #f0abfc; font-family: monospace; border-left: 4px solid #a855f7; border-radius: 8px; }
         
-        .tab-btn {
-            transition: all 0.3s ease;
-            border-radius: 12px;
-            padding: 8px 20px;
-            font-weight: 600;
-        }
-        .tab-btn.active {
-            background: var(--gradient-main);
-            color: white;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
-        }
-        .tab-btn:not(.active) {
-            color: var(--text-secondary);
-        }
-        .tab-btn:not(.active):hover {
-            background: var(--border-color);
-        }
+        .tab-btn { transition: all 0.3s ease; border-radius: 12px; padding: 8px 20px; font-weight: 600; }
+        .tab-btn.active { background: var(--gradient-main); color: white; box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3); }
+        .tab-btn:not(.active) { color: var(--text-secondary); }
+        .tab-btn:not(.active):hover { background: var(--border-color); }
         
-        .setting-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 24px;
-            transition: all 0.3s ease;
-        }
-        .setting-card:hover {
-            border-color: #6366f1;
-        }
+        .setting-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 24px; transition: all 0.3s ease; }
+        .setting-card:hover { border-color: #6366f1; }
         
-        .input-modern {
-            background: var(--bg-primary);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 16px;
-            width: 100%;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-        .input-modern:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-        }
+        .input-modern { background: var(--bg-primary); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 16px; width: 100%; color: var(--text-primary); transition: all 0.3s ease; }
+        .input-modern:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); }
         
-        .btn-primary {
-            background: var(--gradient-main);
-            color: white;
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
-        }
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-primary { background: var(--gradient-main); color: white; padding: 12px 28px; border-radius: 12px; font-weight: 700; transition: all 0.3s ease; border: none; cursor: pointer; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
-        .btn-secondary {
-            background: var(--border-color);
-            color: var(--text-primary);
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-        }
+        .btn-secondary { background: var(--border-color); color: var(--text-primary); padding: 12px 28px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; }
+        .btn-secondary:hover { transform: translateY(-2px); }
         
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #6366f1;
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
-        }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #6366f1; box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2); }
         
-        .work-panel {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 24px;
-            margin-top: 16px;
-            transition: all 0.3s ease;
-        }
-        .work-panel.active {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
+        .work-panel { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius); padding: 24px; margin-top: 16px; transition: all 0.3s ease; }
+        .work-panel.active { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
         
-        .theme-toggle {
-            width: 52px;
-            height: 28px;
-            background: var(--border-color);
-            border-radius: 14px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .theme-toggle.active {
-            background: #6366f1;
-        }
-        .theme-toggle .knob {
-            width: 22px;
-            height: 22px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            transition: all 0.3s ease;
-        }
-        .theme-toggle.active .knob {
-            left: 27px;
-        }
+        .theme-toggle { width: 52px; height: 28px; background: var(--border-color); border-radius: 14px; position: relative; cursor: pointer; transition: all 0.3s ease; }
+        .theme-toggle.active { background: #6366f1; }
+        .theme-toggle .knob { width: 22px; height: 22px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: all 0.3s ease; }
+        .theme-toggle.active .knob { left: 27px; }
         
         /* ========== CASINO REALISTIC ========== */
-        .slot-reel {
-            display: inline-block;
-            font-size: 72px;
-            transition: all 0.15s ease;
-            width: 90px;
-            text-align: center;
-            background: #0f172a;
-            border-radius: 12px;
-            padding: 10px 0;
-            border: 2px solid #fbbf2444;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
-        }
-        .slot-reel.spinning {
-            animation: reelSpin 0.08s linear infinite;
-        }
-        @keyframes reelSpin {
-            0% { transform: translateY(-8px); opacity: 0.3; }
-            50% { transform: translateY(8px); opacity: 1; }
-            100% { transform: translateY(-8px); opacity: 0.3; }
-        }
-        .slot-reel.win {
-            animation: winPulse 0.5s ease 3;
-        }
-        @keyframes winPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 #fbbf24; }
-            50% { transform: scale(1.2); box-shadow: 0 0 50px #fbbf2488; }
-            100% { transform: scale(1); box-shadow: 0 0 0 #fbbf24; }
-        }
+        .slot-reel { display: inline-block; font-size: 72px; transition: all 0.15s ease; width: 90px; text-align: center; background: #0f172a; border-radius: 12px; padding: 10px 0; border: 2px solid #fbbf2444; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); }
+        .slot-reel.spinning { animation: reelSpin 0.08s linear infinite; }
+        @keyframes reelSpin { 0% { transform: translateY(-8px); opacity: 0.3; } 50% { transform: translateY(8px); opacity: 1; } 100% { transform: translateY(-8px); opacity: 0.3; } }
+        .slot-reel.win { animation: winPulse 0.5s ease 3; }
+        @keyframes winPulse { 0% { transform: scale(1); box-shadow: 0 0 0 #fbbf24; } 50% { transform: scale(1.2); box-shadow: 0 0 50px #fbbf2488; } 100% { transform: scale(1); box-shadow: 0 0 0 #fbbf24; } }
         
-        .btn-casino {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            color: #fbbf24;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 16px;
-            border: 2px solid #fbbf24;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            width: 100%;
-        }
-        .btn-casino:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
-        }
-        .btn-casino:active:not(:disabled) {
-            transform: translateY(2px);
-        }
-        .btn-casino:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-casino { background: linear-gradient(145deg, #1e293b, #0f172a); color: #fbbf24; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 16px; border: 2px solid #fbbf24; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px; width: 100%; }
+        .btn-casino:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 30px rgba(251, 191, 36, 0.3); }
+        .btn-casino:active:not(:disabled) { transform: translateY(2px); }
+        .btn-casino:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
-        .roulette-wheel-container {
-            position: relative;
-            width: 240px;
-            height: 240px;
-            margin: 0 auto 16px;
-        }
-        .roulette-wheel {
-            width: 240px;
-            height: 240px;
-            border-radius: 50%;
-            border: 6px solid #fbbf24;
-            position: relative;
-            background: #0f172a;
-            box-shadow: 0 0 40px rgba(251, 191, 36, 0.15), inset 0 0 40px rgba(0,0,0,0.5);
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-        .roulette-wheel.spinning {
-            animation: wheelSpin 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-        }
-        @keyframes wheelSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(1440deg); }
-        }
-        .roulette-wheel .number {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 10px;
-            color: white;
-            border: 1px solid rgba(255,255,255,0.15);
-            text-shadow: 0 0 4px rgba(0,0,0,0.8);
-            transition: all 0.3s ease;
-        }
-        .roulette-wheel .number.red { background: #ef4444; }
-        .roulette-wheel .number.black { background: #1e293b; border-color: #475569; }
-        .roulette-wheel .number.green { background: #22c55e; }
-        .roulette-wheel .number.winning {
-            transform: scale(1.3) !important;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
-            border-color: #fbbf24;
-            z-index: 100 !important;
-        }
+        .roulette-wrapper { position: relative; width: 280px; height: 280px; margin: 0 auto; }
+        .roulette-wheel-container { position: relative; width: 260px; height: 260px; margin: 10px auto 0; }
+        .roulette-wheel { width: 260px; height: 260px; border-radius: 50%; border: 8px solid #fbbf24; position: relative; background: #0f172a; box-shadow: 0 0 40px rgba(251, 191, 36, 0.15), inset 0 0 40px rgba(0,0,0,0.5); transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
+        .roulette-wheel .num { position: absolute; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; color: white; border: 2px solid rgba(255,255,255,0.2); text-shadow: 0 0 4px rgba(0,0,0,0.8); transition: all 0.3s ease; }
+        .roulette-wheel .num.red { background: #ef4444; }
+        .roulette-wheel .num.black { background: #1e293b; border-color: #475569; }
+        .roulette-wheel .num.green { background: #22c55e; }
+        .roulette-wheel .num.winning { transform: scale(1.4) !important; box-shadow: 0 0 30px rgba(251, 191, 36, 0.8); border-color: #fbbf24; z-index: 100 !important; }
         
-        .roulette-pointer {
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 32px;
-            z-index: 10;
-            color: #fbbf24;
-            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-        }
+        .roulette-pointer { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 36px; z-index: 20; color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.5); filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3)); }
         
-        .win-flash {
-            animation: flashWin 0.5s ease 5;
-        }
-        @keyframes flashWin {
-            0% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); }
-            50% { box-shadow: 0 0 60px rgba(251, 191, 36, 0.6); }
-            100% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); }
-        }
+        .win-flash { animation: flashWin 0.5s ease 5; }
+        @keyframes flashWin { 0% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); } 50% { box-shadow: 0 0 60px rgba(251, 191, 36, 0.6); } 100% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); } }
         
-        .casino-bg {
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-        }
+        .casino-bg { background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); }
         
         @media (max-width: 768px) {
             .calendar-day { min-height: 60px; font-size: 12px; }
             .slot-reel { font-size: 48px; width: 60px; padding: 6px 0; }
+            .roulette-wrapper { width: 220px; height: 220px; }
             .roulette-wheel-container { width: 200px; height: 200px; }
             .roulette-wheel { width: 200px; height: 200px; }
-            .roulette-wheel .number { width: 24px; height: 24px; font-size: 8px; }
-            .roulette-pointer { font-size: 24px; top: -10px; }
+            .roulette-wheel .num { width: 24px; height: 24px; font-size: 8px; }
+            .roulette-pointer { font-size: 28px; top: -6px; }
         }
     </style>
 </head>
@@ -435,7 +188,6 @@
 
     <!-- Main App -->
     <div id="app-section" class="hidden">
-        <!-- Header -->
         <header class="glass sticky top-0 z-50 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">🏪 PuntBay</span>
@@ -449,20 +201,14 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="max-w-7xl mx-auto p-4 md:p-6">
             <div id="user-interface" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Sidebar -->
                 <div class="lg:col-span-3 space-y-6">
-                    <!-- Profile Card -->
                     <div class="glass p-6 rounded-[2rem] text-center">
                         <div class="relative inline-block">
-                            <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff&size=80" 
-                                 class="profile-avatar mx-auto" alt="Avatar">
-                            <button onclick="document.getElementById('avatar-upload').click()" 
-                                    class="absolute bottom-0 right-0 bg-indigo-600 text-white rounded-full p-1.5 text-xs shadow-lg hover:bg-indigo-700 transition">
-                                📷
-                            </button>
+                            <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff&size=80" class="profile-avatar mx-auto" alt="Avatar">
+                            <button onclick="document.getElementById('avatar-upload').click()" class="absolute bottom-0 right-0 bg-indigo-600 text-white rounded-full p-1.5 text-xs shadow-lg hover:bg-indigo-700 transition">📷</button>
                             <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="uploadAvatar(event)">
                         </div>
                         <div class="mt-3">
@@ -479,7 +225,6 @@
                         </div>
                     </div>
 
-                    <!-- Navigation -->
                     <div class="glass p-3 rounded-[2rem]">
                         <nav class="space-y-1">
                             <button onclick="showSection('store')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">🏪 Store</button>
@@ -493,10 +238,10 @@
                     </div>
                 </div>
 
-                <!-- Main Content Area -->
+                <!-- Main Content -->
                 <div class="lg:col-span-9 space-y-6">
                     
-                    <!-- STORE SECTION -->
+                    <!-- STORE -->
                     <div id="store-section" class="block">
                         <div class="glass p-6 rounded-[2rem]">
                             <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
@@ -513,7 +258,7 @@
                         </div>
                     </div>
 
-                    <!-- SELL SECTION - SOLO PUNTBAY -->
+                    <!-- SELL -->
                     <div id="sell-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita su <span class="text-indigo-600">PuntBay</span></h2>
@@ -528,44 +273,24 @@
                         </div>
                     </div>
 
-                    <!-- JOBS SECTION -->
+                    <!-- JOBS -->
                     <div id="jobs-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">💼 Lavori disponibili</h2>
                             <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Candidati per un lavoro specializzato. Se vieni accettato, apparirà un pannello dedicato qui sotto.</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl card-hover">
-                                    <h3 class="font-bold text-lg">🪑 Mobili & Arredamenti 3D</h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi arredamenti in carta 3D</p>
-                                    <button onclick="applyForJob('Mobili&Arredamenti')" class="btn-primary text-sm">Candidati</button>
-                                </div>
-                                <div class="p-6 bg-purple-50 dark:bg-purple-900/20 rounded-2xl card-hover">
-                                    <h3 class="font-bold text-lg">🎵 Musicista</h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi musica (ascolto post-acquisto)</p>
-                                    <button onclick="applyForJob('Musicista')" class="btn-primary text-sm">Candidati</button>
-                                </div>
-                                <div class="p-6 bg-pink-50 dark:bg-pink-900/20 rounded-2xl card-hover">
-                                    <h3 class="font-bold text-lg">🎮 Designer Videogames</h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi giochi (download)</p>
-                                    <button onclick="applyForJob('Designer videogames')" class="btn-primary text-sm">Candidati</button>
-                                </div>
-                                <div class="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-2xl card-hover">
-                                    <h3 class="font-bold text-lg">🏦 Bancario</h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci carte e transazioni</p>
-                                    <button onclick="applyForJob('Bancario')" class="btn-primary text-sm">Candidati</button>
-                                </div>
-                                <div class="p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl card-hover">
-                                    <h3 class="font-bold text-lg">🎰 Croupier</h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci il casinò virtuale</p>
-                                    <button onclick="applyForJob('Croupier')" class="btn-primary text-sm">Candidati</button>
-                                </div>
+                                <div class="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl card-hover"><h3 class="font-bold text-lg">🪑 Mobili & Arredamenti 3D</h3><p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi arredamenti in carta 3D</p><button onclick="applyForJob('Mobili&Arredamenti')" class="btn-primary text-sm">Candidati</button></div>
+                                <div class="p-6 bg-purple-50 dark:bg-purple-900/20 rounded-2xl card-hover"><h3 class="font-bold text-lg">🎵 Musicista</h3><p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi musica (ascolto post-acquisto)</p><button onclick="applyForJob('Musicista')" class="btn-primary text-sm">Candidati</button></div>
+                                <div class="p-6 bg-pink-50 dark:bg-pink-900/20 rounded-2xl card-hover"><h3 class="font-bold text-lg">🎮 Designer Videogames</h3><p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi giochi (download)</p><button onclick="applyForJob('Designer videogames')" class="btn-primary text-sm">Candidati</button></div>
+                                <div class="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-2xl card-hover"><h3 class="font-bold text-lg">🏦 Bancario</h3><p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci carte e transazioni</p><button onclick="applyForJob('Bancario')" class="btn-primary text-sm">Candidati</button></div>
+                                <div class="p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl card-hover"><h3 class="font-bold text-lg">🎰 Croupier</h3><p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci il casinò virtuale</p><button onclick="applyForJob('Croupier')" class="btn-primary text-sm">Candidati</button></div>
                             </div>
                             <div id="job-status" class="mt-6"></div>
                             <div id="work-panel-container" class="mt-6"></div>
                         </div>
                     </div>
 
-                    <!-- CALENDAR SECTION -->
+                    <!-- CALENDAR -->
                     <div id="calendar-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <div class="flex flex-wrap justify-between items-center mb-6">
@@ -577,12 +302,9 @@
                                 </div>
                             </div>
                             <div id="calendar-grid" class="grid grid-cols-7 gap-1">
-                                <div class="text-center font-bold text-sm py-2">Lun</div>
-                                <div class="text-center font-bold text-sm py-2">Mar</div>
-                                <div class="text-center font-bold text-sm py-2">Mer</div>
-                                <div class="text-center font-bold text-sm py-2">Gio</div>
-                                <div class="text-center font-bold text-sm py-2">Ven</div>
-                                <div class="text-center font-bold text-sm py-2">Sab</div>
+                                <div class="text-center font-bold text-sm py-2">Lun</div><div class="text-center font-bold text-sm py-2">Mar</div>
+                                <div class="text-center font-bold text-sm py-2">Mer</div><div class="text-center font-bold text-sm py-2">Gio</div>
+                                <div class="text-center font-bold text-sm py-2">Ven</div><div class="text-center font-bold text-sm py-2">Sab</div>
                                 <div class="text-center font-bold text-sm py-2">Dom</div>
                             </div>
                             <div id="selected-day-events" class="mt-6 hidden">
@@ -592,7 +314,7 @@
                         </div>
                     </div>
 
-                    <!-- TRANSACTIONS SECTION -->
+                    <!-- TRANSACTIONS -->
                     <div id="transactions-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">💳 Le tue transazioni</h2>
@@ -600,7 +322,7 @@
                         </div>
                     </div>
 
-                    <!-- ==================== CASINO SECTION - REALISTIC ==================== -->
+                    <!-- ==================== CASINO ==================== -->
                     <div id="casino-section" class="hidden">
                         <div class="casino-bg p-6 md:p-8 rounded-[2.5rem] border border-amber-500/20">
                             <div class="flex justify-between items-center mb-6">
@@ -610,11 +332,10 @@
                             
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 
-                                <!-- SLOT MACHINE -->
+                                <!-- SLOT -->
                                 <div class="p-6 bg-gradient-to-b from-slate-800 to-slate-900 rounded-2xl border-2 border-amber-500/30 shadow-2xl">
                                     <h3 class="font-bold text-xl text-amber-400 mb-2 text-center">🎰 SLOT MACHINE</h3>
                                     <p class="text-sm text-slate-400 text-center mb-4">💰 Puntata minima: €1 | Vincita massima: 50x</p>
-                                    
                                     <div class="bg-slate-950 p-6 rounded-xl mb-4 border-2 border-amber-500/20">
                                         <div class="flex justify-center items-center gap-2 md:gap-4">
                                             <div id="slot-reel-1" class="slot-reel">🍒</div>
@@ -623,15 +344,12 @@
                                         </div>
                                         <div id="slot-message" class="text-center text-sm text-slate-400 mt-3">🎯 Clicca "GIRA" per giocare!</div>
                                     </div>
-                                    
                                     <div class="space-y-3">
                                         <div class="flex items-center gap-3">
                                             <label class="text-slate-300 text-sm font-medium">💶 Puntata:</label>
                                             <input type="number" id="slot-bet" class="input-modern flex-1 bg-slate-800 border-slate-600 text-white" value="1" min="1" step="1">
                                         </div>
-                                        <button onclick="playSlotRealistic()" class="btn-casino" id="slot-btn">
-                                            🎰 GIRA LA SLOT
-                                        </button>
+                                        <button onclick="playSlotRealistic()" class="btn-casino" id="slot-btn">🎰 GIRA LA SLOT</button>
                                     </div>
                                 </div>
                                 
@@ -640,9 +358,11 @@
                                     <h3 class="font-bold text-xl text-green-400 mb-2 text-center">🎡 ROULETTE</h3>
                                     <p class="text-sm text-slate-400 text-center mb-4">🎯 Scegli colore o numero e prova la fortuna!</p>
                                     
-                                    <div class="roulette-wheel-container">
-                                        <div id="roulette-wheel" class="roulette-wheel"></div>
+                                    <div class="roulette-wrapper">
                                         <div class="roulette-pointer">▼</div>
+                                        <div class="roulette-wheel-container">
+                                            <div id="roulette-wheel" class="roulette-wheel"></div>
+                                        </div>
                                     </div>
                                     <div id="roulette-result-display" class="text-center text-lg font-bold text-green-400 mb-4">🎡 In attesa...</div>
                                     
@@ -659,14 +379,11 @@
                                             <option value="number">🎯 Numero specifico (x36)</option>
                                         </select>
                                         <input type="number" id="roulette-number" placeholder="Numero (0-36)" class="input-modern bg-slate-800 border-slate-600 text-white" min="0" max="36">
-                                        <button onclick="playRouletteRealistic()" class="btn-casino border-green-500 text-green-400 hover:shadow-green-500/30" id="roulette-btn">
-                                            🎡 GIRA LA RUOTA
-                                        </button>
+                                        <button onclick="playRouletteRealistic()" class="btn-casino border-green-500 text-green-400 hover:shadow-green-500/30" id="roulette-btn">🎡 GIRA LA RUOTA</button>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Storico giocate -->
                             <div class="mt-6">
                                 <h3 class="font-bold text-lg text-slate-300 mb-3">📊 Storico giocate</h3>
                                 <div id="gambling-history" class="space-y-2 max-h-60 overflow-y-auto"></div>
@@ -674,42 +391,15 @@
                         </div>
                     </div>
 
-                    <!-- SETTINGS SECTION -->
+                    <!-- SETTINGS -->
                     <div id="settings-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">⚙️ Impostazioni</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="setting-card">
-                                    <h3 class="font-bold text-lg mb-4">👤 Account</h3>
-                                    <div class="space-y-3">
-                                        <input type="text" id="settings-fullname" placeholder="Nome e Cognome" class="input-modern">
-                                        <button onclick="updateProfile()" class="btn-primary w-full text-sm">Aggiorna profilo</button>
-                                    </div>
-                                </div>
-                                <div class="setting-card">
-                                    <h3 class="font-bold text-lg mb-4">🔒 Password</h3>
-                                    <div class="space-y-3">
-                                        <input type="password" id="settings-new-password" placeholder="Nuova password" class="input-modern">
-                                        <input type="password" id="settings-confirm-password" placeholder="Conferma password" class="input-modern">
-                                        <button onclick="changePassword()" class="btn-primary w-full text-sm">Cambia password</button>
-                                    </div>
-                                </div>
-                                <div class="setting-card">
-                                    <h3 class="font-bold text-lg mb-4">💳 Carta di credito</h3>
-                                    <div class="space-y-3">
-                                        <input type="password" id="settings-new-pin" maxlength="6" placeholder="Nuovo PIN (6 cifre)" class="input-modern">
-                                        <button onclick="changeCardPin()" class="btn-primary w-full text-sm">Cambia PIN</button>
-                                    </div>
-                                </div>
-                                <div class="setting-card">
-                                    <h3 class="font-bold text-lg mb-4">🎨 Tema</h3>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm">🌙 Tema scuro</span>
-                                        <div id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">
-                                            <div class="knob"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="setting-card"><h3 class="font-bold text-lg mb-4">👤 Account</h3><div class="space-y-3"><input type="text" id="settings-fullname" placeholder="Nome e Cognome" class="input-modern"><button onclick="updateProfile()" class="btn-primary w-full text-sm">Aggiorna profilo</button></div></div>
+                                <div class="setting-card"><h3 class="font-bold text-lg mb-4">🔒 Password</h3><div class="space-y-3"><input type="password" id="settings-new-password" placeholder="Nuova password" class="input-modern"><input type="password" id="settings-confirm-password" placeholder="Conferma password" class="input-modern"><button onclick="changePassword()" class="btn-primary w-full text-sm">Cambia password</button></div></div>
+                                <div class="setting-card"><h3 class="font-bold text-lg mb-4">💳 Carta di credito</h3><div class="space-y-3"><input type="password" id="settings-new-pin" maxlength="6" placeholder="Nuovo PIN (6 cifre)" class="input-modern"><button onclick="changeCardPin()" class="btn-primary w-full text-sm">Cambia PIN</button></div></div>
+                                <div class="setting-card"><h3 class="font-bold text-lg mb-4">🎨 Tema</h3><div class="flex items-center justify-between"><span class="text-sm">🌙 Tema scuro</span><div id="theme-toggle" class="theme-toggle" onclick="toggleTheme()"><div class="knob"></div></div></div></div>
                             </div>
                         </div>
                     </div>
@@ -729,38 +419,10 @@
                         <button onclick="showAdminTab('jobs')" class="tab-btn" id="tab-jobs">Lavori</button>
                         <button onclick="showAdminTab('ceo')" class="tab-btn" id="tab-ceo">CEO</button>
                     </div>
-                    <div id="admin-users" class="block">
-                        <div class="mb-4 flex gap-2">
-                            <input type="text" id="user-search" placeholder="Cerca utente..." class="input-modern">
-                            <button onclick="loadUsers()" class="btn-primary">Cerca</button>
-                        </div>
-                        <div id="admin-users-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
-                    </div>
-                    <div id="admin-events" class="hidden">
-                        <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                            <h3 class="font-bold mb-4">Crea nuovo evento</h3>
-                            <div class="space-y-3">
-                                <input type="text" id="admin-event-title" placeholder="Titolo evento" class="input-modern">
-                                <input type="date" id="admin-event-date" class="input-modern">
-                                <textarea id="admin-event-desc" placeholder="Descrizione" class="input-modern h-20 resize-none"></textarea>
-                                <button onclick="adminCreateEvent()" class="btn-primary">Crea evento</button>
-                            </div>
-                        </div>
-                        <div id="admin-events-list" class="space-y-3"></div>
-                    </div>
-                    <div id="admin-jobs" class="hidden">
-                        <div id="admin-jobs-list" class="space-y-3"></div>
-                    </div>
-                    <div id="admin-ceo" class="hidden">
-                        <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                            <h3 class="font-bold mb-4">Nomina CEO</h3>
-                            <select id="admin-ceo-select" class="input-modern mb-3">
-                                <option value="">Seleziona utente</option>
-                            </select>
-                            <button onclick="adminNominateCEO()" class="btn-primary">Nomina CEO</button>
-                        </div>
-                        <div id="admin-ceo-list" class="mt-4 space-y-3"></div>
-                    </div>
+                    <div id="admin-users" class="block"><div class="mb-4 flex gap-2"><input type="text" id="user-search" placeholder="Cerca utente..." class="input-modern"><button onclick="loadUsers()" class="btn-primary">Cerca</button></div><div id="admin-users-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div></div>
+                    <div id="admin-events" class="hidden"><div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><h3 class="font-bold mb-4">Crea nuovo evento</h3><div class="space-y-3"><input type="text" id="admin-event-title" placeholder="Titolo evento" class="input-modern"><input type="date" id="admin-event-date" class="input-modern"><textarea id="admin-event-desc" placeholder="Descrizione" class="input-modern h-20 resize-none"></textarea><button onclick="adminCreateEvent()" class="btn-primary">Crea evento</button></div></div><div id="admin-events-list" class="space-y-3"></div></div>
+                    <div id="admin-jobs" class="hidden"><div id="admin-jobs-list" class="space-y-3"></div></div>
+                    <div id="admin-ceo" class="hidden"><div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><h3 class="font-bold mb-4">Nomina CEO</h3><select id="admin-ceo-select" class="input-modern mb-3"><option value="">Seleziona utente</option></select><button onclick="adminNominateCEO()" class="btn-primary">Nomina CEO</button></div><div id="admin-ceo-list" class="mt-4 space-y-3"></div></div>
                 </div>
             </div>
         </main>
@@ -772,625 +434,38 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZW5vc2d1dm5mcWVyc2pma3drIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMzk1NzAsImV4cCI6MjA4NzYxNTU3MH0.FvOIhwozZaOGV-cTbXaCp9Ym1X0Zk-dR0Ik02TiqylA';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        // ==================== GLOBAL VARIABLES ====================
-        let currentUser = null;
-        let currentProfile = null;
-        let currentCard = null;
-        let isAdmin = false;
-        let isBanker = false;
-        let isDarkTheme = false;
-        let userJobs = [];
-        let currentDate = new Date();
-        let calendarEvents = [];
+        let currentUser = null, currentProfile = null, currentCard = null, isAdmin = false, isBanker = false, isDarkTheme = false, userJobs = [], currentDate = new Date(), calendarEvents = [];
 
-        // ==================== HELPER FUNCTIONS ====================
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
 
         function updateBalance() {
             if (!currentUser) return;
-            _supabase.from('credit_cards')
-                .select('balance')
-                .eq('user_id', currentUser.id)
-                .single()
-                .then(({ data }) => {
-                    if (data) {
-                        document.getElementById('card-balance').innerText = `€ ${data.balance}`;
-                        document.getElementById('casino-balance').innerText = `€${data.balance}`;
-                    }
-                });
-        }
-
-        // ==================== THEME ====================
-        function toggleTheme() {
-            isDarkTheme = !isDarkTheme;
-            const html = document.getElementById('html-root');
-            if (isDarkTheme) {
-                html.setAttribute('data-theme', 'dark');
-                document.getElementById('theme-toggle').classList.add('active');
-            } else {
-                html.removeAttribute('data-theme');
-                document.getElementById('theme-toggle').classList.remove('active');
-            }
-            localStorage.setItem('puntbay-theme', isDarkTheme ? 'dark' : 'light');
-        }
-
-        function loadTheme() {
-            const saved = localStorage.getItem('puntbay-theme');
-            if (saved === 'dark') {
-                isDarkTheme = true;
-                document.getElementById('html-root').setAttribute('data-theme', 'dark');
-                document.getElementById('theme-toggle').classList.add('active');
-            }
-        }
-
-        // ==================== AUTH FUNCTIONS ====================
-        async function handleEmailLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-            if (error) alert('Errore: ' + error.message);
-            else await initApp(data.user);
-        }
-
-        async function handleRegister() {
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
-            const fullname = document.getElementById('reg-fullname').value;
-            const { data, error } = await _supabase.auth.signUp({
-                email, password,
-                options: { data: { full_name: fullname } }
+            _supabase.from('credit_cards').select('balance').eq('user_id', currentUser.id).single().then(({ data }) => {
+                if (data) { document.getElementById('card-balance').innerText = `€ ${data.balance}`; document.getElementById('casino-balance').innerText = `€${data.balance}`; }
             });
-            if (error) alert('Errore: ' + error.message);
-            else { alert('Registrazione completata! Controlla la tua email per confermare.'); hideRegister(); }
         }
 
-        // ==================== APP INIT ====================
+        function toggleTheme() { isDarkTheme = !isDarkTheme; const html = document.getElementById('html-root'); if (isDarkTheme) { html.setAttribute('data-theme', 'dark'); document.getElementById('theme-toggle').classList.add('active'); } else { html.removeAttribute('data-theme'); document.getElementById('theme-toggle').classList.remove('active'); } localStorage.setItem('puntbay-theme', isDarkTheme ? 'dark' : 'light'); }
+        function loadTheme() { const saved = localStorage.getItem('puntbay-theme'); if (saved === 'dark') { isDarkTheme = true; document.getElementById('html-root').setAttribute('data-theme', 'dark'); document.getElementById('theme-toggle').classList.add('active'); } }
+
+        async function handleEmailLogin() { const email = document.getElementById('email').value; const password = document.getElementById('password').value; const { data, error } = await _supabase.auth.signInWithPassword({ email, password }); if (error) alert('Errore: ' + error.message); else await initApp(data.user); }
+        async function handleRegister() { const email = document.getElementById('reg-email').value; const password = document.getElementById('reg-password').value; const fullname = document.getElementById('reg-fullname').value; const { data, error } = await _supabase.auth.signUp({ email, password, options: { data: { full_name: fullname } } }); if (error) alert('Errore: ' + error.message); else { alert('Registrazione completata! Controlla la tua email per confermare.'); hideRegister(); } }
+
         async function initApp(user) {
-            currentUser = user;
-            loadTheme();
-            
-            const { data: profile, error } = await _supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .maybeSingle();
-            
-            if (error || !profile) {
-                const { data: newProfile } = await _supabase
-                    .from('profiles')
-                    .insert({
-                        id: user.id,
-                        email: user.email,
-                        full_name: user.user_metadata?.full_name || user.email.split('@')[0],
-                        role: 'Non Classificato',
-                        is_admin: user.email.includes('admin') || user.email.includes('leonardo.cattaneo') || user.email.includes('marina.nicolodi')
-                    })
-                    .select()
-                    .single();
-                currentProfile = newProfile;
-            } else {
-                currentProfile = profile;
-            }
-            
+            currentUser = user; loadTheme();
+            const { data: profile, error } = await _supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
+            if (error || !profile) { const { data: newProfile } = await _supabase.from('profiles').insert({ id: user.id, email: user.email, full_name: user.user_metadata?.full_name || user.email.split('@')[0], role: 'Non Classificato', is_admin: user.email.includes('admin') || user.email.includes('leonardo.cattaneo') || user.email.includes('marina.nicolodi') }).select().single(); currentProfile = newProfile; } else { currentProfile = profile; }
             isAdmin = currentProfile?.is_admin || false;
-            
-            const { data: card } = await _supabase
-                .from('credit_cards')
-                .select('*')
-                .eq('user_id', user.id)
-                .maybeSingle();
-            
-            if (!card) {
-                const { data: newCard } = await _supabase
-                    .from('credit_cards')
-                    .insert({
-                        user_id: user.id,
-                        card_number: 'PUNT-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-                        balance: isAdmin ? 25000 : 5000,
-                        type: isAdmin ? 'gold' : 'normale',
-                        pin_hash: '123456'
-                    })
-                    .select()
-                    .single();
-                currentCard = newCard;
-            } else {
-                currentCard = card;
-            }
-            
+            const { data: card } = await _supabase.from('credit_cards').select('*').eq('user_id', user.id).maybeSingle();
+            if (!card) { const { data: newCard } = await _supabase.from('credit_cards').insert({ user_id: user.id, card_number: 'PUNT-' + Math.random().toString(36).substring(2, 10).toUpperCase(), balance: isAdmin ? 25000 : 5000, type: isAdmin ? 'gold' : 'normale', pin_hash: '123456' }).select().single(); currentCard = newCard; } else { currentCard = card; }
             await loadUserJobs();
-            
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('app-section').classList.remove('hidden');
-            document.getElementById('user-interface').classList.remove('hidden');
-            document.getElementById('admin-interface').classList.add('hidden');
-            
-            document.getElementById('user-email-display').innerText = user.email;
-            document.getElementById('profile-name').innerText = currentProfile?.full_name || 'Utente';
-            document.getElementById('profile-email').innerText = user.email;
-            document.getElementById('settings-fullname').value = currentProfile?.full_name || '';
-            
-            if (currentProfile?.avatar_url) {
-                document.getElementById('profile-avatar').src = currentProfile.avatar_url;
-            }
-            
-            const roleBadge = document.getElementById('user-role-badge');
-            roleBadge.innerText = currentProfile?.role || 'Non Classificato';
-            roleBadge.className = `role-badge role-${currentProfile?.role?.replace(/\s+/g, '-') || 'Non-Classificato'}`;
-            
-            if (currentCard) {
-                document.getElementById('card-info').classList.remove('hidden');
-                document.getElementById('card-number').innerText = currentCard.card_number;
-                document.getElementById('card-balance').innerText = `€ ${currentCard.balance}`;
-                document.getElementById('card-type').innerText = currentCard.type.toUpperCase();
-                document.getElementById('casino-balance').innerText = `€${currentCard.balance}`;
-            }
-            
-            if (isAdmin) {
-                document.getElementById('admin-link').classList.remove('hidden');
-                if (currentProfile?.needs_password_change) {
-                    document.getElementById('password-change-overlay').classList.remove('hidden');
-                }
-                loadUsersForCEOSelect();
-            }
-            
-            // Genera ruota roulette
-            generateRouletteWheel();
-            
-            loadProducts();
-            loadEvents();
-            loadUserTransactions();
-            updateWorkPanel();
-        }
-
-        // ==================== USER JOBS ====================
-        async function loadUserJobs() {
-            const { data: jobs } = await _supabase
-                .from('job_applications')
-                .select('*')
-                .eq('user_id', currentUser.id);
-            userJobs = jobs || [];
-            updateJobStatus();
-        }
-
-        function updateJobStatus() {
-            const container = document.getElementById('job-status');
-            if (!userJobs || userJobs.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-            container.innerHTML = `
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                    <h4 class="font-bold mb-2">📋 Le tue candidature</h4>
-                    ${userJobs.map(j => `
-                        <div class="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 last:border-0">
-                            <span>${j.job_type}</span>
-                            <span class="text-sm px-3 py-1 rounded-full ${j.status === 'accepted' ? 'bg-green-100 text-green-700' : j.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}">
-                                ${j.status === 'accepted' ? '✅ Accettato' : j.status === 'pending' ? '⏳ In attesa' : '❌ Rifiutato'}
-                            </span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        // ==================== WORK PANEL ====================
-        async function updateWorkPanel() {
-            const container = document.getElementById('work-panel-container');
-            const acceptedJobs = userJobs.filter(j => j.status === 'accepted');
-            if (acceptedJobs.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-            let panels = '';
-            for (const job of acceptedJobs) {
-                if (job.job_type === 'Bancario') {
-                    panels += `
-                        <div class="work-panel active">
-                            <h3 class="font-bold text-lg mb-3">🏦 Pannello Bancario</h3>
-                            <div class="space-y-3">
-                                <button onclick="showTransactionReview()" class="btn-primary w-full text-sm">Revisiona transazioni</button>
-                                <div class="flex gap-2">
-                                    <input type="text" id="reset-pin-user" placeholder="Email utente" class="input-modern flex-1">
-                                    <button onclick="resetUserPin()" class="btn-secondary">Reset PIN</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else if (job.job_type === 'Croupier') {
-                    panels += `
-                        <div class="work-panel active">
-                            <h3 class="font-bold text-lg mb-3">🎰 Pannello Croupier</h3>
-                            <div class="space-y-3">
-                                <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl">
-                                    <p class="text-sm">🎲 Gestisci le statistiche del casinò</p>
-                                    <button onclick="showCasinoStats()" class="btn-primary text-sm w-full mt-2">Visualizza statistiche</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames') {
-                    const { data: headCheck } = await _supabase
-                        .from('profiles')
-                        .select('company_role')
-                        .eq('id', currentUser.id)
-                        .single();
-                    const isHead = headCheck?.company_role === 'Capo Azienda';
-                    panels += `
-                        <div class="work-panel active">
-                            <h3 class="font-bold text-lg mb-3">🎨 ${job.job_type}</h3>
-                            <div class="space-y-3">
-                                <input type="text" id="work-product-name" placeholder="Nome prodotto" class="input-modern">
-                                <textarea id="work-product-desc" placeholder="Descrizione" class="input-modern h-24 resize-none"></textarea>
-                                <input type="number" id="work-product-price" placeholder="Prezzo (€)" class="input-modern">
-                                <input type="file" id="work-product-file" class="input-modern">
-                                <button onclick="createWorkProduct('${job.job_type}')" class="btn-primary w-full">Carica prodotto</button>
-                            </div>
-                            ${isHead ? `
-                                <div class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-2xl">
-                                    <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-2">👑 Sei Capo Azienda</h4>
-                                    <div id="workers-list-${job.job_type.replace(/\s+/g, '')}" class="space-y-2"></div>
-                                    <button onclick="loadWorkers('${job.job_type}')" class="btn-secondary text-sm w-full mt-2">Aggiorna lavoratori</button>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `;
-                }
-            }
-            container.innerHTML = panels;
-            for (const job of acceptedJobs) {
-                if (job.job_type !== 'Bancario' && job.job_type !== 'Croupier') {
-                    const { data: headCheck } = await _supabase
-                        .from('profiles')
-                        .select('company_role')
-                        .eq('id', currentUser.id)
-                        .single();
-                    if (headCheck?.company_role === 'Capo Azienda') {
-                        loadWorkers(job.job_type);
-                    }
-                }
-            }
-        }
-
-        async function loadWorkers(jobType) {
-            const { data: workers } = await _supabase
-                .from('job_applications')
-                .select('user_id, profiles(full_name, email, company_role)')
-                .eq('job_type', jobType)
-                .eq('status', 'accepted')
-                .neq('user_id', currentUser.id);
-            const container = document.getElementById(`workers-list-${jobType.replace(/\s+/g, '')}`);
-            if (!container) return;
-            if (!workers || workers.length === 0) {
-                container.innerHTML = '<p class="text-sm text-slate-400">Nessun lavoratore nel tuo team</p>';
-                return;
-            }
-            container.innerHTML = workers.map(w => `
-                <div class="flex justify-between items-center p-2 bg-white dark:bg-slate-800 rounded-xl">
-                    <div>
-                        <p class="font-medium text-sm">${w.profiles?.full_name || 'N/A'}</p>
-                        <p class="text-xs text-slate-400">${w.profiles?.email}</p>
-                        ${w.profiles?.company_role === 'Capo Azienda' ? '<span class="text-xs text-amber-600">👑 Capo</span>' : ''}
-                    </div>
-                    <button onclick="fireWorker('${w.user_id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">Licenzia</button>
-                </div>
-            `).join('');
-        }
-
-        async function fireWorker(userId) {
-            if (!confirm('Sei sicuro di voler licenziare questo lavoratore?')) return;
-            await _supabase
-                .from('job_applications')
-                .update({ status: 'rejected', reviewed_at: new Date(), reviewed_by: currentUser.id })
-                .eq('user_id', userId);
-            alert('Lavoratore licenziato!');
-            loadUserJobs();
-            updateWorkPanel();
-        }
-
-        async function createWorkProduct(jobType) {
-            const name = document.getElementById('work-product-name').value;
-            const desc = document.getElementById('work-product-desc').value;
-            const price = document.getElementById('work-product-price').value;
-            const file = document.getElementById('work-product-file').files[0];
-            if (!name || !desc || !price) { alert('Compila tutti i campi!'); return; }
-            let fileUrl = null;
-            if (file) {
-                const path = `work/${jobType}/${Date.now()}_${file.name}`;
-                await _supabase.storage.from('work-files').upload(path, file);
-                fileUrl = _supabase.storage.from('work-files').getPublicUrl(path).data.publicUrl;
-            }
-            const { error } = await _supabase.from('products').insert({
-                seller_id: currentUser.id,
-                category: jobType,
-                name,
-                description: desc,
-                price: parseFloat(price),
-                file_url: fileUrl,
-                is_active: true
-            });
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('Prodotto caricato!');
-                document.getElementById('work-product-name').value = '';
-                document.getElementById('work-product-desc').value = '';
-                document.getElementById('work-product-price').value = '';
-                document.getElementById('work-product-file').value = '';
-                loadProducts();
-            }
-        }
-
-        // ==================== SETTINGS ====================
-        async function updateProfile() {
-            const fullName = document.getElementById('settings-fullname').value;
-            if (!fullName) { alert('Inserisci il nome'); return; }
-            const { error } = await _supabase
-                .from('profiles')
-                .update({ full_name: fullName })
-                .eq('id', currentUser.id);
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('Profilo aggiornato!');
-                document.getElementById('profile-name').innerText = fullName;
-                currentProfile.full_name = fullName;
-            }
-        }
-
-        async function uploadAvatar(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const avatarImg = document.getElementById('profile-avatar');
-            avatarImg.style.opacity = '0.5';
-            try {
-                const path = `${currentUser.id}/${Date.now()}_${file.name}`;
-                const { error: uploadError } = await _supabase.storage
-                    .from('avatars')
-                    .upload(path, file);
-                if (uploadError) {
-                    alert('Errore durante il caricamento: ' + uploadError.message);
-                    return;
-                }
-                const { data: urlData } = _supabase.storage
-                    .from('avatars')
-                    .getPublicUrl(path);
-                const avatarUrl = urlData.publicUrl;
-                await _supabase
-                    .from('profiles')
-                    .update({ avatar_url: avatarUrl })
-                    .eq('id', currentUser.id);
-                avatarImg.src = avatarUrl;
-                avatarImg.style.opacity = '1';
-                alert('Avatar aggiornato! 🎉');
-            } catch (error) {
-                alert('Errore durante il caricamento dell\'avatar');
-                avatarImg.style.opacity = '1';
-            }
-        }
-
-        async function changePassword() {
-            const newPw = document.getElementById('settings-new-password').value;
-            const confirmPw = document.getElementById('settings-confirm-password').value;
-            if (newPw !== confirmPw) { alert('Le password non coincidono'); return; }
-            if (newPw.length < 6) { alert('Minimo 6 caratteri'); return; }
-            const { error } = await _supabase.auth.updateUser({ password: newPw });
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('Password aggiornata!');
-                document.getElementById('settings-new-password').value = '';
-                document.getElementById('settings-confirm-password').value = '';
-            }
-        }
-
-        async function changeCardPin() {
-            const newPin = document.getElementById('settings-new-pin').value;
-            if (!newPin || newPin.length !== 6) { alert('Inserisci un PIN di 6 cifre'); return; }
-            if (!/^\d{6}$/.test(newPin)) { alert('Il PIN deve contenere solo numeri'); return; }
-            const { error } = await _supabase
-                .from('credit_cards')
-                .update({ pin_hash: newPin })
-                .eq('user_id', currentUser.id);
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('PIN aggiornato!');
-                document.getElementById('settings-new-pin').value = '';
-            }
-        }
-
-        // ==================== STORE FUNCTIONS ====================
-        async function loadProducts() {
-            const category = document.getElementById('category-filter').value;
-            let query = _supabase
-                .from('products')
-                .select(`*, seller:profiles!products_seller_id_fkey (full_name, email)`)
-                .eq('is_active', true);
-            if (category !== 'all') query = query.eq('category', category);
-            const { data: products, error } = await query.order('created_at', { ascending: false });
-            if (error) { console.error('Errore caricamento prodotti:', error); return; }
-            const grid = document.getElementById('products-grid');
-            if (!products || products.length === 0) {
-                grid.innerHTML = '<p class="text-slate-400 text-center col-span-3 py-8">Nessun prodotto in vendita</p>';
-                return;
-            }
-            grid.innerHTML = products.map(p => `
-                <div class="glass p-4 rounded-2xl card-hover">
-                    ${p.image_url ? `<img src="${p.image_url}" class="w-full h-40 object-cover rounded-xl mb-3">` : ''}
-                    <h3 class="font-bold text-lg">${escapeHtml(p.name)}</h3>
-                    <p class="text-xs text-slate-400 mb-2">👤 ${escapeHtml(p.seller?.full_name || 'Anonimo')}</p>
-                    <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">${escapeHtml(p.description || '')}</p>
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="font-bold text-xl text-indigo-600">€ ${p.price}</span>
-                        <button onclick="openPinModal('${p.id}', '${escapeHtml(p.name)}')" class="btn-primary text-sm">🛒 Acquista</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function createProduct() {
-            const name = document.getElementById('product-name').value;
-            const desc = document.getElementById('product-desc').value;
-            const price = document.getElementById('product-price').value;
-            const imageFile = document.getElementById('product-image').files[0];
-            if (!name || !desc || !price) { alert('Compila tutti i campi!'); return; }
-            let imageUrl = null;
-            if (imageFile) {
-                const path = `products/${Date.now()}_${imageFile.name}`;
-                await _supabase.storage.from('product-images').upload(path, imageFile);
-                imageUrl = _supabase.storage.from('product-images').getPublicUrl(path).data.publicUrl;
-            }
-            const { error } = await _supabase.from('products').insert({
-                seller_id: currentUser.id,
-                category: 'PuntBay',
-                name,
-                description: desc,
-                price: parseFloat(price),
-                image_url: imageUrl,
-                is_active: true
-            });
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('Prodotto pubblicato su PuntBay!');
-                document.getElementById('product-name').value = '';
-                document.getElementById('product-desc').value = '';
-                document.getElementById('product-price').value = '';
-                document.getElementById('product-image').value = '';
-                showSection('store');
-                loadProducts();
-            }
-        }
-
-        // ==================== PIN MODAL ====================
-        function openPinModal(productId, productName) {
-            document.getElementById('pin-product-id').value = productId;
-            document.getElementById('pin-product-name').innerText = `Prodotto: ${productName}`;
-            document.getElementById('pin-modal').classList.remove('hidden');
-        }
-
-        function closePinModal() {
-            document.getElementById('pin-modal').classList.add('hidden');
-            document.getElementById('pin-input').value = '';
-        }
-
-        async function verifyPinAndBuy() {
-            const productId = document.getElementById('pin-product-id').value;
-            const pin = document.getElementById('pin-input').value;
-            const { data, error } = await _supabase.rpc('verify_pin_and_transact', {
-                p_buyer_id: currentUser.id,
-                p_product_id: productId,
-                p_pin: pin
-            });
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('Acquisto completato!');
-                closePinModal();
-                loadProducts();
-                loadUserTransactions();
-                updateBalance();
-            }
-        }
-
-        // ==================== JOB FUNCTIONS ====================
-        async function applyForJob(jobType) {
-            const existing = userJobs.find(j => j.job_type === jobType);
-            if (existing) { alert('Hai già fatto richiesta per questo lavoro!'); return; }
-            const { error } = await _supabase.from('job_applications').insert({
-                user_id: currentUser.id,
-                job_type: jobType,
-                status: 'pending'
-            });
-            if (error) alert('Errore: ' + error.message);
-            else {
-                alert('Candidatura inviata!');
-                await loadUserJobs();
-                updateWorkPanel();
-            }
-        }
-
-        // ==================== CALENDAR FUNCTIONS ====================
-        async function loadEvents() {
-            const { data: events } = await _supabase
-                .from('calendar_events')
-                .select('*')
-                .order('event_date', { ascending: true });
-            calendarEvents = events || [];
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            document.getElementById('current-month').innerText = 
-                new Date(year, month).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
-            const firstDay = new Date(year, month, 1);
-            let startOffset = firstDay.getDay() - 1;
-            if (startOffset < 0) startOffset = 6;
-            const totalDays = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-            let calendarHTML = '';
-            for (let i = 0; i < startOffset; i++) {
-                calendarHTML += '<div class="calendar-day bg-slate-50 dark:bg-slate-800 text-slate-400"></div>';
-            }
-            for (let day = 1; day <= totalDays; day++) {
-                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                const hasEvent = calendarEvents.some(e => e.event_date === dateStr);
-                const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
-                calendarHTML += `
-                    <div class="calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''} cursor-pointer hover:shadow-md" 
-                         onclick="showDayEvents('${dateStr}')">
-                        <div class="font-bold">${day}</div>
-                        ${hasEvent ? '<div class="event-dot"></div>' : ''}
-                    </div>
-                `;
-            }
-            const totalCells = Math.ceil((startOffset + totalDays) / 7) * 7;
-            const remainingCells = totalCells - (startOffset + totalDays);
-            for (let i = 0; i < remainingCells; i++) {
-                calendarHTML += '<div class="calendar-day bg-slate-50 dark:bg-slate-800"></div>';
-            }
-            document.getElementById('calendar-grid').innerHTML = `
-                <div class="text-center font-bold text-sm py-2">Lun</div>
-                <div class="text-center font-bold text-sm py-2">Mar</div>
-                <div class="text-center font-bold text-sm py-2">Mer</div>
-                <div class="text-center font-bold text-sm py-2">Gio</div>
-                <div class="text-center font-bold text-sm py-2">Ven</div>
-                <div class="text-center font-bold text-sm py-2">Sab</div>
-                <div class="text-center font-bold text-sm py-2">Dom</div>
-                ${calendarHTML}
-            `;
-        }
-
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        }
-
-        function showDayEvents(dateStr) {
-            const dayEvents = calendarEvents.filter(e => e.event_date === dateStr);
-            const dayName = new Date(dateStr).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
-            document.getElementById('selected-day-title').innerText = dayName;
-            if (dayEvents.length > 0) {
-                document.getElementById('day-events-list').innerHTML = dayEvents.map(e => `
-                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
-                        <h4 class="font-bold">${escapeHtml(e.title)}</h4>
-                        <p class="text-sm text-slate-600 dark:text-slate-400">${escapeHtml(e.description || '')}</p>
-                        <p class="text-xs text-slate-400 mt-1">Creato da: ${escapeHtml(e.created_by)}</p>
-                    </div>
-                `).join('');
-            } else {
-                document.getElementById('day-events-list').innerHTML = '<p class="text-slate-400">Nessun evento in questo giorno</p>';
-            }
-            document.getElementById('selected-day-events').classList.remove('hidden');
+            document.getElementById('login-section').classList.add('hidden'); document.getElementById('app-section').classList.remove('hidden'); document.getElementById('user-interface').classList.remove('hidden'); document.getElementById('admin-interface').classList.add('hidden');
+            document.getElementById('user-email-display').innerText = user.email; document.getElementById('profile-name').innerText = currentProfile?.full_name || 'Utente'; document.getElementById('profile-email').innerText = user.email; document.getElementById('settings-fullname').value = currentProfile?.full_name || '';
+            if (currentProfile?.avatar_url) { document.getElementById('profile-avatar').src = currentProfile.avatar_url; }
+            const roleBadge = document.getElementById('user-role-badge'); roleBadge.innerText = currentProfile?.role || 'Non Classificato'; roleBadge.className = `role-badge role-${currentProfile?.role?.replace(/\s+/g, '-') || 'Non-Classificato'}`;
+            if (currentCard) { document.getElementById('card-info').classList.remove('hidden'); document.getElementById('card-number').innerText = currentCard.card_number; document.getElementById('card-balance').innerText = `€ ${currentCard.balance}`; document.getElementById('card-type').innerText = currentCard.type.toUpperCase(); document.getElementById('casino-balance').innerText = `€${currentCard.balance}`; }
+            if (isAdmin) { document.getElementById('admin-link').classList.remove('hidden'); if (currentProfile?.needs_password_change) { document.getElementById('password-change-overlay').classList.remove('hidden'); } loadUsersForCEOSelect(); }
+            generateRouletteWheel(); loadProducts(); loadEvents(); loadUserTransactions(); updateWorkPanel();
         }
 
         // ==================== ROULETTE WHEEL ====================
@@ -1398,47 +473,33 @@
             const wheel = document.getElementById('roulette-wheel');
             if (!wheel) return;
             
-            // Numeri in ordine realistico
             const numbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-            
-            const colors = {
-                0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black',
-                7: 'red', 8: 'black', 9: 'red', 10: 'black', 11: 'red', 12: 'black',
-                13: 'red', 14: 'black', 15: 'red', 16: 'black', 17: 'red', 18: 'black',
-                19: 'red', 20: 'black', 21: 'red', 22: 'black', 23: 'red', 24: 'black',
-                25: 'red', 26: 'black', 27: 'red', 28: 'black', 29: 'red', 30: 'black',
-                31: 'red', 32: 'black', 33: 'red', 34: 'black', 35: 'red', 36: 'black'
-            };
+            const colors = { 0: 'green', 1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black', 7: 'red', 8: 'black', 9: 'red', 10: 'black', 11: 'red', 12: 'black', 13: 'red', 14: 'black', 15: 'red', 16: 'black', 17: 'red', 18: 'black', 19: 'red', 20: 'black', 21: 'red', 22: 'black', 23: 'red', 24: 'black', 25: 'red', 26: 'black', 27: 'red', 28: 'black', 29: 'red', 30: 'black', 31: 'red', 32: 'black', 33: 'red', 34: 'black', 35: 'red', 36: 'black' };
             
             wheel.innerHTML = '';
-            
             const numCount = numbers.length;
             const angleStep = 360 / numCount;
-            const radius = 85;
+            const radius = 100;
             
             numbers.forEach((num, index) => {
-                const angle = (index * angleStep) - 90;
+                const angle = index * angleStep;
                 const rad = angle * Math.PI / 180;
-                const x = radius * Math.cos(rad);
-                const y = radius * Math.sin(rad);
+                const x = radius * Math.sin(rad);
+                const y = -radius * Math.cos(rad);
                 const color = colors[num] || 'green';
                 
                 const div = document.createElement('div');
-                div.className = `number ${color}`;
+                div.className = `num ${color}`;
                 div.textContent = num;
                 div.dataset.number = num;
                 div.style.cssText = `
                     position: absolute;
-                    top: calc(50% + ${y}px - 15px);
-                    left: calc(50% + ${x}px - 15px);
-                    width: 30px;
-                    height: 30px;
+                    top: calc(50% + ${y}px - 16px);
+                    left: calc(50% + ${x}px - 16px);
+                    width: 32px; height: 32px;
                     border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-weight: 700;
-                    font-size: 10px;
+                    display: flex; align-items: center; justify-content: center;
+                    font-weight: 700; font-size: 10px;
                     color: white;
                     background: ${color === 'red' ? '#ef4444' : color === 'black' ? '#1e293b' : '#22c55e'};
                     border: 2px solid rgba(255,255,255,0.15);
@@ -1446,556 +507,141 @@
                     box-shadow: 0 0 8px rgba(0,0,0,0.3);
                     z-index: ${num === 0 ? 2 : 1};
                     transition: all 0.3s ease;
-                    transform: rotate(${angle}deg);
                 `;
                 wheel.appendChild(div);
             });
         }
 
-        // ==================== CASINO FUNCTIONS ====================
-        // Slot Machine Realistica
+        // ==================== SLOT ====================
         async function playSlotRealistic() {
             const bet = parseFloat(document.getElementById('slot-bet').value);
             if (!bet || bet <= 0) { alert('Inserisci una puntata valida (minimo €1)'); return; }
-            
-            const btn = document.getElementById('slot-btn');
-            const reel1 = document.getElementById('slot-reel-1');
-            const reel2 = document.getElementById('slot-reel-2');
-            const reel3 = document.getElementById('slot-reel-3');
-            const message = document.getElementById('slot-message');
-            
-            btn.disabled = true;
-            btn.textContent = '🔄 GIRANDO...';
-            
+            const btn = document.getElementById('slot-btn'); const reel1 = document.getElementById('slot-reel-1'); const reel2 = document.getElementById('slot-reel-2'); const reel3 = document.getElementById('slot-reel-3'); const message = document.getElementById('slot-message');
+            btn.disabled = true; btn.textContent = '🔄 GIRANDO...';
             const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🎰', '⭐'];
-            const spinInterval = setInterval(() => {
-                reel1.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                reel2.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                reel3.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            }, 70);
-            
+            const spinInterval = setInterval(() => { reel1.textContent = symbols[Math.floor(Math.random() * symbols.length)]; reel2.textContent = symbols[Math.floor(Math.random() * symbols.length)]; reel3.textContent = symbols[Math.floor(Math.random() * symbols.length)]; }, 70);
             setTimeout(async () => {
                 clearInterval(spinInterval);
-                
-                const { data, error } = await _supabase.rpc('play_slot', {
-                    p_user_id: currentUser.id,
-                    p_bet_amount: bet
-                });
-                
-                if (error) {
-                    alert('Errore: ' + error.message);
-                    btn.disabled = false;
-                    btn.textContent = '🎰 GIRA LA SLOT';
-                    return;
-                }
-                
-                reel1.textContent = data.symbols[0];
-                reel2.textContent = data.symbols[1];
-                reel3.textContent = data.symbols[2];
-                
-                if (data.result === 'win') {
-                    message.innerHTML = `🎉🎉🎉 HAI VINTO €${data.win_amount}! (x${data.multiplier}) 🎉🎉🎉`;
-                    message.className = 'text-center text-sm text-amber-400 font-bold mt-2';
-                    [reel1, reel2, reel3].forEach(reel => {
-                        reel.className = 'slot-reel win';
-                        setTimeout(() => reel.className = 'slot-reel', 1500);
-                    });
-                    playWinSound();
-                } else {
-                    message.innerHTML = '😅 Hai perso! Ritenta!';
-                    message.className = 'text-center text-sm text-red-400 mt-2';
-                }
-                
-                updateBalance();
-                loadGamblingHistory();
-                btn.disabled = false;
-                btn.textContent = '🎰 GIRA LA SLOT';
+                const { data, error } = await _supabase.rpc('play_slot', { p_user_id: currentUser.id, p_bet_amount: bet });
+                if (error) { alert('Errore: ' + error.message); btn.disabled = false; btn.textContent = '🎰 GIRA LA SLOT'; return; }
+                reel1.textContent = data.symbols[0]; reel2.textContent = data.symbols[1]; reel3.textContent = data.symbols[2];
+                if (data.result === 'win') { message.innerHTML = `🎉🎉🎉 HAI VINTO €${data.win_amount}! (x${data.multiplier}) 🎉🎉🎉`; message.className = 'text-center text-sm text-amber-400 font-bold mt-2'; [reel1, reel2, reel3].forEach(reel => { reel.className = 'slot-reel win'; setTimeout(() => reel.className = 'slot-reel', 1500); }); playWinSound(); } 
+                else { message.innerHTML = '😅 Hai perso! Ritenta!'; message.className = 'text-center text-sm text-red-400 mt-2'; }
+                updateBalance(); loadGamblingHistory(); btn.disabled = false; btn.textContent = '🎰 GIRA LA SLOT';
             }, 1500);
         }
 
-        // Roulette Realistica - Sincronizzata con il database
+        // ==================== ROULETTE ====================
+        let rouletteAngle = 0;
+
         async function playRouletteRealistic() {
             const bet = parseFloat(document.getElementById('roulette-bet').value);
             const betType = document.getElementById('roulette-bet-type').value;
             const number = parseInt(document.getElementById('roulette-number').value);
-            
             if (!bet || bet <= 0) { alert('Inserisci una puntata valida'); return; }
-            if (betType === 'number' && (isNaN(number) || number < 0 || number > 36)) {
-                alert('Inserisci un numero tra 0 e 36'); return;
-            }
+            if (betType === 'number' && (isNaN(number) || number < 0 || number > 36)) { alert('Inserisci un numero tra 0 e 36'); return; }
             
-            const btn = document.getElementById('roulette-btn');
-            const wheel = document.getElementById('roulette-wheel');
-            const resultDisplay = document.getElementById('roulette-result-display');
+            const btn = document.getElementById('roulette-btn'); const wheel = document.getElementById('roulette-wheel'); const resultDisplay = document.getElementById('roulette-result-display');
+            btn.disabled = true; btn.textContent = '🔄 GIRANDO...';
+            document.querySelectorAll('.roulette-wheel .num.winning').forEach(el => el.classList.remove('winning'));
+            resultDisplay.innerHTML = '🎡 La ruota gira...'; resultDisplay.className = 'text-center text-lg font-bold text-amber-400 mb-4';
             
-            btn.disabled = true;
-            btn.textContent = '🔄 GIRANDO...';
-            wheel.className = 'roulette-wheel spinning';
-            resultDisplay.innerHTML = '🎡 La ruota gira...';
-            resultDisplay.className = 'text-center text-lg font-bold text-amber-400 mb-4';
+            // Chiamata al database
+            const { data, error } = await _supabase.rpc('play_roulette', { p_user_id: currentUser.id, p_bet_amount: bet, p_bet_type: betType, p_number: betType === 'number' ? number : null });
             
-            // Rimuovi evidenziazioni precedenti
-            document.querySelectorAll('.roulette-wheel .number.winning').forEach(el => {
-                el.classList.remove('winning');
-            });
+            if (error) { alert('Errore: ' + error.message); btn.disabled = false; btn.textContent = '🎡 GIRA LA RUOTA'; return; }
             
-            setTimeout(async () => {
-                const { data, error } = await _supabase.rpc('play_roulette', {
-                    p_user_id: currentUser.id,
-                    p_bet_amount: bet,
-                    p_bet_type: betType,
-                    p_number: betType === 'number' ? number : null
-                });
-                
-                wheel.className = 'roulette-wheel';
-                
-                if (error) {
-                    alert('Errore: ' + error.message);
-                    btn.disabled = false;
-                    btn.textContent = '🎡 GIRA LA RUOTA';
-                    return;
-                }
-                
-                // Mostra il numero vincente
-                const winningNumber = data.winning_number;
-                const colorEmoji = data.color === 'red' ? '🔴' : data.color === 'black' ? '⚫' : '🟢';
-                
-                // Evidenzia il numero vincente sulla ruota
-                document.querySelectorAll('.roulette-wheel .number').forEach(el => {
+            // Calcola l'angolo per fermare la ruota sul numero vincente
+            const winningNumber = data.winning_number;
+            const numbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+            const winningIndex = numbers.indexOf(winningNumber);
+            
+            // L'ago è in alto (posizione 0°). Per fermare il numero vincente sotto l'ago:
+            // Ogni numero è a angleStep gradi. L'ago punta in alto (270° standard).
+            const angleStep = 360 / numbers.length;
+            // L'ago è in alto, quindi vogliamo che il numero vincente sia allineato con l'ago (in alto)
+            // Calcoliamo l'angolo di rotazione necessario
+            const targetAngle = winningIndex * angleStep;
+            // Aggiungiamo giri extra per l'animazione
+            const extraSpins = 4 * 360; // 4 giri completi
+            const finalAngle = extraSpins - targetAngle + 90;
+            
+            // Applica l'animazione
+            wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+            wheel.style.transform = `rotate(${finalAngle}deg)`;
+            
+            const colorEmoji = data.color === 'red' ? '🔴' : data.color === 'black' ? '⚫' : '🟢';
+            
+            setTimeout(() => {
+                // Evidenzia il numero vincente
+                document.querySelectorAll('.roulette-wheel .num').forEach(el => {
                     if (parseInt(el.dataset.number) === winningNumber) {
                         el.classList.add('winning');
                     }
                 });
                 
                 resultDisplay.innerHTML = `🎯 Numero: <strong>${winningNumber}</strong> ${colorEmoji}`;
-                
                 if (data.result === 'win') {
                     resultDisplay.className = 'text-center text-lg font-bold text-green-400 mb-4 win-flash';
                     playWinSound();
                 } else {
                     resultDisplay.className = 'text-center text-lg font-bold text-red-400 mb-4';
                 }
-                
-                updateBalance();
-                loadGamblingHistory();
-                btn.disabled = false;
-                btn.textContent = '🎡 GIRA LA RUOTA';
-            }, 3500);
+                updateBalance(); loadGamblingHistory(); btn.disabled = false; btn.textContent = '🎡 GIRA LA RUOTA';
+            }, 4200);
         }
 
-        async function loadGamblingHistory() {
-            const { data: history } = await _supabase
-                .from('gambling_history')
-                .select('*')
-                .eq('user_id', currentUser.id)
-                .order('created_at', { ascending: false })
-                .limit(20);
-            
-            const container = document.getElementById('gambling-history');
-            if (!history || history.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 text-center py-4">Nessuna giocata</p>';
-                return;
-            }
-            container.innerHTML = history.map(h => `
-                <div class="p-3 bg-slate-800 rounded-xl flex justify-between items-center border border-slate-700">
-                    <div>
-                        <span class="font-medium text-slate-300">${h.game_type === 'slot' ? '🎰 Slot' : '🎡 Roulette'}</span>
-                        <span class="text-xs text-slate-500 ml-2">${new Date(h.created_at).toLocaleString()}</span>
-                    </div>
-                    <div>
-                        <span class="text-sm text-slate-400">Puntata: €${h.bet_amount}</span>
-                        ${h.win_amount > 0 ? 
-                            `<span class="text-green-400 font-bold ml-3">+€${h.win_amount}</span>` : 
-                            `<span class="text-red-400 font-bold ml-3">-€${h.bet_amount}</span>`}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function showCasinoStats() {
-            const { data: stats } = await _supabase
-                .from('gambling_history')
-                .select('result, game_type, bet_amount, win_amount')
-                .eq('user_id', currentUser.id);
-            
-            if (!stats || stats.length === 0) {
-                alert('Nessuna statistica disponibile');
-                return;
-            }
-            const totalBets = stats.length;
-            const totalWins = stats.filter(s => s.result === 'win').length;
-            const totalLosses = stats.filter(s => s.result === 'lose').length;
-            const totalBetAmount = stats.reduce((sum, s) => sum + s.bet_amount, 0);
-            const totalWinAmount = stats.reduce((sum, s) => sum + s.win_amount, 0);
-            const netProfit = totalWinAmount - totalBetAmount;
-            alert(`📊 STATISTICHE CASINÒ\n\n🎰 Giocate totali: ${totalBets}\n✅ Vincite: ${totalWins}\n❌ Perdite: ${totalLosses}\n💰 Puntate totali: €${totalBetAmount.toFixed(2)}\n🏆 Vincite totali: €${totalWinAmount.toFixed(2)}\n📈 Profitto netto: €${netProfit.toFixed(2)}`);
-        }
-
-        function playWinSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                oscillator.frequency.value = 800;
-                oscillator.type = 'square';
-                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-                oscillator.start(audioCtx.currentTime);
-                oscillator.stop(audioCtx.currentTime + 0.5);
-                setTimeout(() => {
-                    const osc2 = audioCtx.createOscillator();
-                    const gain2 = audioCtx.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(audioCtx.destination);
-                    osc2.frequency.value = 1200;
-                    osc2.type = 'square';
-                    gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc2.start(audioCtx.currentTime);
-                    osc2.stop(audioCtx.currentTime + 0.3);
-                }, 200);
-            } catch(e) {}
-        }
-
-        // ==================== ADMIN FUNCTIONS ====================
-        async function loadUsers() {
-            const search = document.getElementById('user-search').value;
-            let query = _supabase.from('profiles').select('*').order('created_at', { ascending: false });
-            if (search) {
-                query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`);
-            }
-            const { data: users } = await query;
-            document.getElementById('admin-users-list').innerHTML = users.map(u => `
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                    <div class="flex flex-wrap justify-between gap-4">
-                        <div class="flex-1">
-                            <p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p>
-                            <p class="text-xs text-slate-400">${escapeHtml(u.email)}</p>
-                            <div class="flex flex-wrap items-center gap-2 mt-2">
-                                <span class="role-badge role-${u.role?.replace(/\s+/g, '-') || 'Non-Classificato'}">${u.role || 'Non Classificato'}</span>
-                                ${u.is_banned ? '<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">🚫 Bannato</span>' : ''}
-                                ${u.company_role === 'CEO' ? '<span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">👑 CEO</span>' : ''}
-                                ${u.company_role === 'Capo Azienda' ? '<span class="text-xs bg-amber-100 text-amber-600 px-2 py-1 rounded-full">👔 Capo Azienda</span>' : ''}
-                            </div>
-                            ${u.demonic_note ? `<p class="demonic-note text-xs p-2 rounded-xl mt-2">👿 ${escapeHtml(u.demonic_note)}</p>` : ''}
-                        </div>
-                        <div class="space-y-2">
-                            <select onchange="changeUserRole('${u.id}', this.value)" class="input-modern text-sm">
-                                <option value="Non Classificato" ${u.role === 'Non Classificato' ? 'selected' : ''}>Non Classificato</option>
-                                <option value="Mercante anziano" ${u.role === 'Mercante anziano' ? 'selected' : ''}>Mercante anziano</option>
-                                <option value="Vicepresidente" ${u.role === 'Vicepresidente' ? 'selected' : ''}>Vicepresidente</option>
-                                <option value="Presidente" ${u.role === 'Presidente' ? 'selected' : ''}>Presidente</option>
-                                <option value="Gold" ${u.role === 'Gold' ? 'selected' : ''}>Gold</option>
-                            </select>
-                            <div class="flex gap-2">
-                                ${!u.is_banned ? 
-                                    `<button onclick="banUser('${u.id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">Ban</button>` : 
-                                    `<button onclick="unbanUser('${u.id}')" class="text-xs bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition">Unban</button>`}
-                                <button onclick="addDemonicNote('${u.id}')" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 transition">👿 Nota</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function changeUserRole(userId, role) {
-            await _supabase.from('profiles').update({ role }).eq('id', userId);
-            loadUsers();
-        }
-
-        async function banUser(userId) {
-            const reason = prompt('Motivo del ban:');
-            if (reason) {
-                await _supabase.from('profiles').update({ is_banned: true, ban_reason: reason }).eq('id', userId);
-                loadUsers();
-            }
-        }
-
-        async function unbanUser(userId) {
-            await _supabase.from('profiles').update({ is_banned: false, ban_reason: null }).eq('id', userId);
-            loadUsers();
-        }
-
-        async function addDemonicNote(userId) {
-            const note = prompt('Nota demoniaca:');
-            if (note) {
-                await _supabase.from('profiles').update({ demonic_note: note }).eq('id', userId);
-                loadUsers();
-            }
-        }
-
-        async function loadAdminEvents() {
-            const { data: events } = await _supabase
-                .from('calendar_events')
-                .select('*, profiles(full_name)')
-                .order('event_date', { ascending: true });
-            document.getElementById('admin-events-list').innerHTML = events.map(e => `
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                    <div class="flex flex-wrap justify-between gap-2">
-                        <div>
-                            <h4 class="font-bold">${escapeHtml(e.title)}</h4>
-                            <p class="text-xs text-slate-400">${new Date(e.event_date).toLocaleDateString()}</p>
-                            <p class="text-sm mt-2">${escapeHtml(e.description || '')}</p>
-                            <p class="text-xs text-slate-400 mt-1">Creato da: ${escapeHtml(e.profiles?.full_name || e.created_by)}</p>
-                        </div>
-                        <button onclick="deleteEvent('${e.id}')" class="text-red-500 text-sm hover:underline">Elimina</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function deleteEvent(eventId) {
-            if (confirm('Sei sicuro di voler eliminare questo evento?')) {
-                await _supabase.from('calendar_events').delete().eq('id', eventId);
-                loadAdminEvents();
-                loadEvents();
-            }
-        }
-
-        async function adminCreateEvent() {
-            const title = document.getElementById('admin-event-title').value;
-            const date = document.getElementById('admin-event-date').value;
-            const desc = document.getElementById('admin-event-desc').value;
-            if (!title || !date) { alert('Inserisci titolo e data!'); return; }
-            const { error } = await _supabase.from('calendar_events').insert({
-                title, description: desc, event_date: date, created_by: currentUser.id
-            });
-            if (!error) {
-                alert('Evento creato!');
-                document.getElementById('admin-event-title').value = '';
-                document.getElementById('admin-event-date').value = '';
-                document.getElementById('admin-event-desc').value = '';
-                loadAdminEvents();
-                loadEvents();
-            }
-        }
-
-        async function loadJobApplications() {
-            const { data: apps } = await _supabase
-                .from('job_applications')
-                .select('*, profiles(full_name, email)')
-                .eq('status', 'pending')
-                .order('applied_at', { ascending: false });
-            document.getElementById('admin-jobs-list').innerHTML = apps.map(a => `
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                    <p class="font-bold">${escapeHtml(a.profiles?.full_name)}</p>
-                    <p class="text-xs">${escapeHtml(a.profiles?.email)}</p>
-                    <p class="text-sm mt-2">Richiesta: ${a.job_type}</p>
-                    <p class="text-xs text-slate-400">Inviata: ${new Date(a.applied_at).toLocaleString()}</p>
-                    <div class="flex flex-wrap gap-2 mt-3">
-                        <button onclick="handleApplication('${a.id}', 'accepted')" class="btn-primary text-sm">Accetta</button>
-                        <button onclick="handleApplication('${a.id}', 'rejected')" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-red-600 transition">Rifiuta</button>
-                        <button onclick="promoteToHead('${a.user_id}', '${a.job_type}')" class="bg-amber-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-amber-600 transition">👔 Promuovi a Capo</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function promoteToHead(userId, jobType) {
-            if (!confirm(`Promuovere questo utente a Capo Azienda per ${jobType}?`)) return;
-            await _supabase
-                .from('profiles')
-                .update({ company_role: null })
-                .eq('company_role', 'Capo Azienda');
-            await _supabase
-                .from('profiles')
-                .update({ company_role: 'Capo Azienda' })
-                .eq('id', userId);
-            alert('Utente promosso a Capo Azienda!');
-            loadJobApplications();
-        }
-
-        async function handleApplication(appId, status) {
-            await _supabase.from('job_applications')
-                .update({ status, reviewed_at: new Date(), reviewed_by: currentUser.id })
-                .eq('id', appId);
-            loadJobApplications();
-            loadUserJobs();
-            updateWorkPanel();
-        }
-
-        async function loadUsersForCEOSelect() {
-            const { data: users } = await _supabase
-                .from('profiles')
-                .select('id, full_name, email, company_role, is_banned, is_admin')
-                .or('company_role.is.null,company_role.neq.CEO')
-                .eq('is_banned', false)
-                .order('full_name', { ascending: true });
-            const select = document.getElementById('admin-ceo-select');
-            select.innerHTML = '<option value="">Seleziona utente</option>' + 
-                (users || []).map(u => `<option value="${u.id}">${escapeHtml(u.full_name || u.email)}${u.is_admin ? ' (Admin)' : ''}</option>`).join('');
-            const { data: ceos } = await _supabase
-                .from('profiles')
-                .select('*')
-                .eq('company_role', 'CEO');
-            document.getElementById('admin-ceo-list').innerHTML = (ceos || []).map(u => `
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                    <p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p>
-                    <p class="text-xs">${escapeHtml(u.email)}</p>
-                    <p class="text-xs text-purple-600 mt-1">👑 CEO</p>
-                    <button onclick="removeCEO('${u.id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition">Rimuovi CEO</button>
-                </div>
-            `).join('');
-        }
-
-        async function removeCEO(userId) {
-            if (!confirm('Rimuovere il CEO?')) return;
-            await _supabase.from('profiles').update({ company_role: null }).eq('id', userId);
-            loadUsersForCEOSelect();
-        }
-
-        async function adminNominateCEO() {
-            const userId = document.getElementById('admin-ceo-select').value;
-            if (!userId) { alert('Seleziona un utente'); return; }
-            await _supabase.from('profiles').update({ company_role: null }).eq('company_role', 'CEO');
-            await _supabase.from('profiles').update({ company_role: 'CEO' }).eq('id', userId);
-            alert('CEO nominato!');
-            loadUsersForCEOSelect();
-        }
-
-        // ==================== BANKER FUNCTIONS ====================
-        async function resetUserPin() {
-            const email = document.getElementById('reset-pin-user').value;
-            if (!email) { alert('Inserisci email'); return; }
-            const { data: user } = await _supabase.from('profiles').select('id').eq('email', email).single();
-            if (user) {
-                const newPin = Math.floor(100000 + Math.random() * 900000).toString();
-                await _supabase.from('credit_cards').update({ pin_hash: newPin }).eq('user_id', user.id);
-                alert(`Nuovo PIN per ${email}: ${newPin}`);
-                document.getElementById('reset-pin-user').value = '';
-            } else alert('Utente non trovato');
-        }
-
-        async function showTransactionReview() {
-            const { data: transactions } = await _supabase
-                .from('transactions')
-                .select('*, products(name), seller:profiles!seller_id(full_name), buyer:profiles!buyer_id(full_name)')
-                .is('is_legal', null);
-            if (!transactions || transactions.length === 0) {
-                alert('Nessuna transazione da revisionare');
-                return;
-            }
-            const t = transactions[0];
-            const legal = confirm(`Verifica transazione:\n📦 Prodotto: ${t.products?.name}\n💰 Importo: €${t.amount}\n👤 Venditore: ${t.seller?.full_name}\n👤 Compratore: ${t.buyer?.full_name}\n\n✅ È legale?`);
-            if (legal !== null) {
-                await _supabase.from('transactions')
-                    .update({ is_legal: legal, reviewed_by_banker: currentUser.id })
-                    .eq('id', t.id);
-                alert('Transazione ' + (legal ? 'approvata ✅' : 'segnalata ❌'));
-            }
-        }
-
-        // ==================== TRANSACTIONS ====================
-        async function loadUserTransactions() {
-            const { data: transactions } = await _supabase
-                .from('transactions')
-                .select('*, products(name)')
-                .or(`buyer_id.eq.${currentUser.id},seller_id.eq.${currentUser.id}`)
-                .order('created_at', { ascending: false });
-            const list = document.getElementById('transactions-list');
-            if (!transactions || transactions.length === 0) {
-                list.innerHTML = '<p class="text-slate-400 text-center py-4">Nessuna transazione</p>';
-                return;
-            }
-            list.innerHTML = transactions.map(t => `
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="font-medium">${t.buyer_id === currentUser.id ? '💰 Acquisto' : '💸 Vendita'} - ${escapeHtml(t.products?.name)}</p>
-                            <p class="text-xs text-slate-400">${new Date(t.created_at).toLocaleString()}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-lg">€ ${t.amount}</p>
-                            ${t.is_legal !== null ? 
-                                `<p class="text-xs ${t.is_legal ? 'text-green-600' : 'text-red-600'}">${t.is_legal ? '✅ Verificata' : '❌ Sospetta'}</p>` : 
-                                '<p class="text-xs text-amber-500">⏳ In attesa verifica</p>'}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ==================== UI FUNCTIONS ====================
-        function showSection(section) {
-            ['store', 'sell', 'jobs', 'calendar', 'transactions', 'casino', 'settings'].forEach(s => {
-                document.getElementById(s + '-section').classList.add('hidden');
-            });
-            document.getElementById(section + '-section').classList.remove('hidden');
-            if (section === 'store') loadProducts();
-            if (section === 'calendar') loadEvents();
-            if (section === 'transactions') loadUserTransactions();
-            if (section === 'casino') { 
-                loadGamblingHistory(); 
-                updateBalance();
-                generateRouletteWheel();
-            }
-            if (section === 'jobs') { loadUserJobs(); updateWorkPanel(); }
-        }
-
-        function showRegister() {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('register-section').classList.remove('hidden');
-        }
-
-        function hideRegister() {
-            document.getElementById('register-section').classList.add('hidden');
-            document.getElementById('login-section').classList.remove('hidden');
-        }
-
-        async function updateAdminPassword() {
-            const newPw = document.getElementById('new-admin-password').value;
-            const confirmPw = document.getElementById('confirm-admin-password').value;
-            if (newPw !== confirmPw) { alert('Le password non coincidono'); return; }
-            if (newPw.length < 6) { alert('Minimo 6 caratteri'); return; }
-            const { error } = await _supabase.auth.updateUser({ password: newPw });
-            if (!error) {
-                await _supabase.from('profiles').update({ needs_password_change: false }).eq('id', currentUser.id);
-                document.getElementById('password-change-overlay').classList.add('hidden');
-                alert('Password aggiornata!');
-            } else alert('Errore: ' + error.message);
-        }
-
-        async function handleLogout() {
-            await _supabase.auth.signOut();
-            location.reload();
-        }
-
-        // ==================== INTERFACE SWITCHING ====================
-        function showAdminInterface() {
-            document.getElementById('user-interface').classList.add('hidden');
-            document.getElementById('admin-interface').classList.remove('hidden');
-            loadUsers();
-            loadAdminEvents();
-            loadJobApplications();
-            loadUsersForCEOSelect();
-        }
-
-        function showUserInterface() {
-            document.getElementById('user-interface').classList.remove('hidden');
-            document.getElementById('admin-interface').classList.add('hidden');
-        }
-
-        function showAdminTab(tab) {
-            ['users', 'events', 'jobs', 'ceo'].forEach(t => {
-                document.getElementById(`admin-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('active');
-            });
-            document.getElementById(`admin-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            if (tab === 'users') loadUsers();
-            if (tab === 'events') loadAdminEvents();
-            if (tab === 'jobs') loadJobApplications();
-            if (tab === 'ceo') loadUsersForCEOSelect();
-        }
-
-        // ==================== INIT ====================
-        (async function() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session?.user) await initApp(session.user);
-        })();
+        // ==================== HELPERS ====================
+        async function loadUserJobs() { const { data: jobs } = await _supabase.from('job_applications').select('*').eq('user_id', currentUser.id); userJobs = jobs || []; updateJobStatus(); }
+        function updateJobStatus() { const container = document.getElementById('job-status'); if (!userJobs || userJobs.length === 0) { container.innerHTML = ''; return; } container.innerHTML = `<div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><h4 class="font-bold mb-2">📋 Le tue candidature</h4>${userJobs.map(j => `<div class="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 last:border-0"><span>${j.job_type}</span><span class="text-sm px-3 py-1 rounded-full ${j.status === 'accepted' ? 'bg-green-100 text-green-700' : j.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}">${j.status === 'accepted' ? '✅ Accettato' : j.status === 'pending' ? '⏳ In attesa' : '❌ Rifiutato'}</span></div>`).join('')}</div>`; }
+        async function updateWorkPanel() { const container = document.getElementById('work-panel-container'); const acceptedJobs = userJobs.filter(j => j.status === 'accepted'); if (acceptedJobs.length === 0) { container.innerHTML = ''; return; } let panels = ''; for (const job of acceptedJobs) { if (job.job_type === 'Bancario') { panels += `<div class="work-panel active"><h3 class="font-bold text-lg mb-3">🏦 Pannello Bancario</h3><div class="space-y-3"><button onclick="showTransactionReview()" class="btn-primary w-full text-sm">Revisiona transazioni</button><div class="flex gap-2"><input type="text" id="reset-pin-user" placeholder="Email utente" class="input-modern flex-1"><button onclick="resetUserPin()" class="btn-secondary">Reset PIN</button></div></div></div>`; } else if (job.job_type === 'Croupier') { panels += `<div class="work-panel active"><h3 class="font-bold text-lg mb-3">🎰 Pannello Croupier</h3><div class="space-y-3"><div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl"><p class="text-sm">🎲 Gestisci le statistiche del casinò</p><button onclick="showCasinoStats()" class="btn-primary text-sm w-full mt-2">Visualizza statistiche</button></div></div></div>`; } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames') { const { data: headCheck } = await _supabase.from('profiles').select('company_role').eq('id', currentUser.id).single(); const isHead = headCheck?.company_role === 'Capo Azienda'; panels += `<div class="work-panel active"><h3 class="font-bold text-lg mb-3">🎨 ${job.job_type}</h3><div class="space-y-3"><input type="text" id="work-product-name" placeholder="Nome prodotto" class="input-modern"><textarea id="work-product-desc" placeholder="Descrizione" class="input-modern h-24 resize-none"></textarea><input type="number" id="work-product-price" placeholder="Prezzo (€)" class="input-modern"><input type="file" id="work-product-file" class="input-modern"><button onclick="createWorkProduct('${job.job_type}')" class="btn-primary w-full">Carica prodotto</button></div>${isHead ? `<div class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-2xl"><h4 class="font-bold text-amber-700 dark:text-amber-400 mb-2">👑 Sei Capo Azienda</h4><div id="workers-list-${job.job_type.replace(/\s+/g, '')}" class="space-y-2"></div><button onclick="loadWorkers('${job.job_type}')" class="btn-secondary text-sm w-full mt-2">Aggiorna lavoratori</button></div>` : ''}</div>`; } } container.innerHTML = panels; for (const job of acceptedJobs) { if (job.job_type !== 'Bancario' && job.job_type !== 'Croupier') { const { data: headCheck } = await _supabase.from('profiles').select('company_role').eq('id', currentUser.id).single(); if (headCheck?.company_role === 'Capo Azienda') { loadWorkers(job.job_type); } } } }
+        async function loadWorkers(jobType) { const { data: workers } = await _supabase.from('job_applications').select('user_id, profiles(full_name, email, company_role)').eq('job_type', jobType).eq('status', 'accepted').neq('user_id', currentUser.id); const container = document.getElementById(`workers-list-${jobType.replace(/\s+/g, '')}`); if (!container) return; if (!workers || workers.length === 0) { container.innerHTML = '<p class="text-sm text-slate-400">Nessun lavoratore nel tuo team</p>'; return; } container.innerHTML = workers.map(w => `<div class="flex justify-between items-center p-2 bg-white dark:bg-slate-800 rounded-xl"><div><p class="font-medium text-sm">${w.profiles?.full_name || 'N/A'}</p><p class="text-xs text-slate-400">${w.profiles?.email}</p>${w.profiles?.company_role === 'Capo Azienda' ? '<span class="text-xs text-amber-600">👑 Capo</span>' : ''}</div><button onclick="fireWorker('${w.user_id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">Licenzia</button></div>`).join(''); }
+        async function fireWorker(userId) { if (!confirm('Sei sicuro di voler licenziare questo lavoratore?')) return; await _supabase.from('job_applications').update({ status: 'rejected', reviewed_at: new Date(), reviewed_by: currentUser.id }).eq('user_id', userId); alert('Lavoratore licenziato!'); loadUserJobs(); updateWorkPanel(); }
+        async function createWorkProduct(jobType) { const name = document.getElementById('work-product-name').value; const desc = document.getElementById('work-product-desc').value; const price = document.getElementById('work-product-price').value; const file = document.getElementById('work-product-file').files[0]; if (!name || !desc || !price) { alert('Compila tutti i campi!'); return; } let fileUrl = null; if (file) { const path = `work/${jobType}/${Date.now()}_${file.name}`; await _supabase.storage.from('work-files').upload(path, file); fileUrl = _supabase.storage.from('work-files').getPublicUrl(path).data.publicUrl; } const { error } = await _supabase.from('products').insert({ seller_id: currentUser.id, category: jobType, name, description: desc, price: parseFloat(price), file_url: fileUrl, is_active: true }); if (error) alert('Errore: ' + error.message); else { alert('Prodotto caricato!'); document.getElementById('work-product-name').value = ''; document.getElementById('work-product-desc').value = ''; document.getElementById('work-product-price').value = ''; document.getElementById('work-product-file').value = ''; loadProducts(); } }
+        async function updateProfile() { const fullName = document.getElementById('settings-fullname').value; if (!fullName) { alert('Inserisci il nome'); return; } const { error } = await _supabase.from('profiles').update({ full_name: fullName }).eq('id', currentUser.id); if (error) alert('Errore: ' + error.message); else { alert('Profilo aggiornato!'); document.getElementById('profile-name').innerText = fullName; currentProfile.full_name = fullName; } }
+        async function uploadAvatar(event) { const file = event.target.files[0]; if (!file) return; const avatarImg = document.getElementById('profile-avatar'); avatarImg.style.opacity = '0.5'; try { const path = `${currentUser.id}/${Date.now()}_${file.name}`; const { error: uploadError } = await _supabase.storage.from('avatars').upload(path, file); if (uploadError) { alert('Errore durante il caricamento: ' + uploadError.message); return; } const { data: urlData } = _supabase.storage.from('avatars').getPublicUrl(path); const avatarUrl = urlData.publicUrl; await _supabase.from('profiles').update({ avatar_url: avatarUrl }).eq('id', currentUser.id); avatarImg.src = avatarUrl; avatarImg.style.opacity = '1'; alert('Avatar aggiornato! 🎉'); } catch (error) { alert('Errore durante il caricamento dell\'avatar'); avatarImg.style.opacity = '1'; } }
+        async function changePassword() { const newPw = document.getElementById('settings-new-password').value; const confirmPw = document.getElementById('settings-confirm-password').value; if (newPw !== confirmPw) { alert('Le password non coincidono'); return; } if (newPw.length < 6) { alert('Minimo 6 caratteri'); return; } const { error } = await _supabase.auth.updateUser({ password: newPw }); if (error) alert('Errore: ' + error.message); else { alert('Password aggiornata!'); document.getElementById('settings-new-password').value = ''; document.getElementById('settings-confirm-password').value = ''; } }
+        async function changeCardPin() { const newPin = document.getElementById('settings-new-pin').value; if (!newPin || newPin.length !== 6) { alert('Inserisci un PIN di 6 cifre'); return; } if (!/^\d{6}$/.test(newPin)) { alert('Il PIN deve contenere solo numeri'); return; } const { error } = await _supabase.from('credit_cards').update({ pin_hash: newPin }).eq('user_id', currentUser.id); if (error) alert('Errore: ' + error.message); else { alert('PIN aggiornato!'); document.getElementById('settings-new-pin').value = ''; } }
+        async function loadProducts() { const category = document.getElementById('category-filter').value; let query = _supabase.from('products').select(`*, seller:profiles!products_seller_id_fkey (full_name, email)`).eq('is_active', true); if (category !== 'all') query = query.eq('category', category); const { data: products, error } = await query.order('created_at', { ascending: false }); if (error) { console.error('Errore caricamento prodotti:', error); return; } const grid = document.getElementById('products-grid'); if (!products || products.length === 0) { grid.innerHTML = '<p class="text-slate-400 text-center col-span-3 py-8">Nessun prodotto in vendita</p>'; return; } grid.innerHTML = products.map(p => `<div class="glass p-4 rounded-2xl card-hover">${p.image_url ? `<img src="${p.image_url}" class="w-full h-40 object-cover rounded-xl mb-3">` : ''}<h3 class="font-bold text-lg">${escapeHtml(p.name)}</h3><p class="text-xs text-slate-400 mb-2">👤 ${escapeHtml(p.seller?.full_name || 'Anonimo')}</p><p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">${escapeHtml(p.description || '')}</p><div class="flex justify-between items-center mt-4"><span class="font-bold text-xl text-indigo-600">€ ${p.price}</span><button onclick="openPinModal('${p.id}', '${escapeHtml(p.name)}')" class="btn-primary text-sm">🛒 Acquista</button></div></div>`).join(''); }
+        async function createProduct() { const name = document.getElementById('product-name').value; const desc = document.getElementById('product-desc').value; const price = document.getElementById('product-price').value; const imageFile = document.getElementById('product-image').files[0]; if (!name || !desc || !price) { alert('Compila tutti i campi!'); return; } let imageUrl = null; if (imageFile) { const path = `products/${Date.now()}_${imageFile.name}`; await _supabase.storage.from('product-images').upload(path, imageFile); imageUrl = _supabase.storage.from('product-images').getPublicUrl(path).data.publicUrl; } const { error } = await _supabase.from('products').insert({ seller_id: currentUser.id, category: 'PuntBay', name, description: desc, price: parseFloat(price), image_url: imageUrl, is_active: true }); if (error) alert('Errore: ' + error.message); else { alert('Prodotto pubblicato su PuntBay!'); document.getElementById('product-name').value = ''; document.getElementById('product-desc').value = ''; document.getElementById('product-price').value = ''; document.getElementById('product-image').value = ''; showSection('store'); loadProducts(); } }
+        function openPinModal(productId, productName) { document.getElementById('pin-product-id').value = productId; document.getElementById('pin-product-name').innerText = `Prodotto: ${productName}`; document.getElementById('pin-modal').classList.remove('hidden'); }
+        function closePinModal() { document.getElementById('pin-modal').classList.add('hidden'); document.getElementById('pin-input').value = ''; }
+        async function verifyPinAndBuy() { const productId = document.getElementById('pin-product-id').value; const pin = document.getElementById('pin-input').value; const { data, error } = await _supabase.rpc('verify_pin_and_transact', { p_buyer_id: currentUser.id, p_product_id: productId, p_pin: pin }); if (error) alert('Errore: ' + error.message); else { alert('Acquisto completato!'); closePinModal(); loadProducts(); loadUserTransactions(); updateBalance(); } }
+        async function applyForJob(jobType) { const existing = userJobs.find(j => j.job_type === jobType); if (existing) { alert('Hai già fatto richiesta per questo lavoro!'); return; } const { error } = await _supabase.from('job_applications').insert({ user_id: currentUser.id, job_type: jobType, status: 'pending' }); if (error) alert('Errore: ' + error.message); else { alert('Candidatura inviata!'); await loadUserJobs(); updateWorkPanel(); } }
+        async function loadEvents() { const { data: events } = await _supabase.from('calendar_events').select('*').order('event_date', { ascending: true }); calendarEvents = events || []; renderCalendar(); }
+        function renderCalendar() { const year = currentDate.getFullYear(); const month = currentDate.getMonth(); document.getElementById('current-month').innerText = new Date(year, month).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' }); const firstDay = new Date(year, month, 1); let startOffset = firstDay.getDay() - 1; if (startOffset < 0) startOffset = 6; const totalDays = new Date(year, month + 1, 0).getDate(); const today = new Date(); let calendarHTML = ''; for (let i = 0; i < startOffset; i++) { calendarHTML += '<div class="calendar-day bg-slate-50 dark:bg-slate-800 text-slate-400"></div>'; } for (let day = 1; day <= totalDays; day++) { const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`; const hasEvent = calendarEvents.some(e => e.event_date === dateStr); const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day; calendarHTML += `<div class="calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''} cursor-pointer hover:shadow-md" onclick="showDayEvents('${dateStr}')"><div class="font-bold">${day}</div>${hasEvent ? '<div class="event-dot"></div>' : ''}</div>`; } const totalCells = Math.ceil((startOffset + totalDays) / 7) * 7; const remainingCells = totalCells - (startOffset + totalDays); for (let i = 0; i < remainingCells; i++) { calendarHTML += '<div class="calendar-day bg-slate-50 dark:bg-slate-800"></div>'; } document.getElementById('calendar-grid').innerHTML = `<div class="text-center font-bold text-sm py-2">Lun</div><div class="text-center font-bold text-sm py-2">Mar</div><div class="text-center font-bold text-sm py-2">Mer</div><div class="text-center font-bold text-sm py-2">Gio</div><div class="text-center font-bold text-sm py-2">Ven</div><div class="text-center font-bold text-sm py-2">Sab</div><div class="text-center font-bold text-sm py-2">Dom</div>${calendarHTML}`; }
+        function previousMonth() { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); }
+        function nextMonth() { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); }
+        function showDayEvents(dateStr) { const dayEvents = calendarEvents.filter(e => e.event_date === dateStr); const dayName = new Date(dateStr).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }); document.getElementById('selected-day-title').innerText = dayName; if (dayEvents.length > 0) { document.getElementById('day-events-list').innerHTML = dayEvents.map(e => `<div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl"><h4 class="font-bold">${escapeHtml(e.title)}</h4><p class="text-sm text-slate-600 dark:text-slate-400">${escapeHtml(e.description || '')}</p><p class="text-xs text-slate-400 mt-1">Creato da: ${escapeHtml(e.created_by)}</p></div>`).join(''); } else { document.getElementById('day-events-list').innerHTML = '<p class="text-slate-400">Nessun evento in questo giorno</p>'; } document.getElementById('selected-day-events').classList.remove('hidden'); }
+        async function loadGamblingHistory() { const { data: history } = await _supabase.from('gambling_history').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20); const container = document.getElementById('gambling-history'); if (!history || history.length === 0) { container.innerHTML = '<p class="text-slate-400 text-center py-4">Nessuna giocata</p>'; return; } container.innerHTML = history.map(h => `<div class="p-3 bg-slate-800 rounded-xl flex justify-between items-center border border-slate-700"><div><span class="font-medium text-slate-300">${h.game_type === 'slot' ? '🎰 Slot' : '🎡 Roulette'}</span><span class="text-xs text-slate-500 ml-2">${new Date(h.created_at).toLocaleString()}</span></div><div><span class="text-sm text-slate-400">Puntata: €${h.bet_amount}</span>${h.win_amount > 0 ? `<span class="text-green-400 font-bold ml-3">+€${h.win_amount}</span>` : `<span class="text-red-400 font-bold ml-3">-€${h.bet_amount}</span>`}</div></div>`).join(''); }
+        async function showCasinoStats() { const { data: stats } = await _supabase.from('gambling_history').select('result, game_type, bet_amount, win_amount').eq('user_id', currentUser.id); if (!stats || stats.length === 0) { alert('Nessuna statistica disponibile'); return; } const totalBets = stats.length; const totalWins = stats.filter(s => s.result === 'win').length; const totalLosses = stats.filter(s => s.result === 'lose').length; const totalBetAmount = stats.reduce((sum, s) => sum + s.bet_amount, 0); const totalWinAmount = stats.reduce((sum, s) => sum + s.win_amount, 0); const netProfit = totalWinAmount - totalBetAmount; alert(`📊 STATISTICHE CASINÒ\n\n🎰 Giocate totali: ${totalBets}\n✅ Vincite: ${totalWins}\n❌ Perdite: ${totalLosses}\n💰 Puntate totali: €${totalBetAmount.toFixed(2)}\n🏆 Vincite totali: €${totalWinAmount.toFixed(2)}\n📈 Profitto netto: €${netProfit.toFixed(2)}`); }
+        function playWinSound() { try { const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); const oscillator = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); oscillator.connect(gainNode); gainNode.connect(audioCtx.destination); oscillator.frequency.value = 800; oscillator.type = 'square'; gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5); oscillator.start(audioCtx.currentTime); oscillator.stop(audioCtx.currentTime + 0.5); setTimeout(() => { const osc2 = audioCtx.createOscillator(); const gain2 = audioCtx.createGain(); osc2.connect(gain2); gain2.connect(audioCtx.destination); osc2.frequency.value = 1200; osc2.type = 'square'; gain2.gain.setValueAtTime(0.2, audioCtx.currentTime); gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3); osc2.start(audioCtx.currentTime); osc2.stop(audioCtx.currentTime + 0.3); }, 200); } catch(e) {} }
+        async function loadUsers() { const search = document.getElementById('user-search').value; let query = _supabase.from('profiles').select('*').order('created_at', { ascending: false }); if (search) { query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`); } const { data: users } = await query; document.getElementById('admin-users-list').innerHTML = users.map(u => `<div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><div class="flex flex-wrap justify-between gap-4"><div class="flex-1"><p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p><p class="text-xs text-slate-400">${escapeHtml(u.email)}</p><div class="flex flex-wrap items-center gap-2 mt-2"><span class="role-badge role-${u.role?.replace(/\s+/g, '-') || 'Non-Classificato'}">${u.role || 'Non Classificato'}</span>${u.is_banned ? '<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">🚫 Bannato</span>' : ''}${u.company_role === 'CEO' ? '<span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">👑 CEO</span>' : ''}${u.company_role === 'Capo Azienda' ? '<span class="text-xs bg-amber-100 text-amber-600 px-2 py-1 rounded-full">👔 Capo Azienda</span>' : ''}</div>${u.demonic_note ? `<p class="demonic-note text-xs p-2 rounded-xl mt-2">👿 ${escapeHtml(u.demonic_note)}</p>` : ''}</div><div class="space-y-2"><select onchange="changeUserRole('${u.id}', this.value)" class="input-modern text-sm"><option value="Non Classificato" ${u.role === 'Non Classificato' ? 'selected' : ''}>Non Classificato</option><option value="Mercante anziano" ${u.role === 'Mercante anziano' ? 'selected' : ''}>Mercante anziano</option><option value="Vicepresidente" ${u.role === 'Vicepresidente' ? 'selected' : ''}>Vicepresidente</option><option value="Presidente" ${u.role === 'Presidente' ? 'selected' : ''}>Presidente</option><option value="Gold" ${u.role === 'Gold' ? 'selected' : ''}>Gold</option></select><div class="flex gap-2">${!u.is_banned ? `<button onclick="banUser('${u.id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">Ban</button>` : `<button onclick="unbanUser('${u.id}')" class="text-xs bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition">Unban</button>`}<button onclick="addDemonicNote('${u.id}')" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 transition">👿 Nota</button></div></div></div></div>`).join(''); }
+        async function changeUserRole(userId, role) { await _supabase.from('profiles').update({ role }).eq('id', userId); loadUsers(); }
+        async function banUser(userId) { const reason = prompt('Motivo del ban:'); if (reason) { await _supabase.from('profiles').update({ is_banned: true, ban_reason: reason }).eq('id', userId); loadUsers(); } }
+        async function unbanUser(userId) { await _supabase.from('profiles').update({ is_banned: false, ban_reason: null }).eq('id', userId); loadUsers(); }
+        async function addDemonicNote(userId) { const note = prompt('Nota demoniaca:'); if (note) { await _supabase.from('profiles').update({ demonic_note: note }).eq('id', userId); loadUsers(); } }
+        async function loadAdminEvents() { const { data: events } = await _supabase.from('calendar_events').select('*, profiles(full_name)').order('event_date', { ascending: true }); document.getElementById('admin-events-list').innerHTML = events.map(e => `<div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><div class="flex flex-wrap justify-between gap-2"><div><h4 class="font-bold">${escapeHtml(e.title)}</h4><p class="text-xs text-slate-400">${new Date(e.event_date).toLocaleDateString()}</p><p class="text-sm mt-2">${escapeHtml(e.description || '')}</p><p class="text-xs text-slate-400 mt-1">Creato da: ${escapeHtml(e.profiles?.full_name || e.created_by)}</p></div><button onclick="deleteEvent('${e.id}')" class="text-red-500 text-sm hover:underline">Elimina</button></div></div>`).join(''); }
+        async function deleteEvent(eventId) { if (confirm('Sei sicuro di voler eliminare questo evento?')) { await _supabase.from('calendar_events').delete().eq('id', eventId); loadAdminEvents(); loadEvents(); } }
+        async function adminCreateEvent() { const title = document.getElementById('admin-event-title').value; const date = document.getElementById('admin-event-date').value; const desc = document.getElementById('admin-event-desc').value; if (!title || !date) { alert('Inserisci titolo e data!'); return; } const { error } = await _supabase.from('calendar_events').insert({ title, description: desc, event_date: date, created_by: currentUser.id }); if (!error) { alert('Evento creato!'); document.getElementById('admin-event-title').value = ''; document.getElementById('admin-event-date').value = ''; document.getElementById('admin-event-desc').value = ''; loadAdminEvents(); loadEvents(); } }
+        async function loadJobApplications() { const { data: apps } = await _supabase.from('job_applications').select('*, profiles(full_name, email)').eq('status', 'pending').order('applied_at', { ascending: false }); document.getElementById('admin-jobs-list').innerHTML = apps.map(a => `<div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><p class="font-bold">${escapeHtml(a.profiles?.full_name)}</p><p class="text-xs">${escapeHtml(a.profiles?.email)}</p><p class="text-sm mt-2">Richiesta: ${a.job_type}</p><p class="text-xs text-slate-400">Inviata: ${new Date(a.applied_at).toLocaleString()}</p><div class="flex flex-wrap gap-2 mt-3"><button onclick="handleApplication('${a.id}', 'accepted')" class="btn-primary text-sm">Accetta</button><button onclick="handleApplication('${a.id}', 'rejected')" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-red-600 transition">Rifiuta</button><button onclick="promoteToHead('${a.user_id}', '${a.job_type}')" class="bg-amber-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-amber-600 transition">👔 Promuovi a Capo</button></div></div>`).join(''); }
+        async function promoteToHead(userId, jobType) { if (!confirm(`Promuovere questo utente a Capo Azienda per ${jobType}?`)) return; await _supabase.from('profiles').update({ company_role: null }).eq('company_role', 'Capo Azienda'); await _supabase.from('profiles').update({ company_role: 'Capo Azienda' }).eq('id', userId); alert('Utente promosso a Capo Azienda!'); loadJobApplications(); }
+        async function handleApplication(appId, status) { await _supabase.from('job_applications').update({ status, reviewed_at: new Date(), reviewed_by: currentUser.id }).eq('id', appId); loadJobApplications(); loadUserJobs(); updateWorkPanel(); }
+        async function loadUsersForCEOSelect() { const { data: users } = await _supabase.from('profiles').select('id, full_name, email, company_role, is_banned, is_admin').or('company_role.is.null,company_role.neq.CEO').eq('is_banned', false).order('full_name', { ascending: true }); const select = document.getElementById('admin-ceo-select'); select.innerHTML = '<option value="">Seleziona utente</option>' + (users || []).map(u => `<option value="${u.id}">${escapeHtml(u.full_name || u.email)}${u.is_admin ? ' (Admin)' : ''}</option>`).join(''); const { data: ceos } = await _supabase.from('profiles').select('*').eq('company_role', 'CEO'); document.getElementById('admin-ceo-list').innerHTML = (ceos || []).map(u => `<div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p><p class="text-xs">${escapeHtml(u.email)}</p><p class="text-xs text-purple-600 mt-1">👑 CEO</p><button onclick="removeCEO('${u.id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition">Rimuovi CEO</button></div>`).join(''); }
+        async function removeCEO(userId) { if (!confirm('Rimuovere il CEO?')) return; await _supabase.from('profiles').update({ company_role: null }).eq('id', userId); loadUsersForCEOSelect(); }
+        async function adminNominateCEO() { const userId = document.getElementById('admin-ceo-select').value; if (!userId) { alert('Seleziona un utente'); return; } await _supabase.from('profiles').update({ company_role: null }).eq('company_role', 'CEO'); await _supabase.from('profiles').update({ company_role: 'CEO' }).eq('id', userId); alert('CEO nominato!'); loadUsersForCEOSelect(); }
+        async function resetUserPin() { const email = document.getElementById('reset-pin-user').value; if (!email) { alert('Inserisci email'); return; } const { data: user } = await _supabase.from('profiles').select('id').eq('email', email).single(); if (user) { const newPin = Math.floor(100000 + Math.random() * 900000).toString(); await _supabase.from('credit_cards').update({ pin_hash: newPin }).eq('user_id', user.id); alert(`Nuovo PIN per ${email}: ${newPin}`); document.getElementById('reset-pin-user').value = ''; } else alert('Utente non trovato'); }
+        async function showTransactionReview() { const { data: transactions } = await _supabase.from('transactions').select('*, products(name), seller:profiles!seller_id(full_name), buyer:profiles!buyer_id(full_name)').is('is_legal', null); if (!transactions || transactions.length === 0) { alert('Nessuna transazione da revisionare'); return; } const t = transactions[0]; const legal = confirm(`Verifica transazione:\n📦 Prodotto: ${t.products?.name}\n💰 Importo: €${t.amount}\n👤 Venditore: ${t.seller?.full_name}\n👤 Compratore: ${t.buyer?.full_name}\n\n✅ È legale?`); if (legal !== null) { await _supabase.from('transactions').update({ is_legal: legal, reviewed_by_banker: currentUser.id }).eq('id', t.id); alert('Transazione ' + (legal ? 'approvata ✅' : 'segnalata ❌')); } }
+        async function loadUserTransactions() { const { data: transactions } = await _supabase.from('transactions').select('*, products(name)').or(`buyer_id.eq.${currentUser.id},seller_id.eq.${currentUser.id}`).order('created_at', { ascending: false }); const list = document.getElementById('transactions-list'); if (!transactions || transactions.length === 0) { list.innerHTML = '<p class="text-slate-400 text-center py-4">Nessuna transazione</p>'; return; } list.innerHTML = transactions.map(t => `<div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl"><div class="flex justify-between items-center"><div><p class="font-medium">${t.buyer_id === currentUser.id ? '💰 Acquisto' : '💸 Vendita'} - ${escapeHtml(t.products?.name)}</p><p class="text-xs text-slate-400">${new Date(t.created_at).toLocaleString()}</p></div><div class="text-right"><p class="font-bold text-lg">€ ${t.amount}</p>${t.is_legal !== null ? `<p class="text-xs ${t.is_legal ? 'text-green-600' : 'text-red-600'}">${t.is_legal ? '✅ Verificata' : '❌ Sospetta'}</p>` : '<p class="text-xs text-amber-500">⏳ In attesa verifica</p>'}</div></div></div>`).join(''); }
+        function showSection(section) { ['store', 'sell', 'jobs', 'calendar', 'transactions', 'casino', 'settings'].forEach(s => { document.getElementById(s + '-section').classList.add('hidden'); }); document.getElementById(section + '-section').classList.remove('hidden'); if (section === 'store') loadProducts(); if (section === 'calendar') loadEvents(); if (section === 'transactions') loadUserTransactions(); if (section === 'casino') { loadGamblingHistory(); updateBalance(); generateRouletteWheel(); } if (section === 'jobs') { loadUserJobs(); updateWorkPanel(); } }
+        function showRegister() { document.getElementById('login-section').classList.add('hidden'); document.getElementById('register-section').classList.remove('hidden'); }
+        function hideRegister() { document.getElementById('register-section').classList.add('hidden'); document.getElementById('login-section').classList.remove('hidden'); }
+        async function updateAdminPassword() { const newPw = document.getElementById('new-admin-password').value; const confirmPw = document.getElementById('confirm-admin-password').value; if (newPw !== confirmPw) { alert('Le password non coincidono'); return; } if (newPw.length < 6) { alert('Minimo 6 caratteri'); return; } const { error } = await _supabase.auth.updateUser({ password: newPw }); if (!error) { await _supabase.from('profiles').update({ needs_password_change: false }).eq('id', currentUser.id); document.getElementById('password-change-overlay').classList.add('hidden'); alert('Password aggiornata!'); } else alert('Errore: ' + error.message); }
+        async function handleLogout() { await _supabase.auth.signOut(); location.reload(); }
+        function showAdminInterface() { document.getElementById('user-interface').classList.add('hidden'); document.getElementById('admin-interface').classList.remove('hidden'); loadUsers(); loadAdminEvents(); loadJobApplications(); loadUsersForCEOSelect(); }
+        function showUserInterface() { document.getElementById('user-interface').classList.remove('hidden'); document.getElementById('admin-interface').classList.add('hidden'); }
+        function showAdminTab(tab) { ['users', 'events', 'jobs', 'ceo'].forEach(t => { document.getElementById(`admin-${t}`).classList.add('hidden'); document.getElementById(`tab-${t}`).classList.remove('active'); }); document.getElementById(`admin-${tab}`).classList.remove('hidden'); document.getElementById(`tab-${tab}`).classList.add('active'); if (tab === 'users') loadUsers(); if (tab === 'events') loadAdminEvents(); if (tab === 'jobs') loadJobApplications(); if (tab === 'ceo') loadUsersForCEOSelect(); }
+        (async function() { const { data: { session } } = await _supabase.auth.getSession(); if (session?.user) await initApp(session.user); })();
     </script>
 </body>
 </html>

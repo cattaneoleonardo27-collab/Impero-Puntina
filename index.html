@@ -372,7 +372,7 @@
                                 🏪 Store
                             </button>
                             <button onclick="showSection('sell')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
-                                📦 Vendi
+                                📦 Vendi su PuntBay
                             </button>
                             <button onclick="showSection('jobs')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
                                 💼 Lavori
@@ -406,30 +406,23 @@
                                     <option value="Mobili&Arredamenti">Mobili & Arredamenti</option>
                                     <option value="Musicista">Musicista</option>
                                     <option value="Videogames">Videogames</option>
-                                    <option value="Giochi da Ardo">🎲 Giochi da Ardo</option>
                                 </select>
                             </div>
                             <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                         </div>
                     </div>
 
-                    <!-- Sell Section -->
+                    <!-- Sell Section - SOLO PUNTBAY -->
                     <div id="sell-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
-                            <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita</h2>
+                            <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita su <span class="text-indigo-600">PuntBay</span></h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Su PuntBay puoi vendere qualsiasi prodotto. Per vendere in categorie specializzate (Mobili, Musica, Videogames), vai su 💼 Lavori e candidati.</p>
                             <div class="space-y-4">
-                                <select id="sell-category" class="input-modern">
-                                    <option value="PuntBay">PuntBay</option>
-                                    <option value="Mobili&Arredamenti">Mobili & Arredamenti</option>
-                                    <option value="Musicista">Musicista</option>
-                                    <option value="Videogames">Videogames</option>
-                                    <option value="Giochi da Ardo">🎲 Giochi da Ardo</option>
-                                </select>
                                 <input type="text" id="product-name" placeholder="Nome prodotto" class="input-modern">
                                 <textarea id="product-desc" placeholder="Descrizione" class="input-modern h-32 resize-none"></textarea>
                                 <input type="number" id="product-price" placeholder="Prezzo (€)" class="input-modern">
                                 <input type="file" id="product-image" accept="image/*" class="input-modern">
-                                <button onclick="createProduct()" class="btn-primary w-full">Pubblica in vendita</button>
+                                <button onclick="createProduct()" class="btn-primary w-full">🚀 Pubblica su PuntBay</button>
                             </div>
                         </div>
                     </div>
@@ -438,6 +431,7 @@
                     <div id="jobs-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">💼 Lavori disponibili</h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Candidati per un lavoro specializzato. Se vieni accettato, apparirà un pannello dedicato qui sotto.</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl card-hover">
                                     <h3 class="font-bold text-lg">🪑 Mobili & Arredamenti 3D</h3>
@@ -459,8 +453,8 @@
                                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci carte e transazioni</p>
                                     <button onclick="applyForJob('Bancario')" class="btn-primary text-sm">Candidati</button>
                                 </div>
-                                <div class="p-6 bg-green-50 dark:bg-green-900/20 rounded-2xl card-hover">
-                                    <h3 class="font-bold text-lg">🎲 Croupier</h3>
+                                <div class="p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl card-hover">
+                                    <h3 class="font-bold text-lg">🎰 Croupier</h3>
                                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci il casinò virtuale</p>
                                     <button onclick="applyForJob('Croupier')" class="btn-primary text-sm">Candidati</button>
                                 </div>
@@ -918,7 +912,7 @@
                             </div>
                         </div>
                     `;
-                } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames' || job.job_type === 'Giochi da Ardo') {
+                } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames') {
                     const { data: headCheck } = await _supabase
                         .from('profiles')
                         .select('company_role')
@@ -1189,7 +1183,6 @@
         }
 
         async function createProduct() {
-            const category = document.getElementById('sell-category').value;
             const name = document.getElementById('product-name').value;
             const desc = document.getElementById('product-desc').value;
             const price = document.getElementById('product-price').value;
@@ -1206,7 +1199,7 @@
             
             const { error } = await _supabase.from('products').insert({
                 seller_id: currentUser.id,
-                category: category,
+                category: 'PuntBay',
                 name,
                 description: desc,
                 price: parseFloat(price),
@@ -1216,7 +1209,7 @@
             
             if (error) alert('Errore: ' + error.message);
             else {
-                alert('Prodotto pubblicato!');
+                alert('Prodotto pubblicato su PuntBay!');
                 document.getElementById('product-name').value = '';
                 document.getElementById('product-desc').value = '';
                 document.getElementById('product-price').value = '';

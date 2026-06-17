@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impero Puntina - L'impero delle puntine</title>
+    <title>PuntBay - L'impero delle puntine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
     <style>
@@ -164,6 +164,11 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
         }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
         
         .btn-secondary {
             background: var(--border-color);
@@ -227,10 +232,24 @@
             left: 27px;
         }
         
+        .slot-symbol {
+            font-size: 48px;
+            display: inline-block;
+            animation: slotSpin 0.3s ease-out;
+        }
+        
+        @keyframes slotSpin {
+            0% { transform: rotate(0deg) scale(0.5); opacity: 0; }
+            100% { transform: rotate(360deg) scale(1); opacity: 1; }
+        }
+        
         @media (max-width: 768px) {
             .calendar-day {
                 min-height: 60px;
                 font-size: 12px;
+            }
+            .slot-symbol {
+                font-size: 32px;
             }
         }
     </style>
@@ -303,7 +322,7 @@
         <!-- Header -->
         <header class="glass sticky top-0 z-50 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">  Impero Puntina </span>
+                <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">🏪 PuntBay</span>
                 <span id="user-role-badge" class="role-badge"></span>
             </div>
             <div class="flex items-center gap-3 flex-wrap">
@@ -364,6 +383,9 @@
                             <button onclick="showSection('transactions')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
                                 💳 Transazioni
                             </button>
+                            <button onclick="showSection('casino')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                🎰 Casinò
+                            </button>
                             <button onclick="showSection('settings')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
                                 ⚙️ Impostazioni
                             </button>
@@ -384,6 +406,7 @@
                                     <option value="Mobili&Arredamenti">Mobili & Arredamenti</option>
                                     <option value="Musicista">Musicista</option>
                                     <option value="Videogames">Videogames</option>
+                                    <option value="Giochi da Ardo">🎲 Giochi da Ardo</option>
                                 </select>
                             </div>
                             <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -393,9 +416,15 @@
                     <!-- Sell Section -->
                     <div id="sell-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
-                            <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita su <span class="text-indigo-600">PuntBay</span></h2>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">I tuoi prodotti verranno pubblicati nella categoria PuntBay</p>
+                            <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita</h2>
                             <div class="space-y-4">
+                                <select id="sell-category" class="input-modern">
+                                    <option value="PuntBay">PuntBay</option>
+                                    <option value="Mobili&Arredamenti">Mobili & Arredamenti</option>
+                                    <option value="Musicista">Musicista</option>
+                                    <option value="Videogames">Videogames</option>
+                                    <option value="Giochi da Ardo">🎲 Giochi da Ardo</option>
+                                </select>
                                 <input type="text" id="product-name" placeholder="Nome prodotto" class="input-modern">
                                 <textarea id="product-desc" placeholder="Descrizione" class="input-modern h-32 resize-none"></textarea>
                                 <input type="number" id="product-price" placeholder="Prezzo (€)" class="input-modern">
@@ -430,12 +459,14 @@
                                     <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci carte e transazioni</p>
                                     <button onclick="applyForJob('Bancario')" class="btn-primary text-sm">Candidati</button>
                                 </div>
+                                <div class="p-6 bg-green-50 dark:bg-green-900/20 rounded-2xl card-hover">
+                                    <h3 class="font-bold text-lg">🎲 Croupier</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci il casinò virtuale</p>
+                                    <button onclick="applyForJob('Croupier')" class="btn-primary text-sm">Candidati</button>
+                                </div>
                             </div>
                             
-                            <!-- Job Status -->
                             <div id="job-status" class="mt-6"></div>
-                            
-                            <!-- Work Panel (dinamico) -->
                             <div id="work-panel-container" class="mt-6"></div>
                         </div>
                     </div>
@@ -475,13 +506,68 @@
                         </div>
                     </div>
 
+                    <!-- CASINO SECTION -->
+                    <div id="casino-section" class="hidden">
+                        <div class="glass p-8 rounded-[2.5rem]">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold">🎰 Casinò PuntBay</h2>
+                                <div class="text-sm text-slate-400">💰 Saldo: <span id="casino-balance" class="font-bold text-indigo-600">€0</span></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Slot Machine -->
+                                <div class="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
+                                    <h3 class="font-bold text-xl mb-2">🎰 Slot Machine</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Prova la fortuna! 1/10 possibilità di vincere fino a 5x</p>
+                                    <div class="space-y-3">
+                                        <input type="number" id="slot-bet" placeholder="Puntata (€)" class="input-modern" value="1" min="1" step="0.5">
+                                        <div id="slot-result" class="text-3xl text-center py-3 bg-white dark:bg-slate-800 rounded-xl">
+                                            🎰 🎰 🎰
+                                        </div>
+                                        <button onclick="playSlot()" class="btn-primary w-full" id="slot-btn">
+                                            🎰 Gira!
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Roulette -->
+                                <div class="p-6 bg-purple-50 dark:bg-purple-900/20 rounded-2xl">
+                                    <h3 class="font-bold text-xl mb-2">🎡 Roulette</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Scegli colore o numero e prova a indovinare!</p>
+                                    <div class="space-y-3">
+                                        <input type="number" id="roulette-bet" placeholder="Puntata (€)" class="input-modern" value="1" min="1" step="0.5">
+                                        <select id="roulette-bet-type" class="input-modern">
+                                            <option value="red">🔴 Rosso</option>
+                                            <option value="black">⚫ Nero</option>
+                                            <option value="even">🔢 Pari</option>
+                                            <option value="odd">🔢 Dispari</option>
+                                            <option value="number">🎯 Numero specifico</option>
+                                        </select>
+                                        <input type="number" id="roulette-number" placeholder="Numero (0-36)" class="input-modern" min="0" max="36">
+                                        <div id="roulette-result" class="text-center py-2 bg-white dark:bg-slate-800 rounded-xl">
+                                            🎡 In attesa...
+                                        </div>
+                                        <button onclick="playRoulette()" class="btn-primary w-full" id="roulette-btn">
+                                            🎡 Gira la ruota!
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Storico giocate -->
+                            <div class="mt-6">
+                                <h3 class="font-bold text-lg mb-3">📊 Storico giocate</h3>
+                                <div id="gambling-history" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Settings Section -->
                     <div id="settings-section" class="hidden">
                         <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">⚙️ Impostazioni</h2>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Account Settings -->
                                 <div class="setting-card">
                                     <h3 class="font-bold text-lg mb-4">👤 Account</h3>
                                     <div class="space-y-3">
@@ -490,7 +576,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Password Settings -->
                                 <div class="setting-card">
                                     <h3 class="font-bold text-lg mb-4">🔒 Password</h3>
                                     <div class="space-y-3">
@@ -500,7 +585,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Card Settings -->
                                 <div class="setting-card">
                                     <h3 class="font-bold text-lg mb-4">💳 Carta di credito</h3>
                                     <div class="space-y-3">
@@ -509,7 +593,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Theme Settings -->
                                 <div class="setting-card">
                                     <h3 class="font-bold text-lg mb-4">🎨 Tema</h3>
                                     <div class="flex items-center justify-between">
@@ -610,6 +693,20 @@
             });
         }
 
+        function updateBalance() {
+            if (!currentUser) return;
+            _supabase.from('credit_cards')
+                .select('balance')
+                .eq('user_id', currentUser.id)
+                .single()
+                .then(({ data }) => {
+                    if (data) {
+                        document.getElementById('card-balance').innerText = `€ ${data.balance}`;
+                        document.getElementById('casino-balance').innerText = `€${data.balance}`;
+                    }
+                });
+        }
+
         // ==================== THEME ====================
         function toggleTheme() {
             isDarkTheme = !isDarkTheme;
@@ -690,14 +787,14 @@
                 .eq('user_id', user.id)
                 .maybeSingle();
             
-            if (!card && !isAdmin) {
+            if (!card) {
                 const { data: newCard } = await _supabase
                     .from('credit_cards')
                     .insert({
                         user_id: user.id,
                         card_number: 'PUNT-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-                        balance: 5000,
-                        type: 'normale',
+                        balance: isAdmin ? 25000 : 5000,
+                        type: isAdmin ? 'gold' : 'normale',
                         pin_hash: '123456'
                     })
                     .select()
@@ -707,7 +804,6 @@
                 currentCard = card;
             }
             
-            // Load user jobs
             await loadUserJobs();
             
             document.getElementById('login-section').classList.add('hidden');
@@ -733,6 +829,7 @@
                 document.getElementById('card-number').innerText = currentCard.card_number;
                 document.getElementById('card-balance').innerText = `€ ${currentCard.balance}`;
                 document.getElementById('card-type').innerText = currentCard.type.toUpperCase();
+                document.getElementById('casino-balance').innerText = `€${currentCard.balance}`;
             }
             
             if (isAdmin) {
@@ -786,8 +883,6 @@
         // ==================== WORK PANEL ====================
         async function updateWorkPanel() {
             const container = document.getElementById('work-panel-container');
-            
-            // Check if user has accepted jobs
             const acceptedJobs = userJobs.filter(j => j.status === 'accepted');
             
             if (acceptedJobs.length === 0) {
@@ -799,7 +894,6 @@
             
             for (const job of acceptedJobs) {
                 if (job.job_type === 'Bancario') {
-                    // Banker panel
                     panels += `
                         <div class="work-panel active">
                             <h3 class="font-bold text-lg mb-3">🏦 Pannello Bancario</h3>
@@ -812,8 +906,19 @@
                             </div>
                         </div>
                     `;
-                } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames') {
-                    // Check if user is department head
+                } else if (job.job_type === 'Croupier') {
+                    panels += `
+                        <div class="work-panel active">
+                            <h3 class="font-bold text-lg mb-3">🎰 Pannello Croupier</h3>
+                            <div class="space-y-3">
+                                <div class="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl">
+                                    <p class="text-sm">🎲 Gestisci le statistiche del casinò</p>
+                                    <button onclick="showCasinoStats()" class="btn-primary text-sm w-full mt-2">Visualizza statistiche</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames' || job.job_type === 'Giochi da Ardo') {
                     const { data: headCheck } = await _supabase
                         .from('profiles')
                         .select('company_role')
@@ -846,9 +951,8 @@
             
             container.innerHTML = panels;
             
-            // Load workers if user is head
             for (const job of acceptedJobs) {
-                if (job.job_type !== 'Bancario') {
+                if (job.job_type !== 'Bancario' && job.job_type !== 'Croupier') {
                     const { data: headCheck } = await _supabase
                         .from('profiles')
                         .select('company_role')
@@ -863,7 +967,6 @@
         }
 
         async function loadWorkers(jobType) {
-            // Get all users with accepted job applications for this job type
             const { data: workers } = await _supabase
                 .from('job_applications')
                 .select('user_id, profiles(full_name, email, company_role)')
@@ -896,7 +999,6 @@
         async function fireWorker(userId) {
             if (!confirm('Sei sicuro di voler licenziare questo lavoratore?')) return;
             
-            // Update job application status to 'rejected'
             await _supabase
                 .from('job_applications')
                 .update({ status: 'rejected', reviewed_at: new Date(), reviewed_by: currentUser.id })
@@ -965,17 +1067,48 @@
             const file = event.target.files[0];
             if (!file) return;
             
-            const path = `avatars/${currentUser.id}/${Date.now()}_${file.name}`;
-            await _supabase.storage.from('avatars').upload(path, file);
-            const avatarUrl = _supabase.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+            const avatarImg = document.getElementById('profile-avatar');
+            avatarImg.style.opacity = '0.5';
             
-            await _supabase
-                .from('profiles')
-                .update({ avatar_url: avatarUrl })
-                .eq('id', currentUser.id);
-            
-            document.getElementById('profile-avatar').src = avatarUrl;
-            alert('Avatar aggiornato!');
+            try {
+                const path = `${currentUser.id}/${Date.now()}_${file.name}`;
+                
+                const { error: uploadError } = await _supabase.storage
+                    .from('avatars')
+                    .upload(path, file);
+                
+                if (uploadError) {
+                    console.error('Errore upload:', uploadError);
+                    alert('Errore durante il caricamento: ' + uploadError.message);
+                    return;
+                }
+                
+                const { data: urlData } = _supabase.storage
+                    .from('avatars')
+                    .getPublicUrl(path);
+                
+                const avatarUrl = urlData.publicUrl;
+                
+                const { error: updateError } = await _supabase
+                    .from('profiles')
+                    .update({ avatar_url: avatarUrl })
+                    .eq('id', currentUser.id);
+                
+                if (updateError) {
+                    console.error('Errore aggiornamento profilo:', updateError);
+                    alert('Errore durante l\'aggiornamento del profilo');
+                    return;
+                }
+                
+                avatarImg.src = avatarUrl;
+                avatarImg.style.opacity = '1';
+                alert('Avatar aggiornato! 🎉');
+                
+            } catch (error) {
+                console.error('Errore:', error);
+                alert('Errore durante il caricamento dell\'avatar');
+                avatarImg.style.opacity = '1';
+            }
         }
 
         async function changePassword() {
@@ -1056,6 +1189,7 @@
         }
 
         async function createProduct() {
+            const category = document.getElementById('sell-category').value;
             const name = document.getElementById('product-name').value;
             const desc = document.getElementById('product-desc').value;
             const price = document.getElementById('product-price').value;
@@ -1072,7 +1206,7 @@
             
             const { error } = await _supabase.from('products').insert({
                 seller_id: currentUser.id,
-                category: 'PuntBay',
+                category: category,
                 name,
                 description: desc,
                 price: parseFloat(price),
@@ -1082,7 +1216,7 @@
             
             if (error) alert('Errore: ' + error.message);
             else {
-                alert('Prodotto pubblicato su PuntBay!');
+                alert('Prodotto pubblicato!');
                 document.getElementById('product-name').value = '';
                 document.getElementById('product-desc').value = '';
                 document.getElementById('product-price').value = '';
@@ -1120,14 +1254,12 @@
                 closePinModal();
                 loadProducts();
                 loadUserTransactions();
-                const { data: card } = await _supabase.from('credit_cards').select('balance').eq('user_id', currentUser.id).single();
-                if (card) document.getElementById('card-balance').innerText = `€ ${card.balance}`;
+                updateBalance();
             }
         }
 
         // ==================== JOB FUNCTIONS ====================
         async function applyForJob(jobType) {
-            // Check if already applied
             const existing = userJobs.find(j => j.job_type === jobType);
             if (existing) {
                 alert('Hai già fatto richiesta per questo lavoro!');
@@ -1240,6 +1372,140 @@
             }
             
             document.getElementById('selected-day-events').classList.remove('hidden');
+        }
+
+        // ==================== CASINO FUNCTIONS ====================
+        async function playSlot() {
+            const bet = parseFloat(document.getElementById('slot-bet').value);
+            if (!bet || bet <= 0) { alert('Inserisci una puntata valida'); return; }
+            
+            const btn = document.getElementById('slot-btn');
+            btn.disabled = true;
+            btn.textContent = '🔄 In corso...';
+            
+            const { data, error } = await _supabase.rpc('play_slot', {
+                p_user_id: currentUser.id,
+                p_bet_amount: bet
+            });
+            
+            btn.disabled = false;
+            btn.textContent = '🎰 Gira!';
+            
+            if (error) {
+                alert('Errore: ' + error.message);
+                return;
+            }
+            
+            document.getElementById('slot-result').innerHTML = data.symbols.join(' ');
+            
+            if (data.result === 'win') {
+                alert(`🎉🎉🎉 HAI VINTO €${data.win_amount}! (x${data.multiplier}) 🎉🎉🎉`);
+            } else {
+                alert('😅 Hai perso! Ritenta!');
+            }
+            
+            updateBalance();
+            loadGamblingHistory();
+        }
+
+        async function playRoulette() {
+            const bet = parseFloat(document.getElementById('roulette-bet').value);
+            const betType = document.getElementById('roulette-bet-type').value;
+            const number = parseInt(document.getElementById('roulette-number').value);
+            
+            if (!bet || bet <= 0) { alert('Inserisci una puntata valida'); return; }
+            if (betType === 'number' && (isNaN(number) || number < 0 || number > 36)) {
+                alert('Inserisci un numero tra 0 e 36'); return;
+            }
+            
+            const btn = document.getElementById('roulette-btn');
+            btn.disabled = true;
+            btn.textContent = '🔄 In corso...';
+            
+            const { data, error } = await _supabase.rpc('play_roulette', {
+                p_user_id: currentUser.id,
+                p_bet_amount: bet,
+                p_bet_type: betType,
+                p_number: betType === 'number' ? number : null
+            });
+            
+            btn.disabled = false;
+            btn.textContent = '🎡 Gira la ruota!';
+            
+            if (error) {
+                alert('Errore: ' + error.message);
+                return;
+            }
+            
+            const colorEmoji = data.color === 'red' ? '🔴' : data.color === 'black' ? '⚫' : '🟢';
+            document.getElementById('roulette-result').innerHTML = 
+                `🎡 Numero: <strong>${data.winning_number}</strong> ${colorEmoji}`;
+            
+            if (data.result === 'win') {
+                alert(`🎉🎉🎉 HAI VINTO €${data.win_amount}! 🎉🎉🎉`);
+            } else {
+                alert(`😅 Hai perso! Il numero era ${data.winning_number} ${colorEmoji}`);
+            }
+            
+            updateBalance();
+            loadGamblingHistory();
+        }
+
+        async function loadGamblingHistory() {
+            const { data: history } = await _supabase
+                .from('gambling_history')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false })
+                .limit(20);
+            
+            const container = document.getElementById('gambling-history');
+            if (!history || history.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-center py-4">Nessuna giocata</p>';
+                return;
+            }
+            
+            container.innerHTML = history.map(h => `
+                <div class="p-3 bg-white dark:bg-slate-800 rounded-xl flex justify-between items-center">
+                    <div>
+                        <span class="font-medium">${h.game_type === 'slot' ? '🎰 Slot' : '🎡 Roulette'}</span>
+                        <span class="text-xs text-slate-400 ml-2">${new Date(h.created_at).toLocaleString()}</span>
+                    </div>
+                    <div>
+                        <span class="text-sm">Puntata: €${h.bet_amount}</span>
+                        ${h.win_amount > 0 ? 
+                            `<span class="text-green-600 font-bold ml-3">+€${h.win_amount}</span>` : 
+                            `<span class="text-red-600 font-bold ml-3">-€${h.bet_amount}</span>`}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function showCasinoStats() {
+            const { data: stats } = await _supabase
+                .from('gambling_history')
+                .select('result, game_type, bet_amount, win_amount')
+                .eq('user_id', currentUser.id);
+            
+            if (!stats || stats.length === 0) {
+                alert('Nessuna statistica disponibile');
+                return;
+            }
+            
+            const totalBets = stats.length;
+            const totalWins = stats.filter(s => s.result === 'win').length;
+            const totalLosses = stats.filter(s => s.result === 'lose').length;
+            const totalBetAmount = stats.reduce((sum, s) => sum + s.bet_amount, 0);
+            const totalWinAmount = stats.reduce((sum, s) => sum + s.win_amount, 0);
+            const netProfit = totalWinAmount - totalBetAmount;
+            
+            alert(`📊 STATISTICHE CASINÒ\n\n` +
+                  `🎰 Giocate totali: ${totalBets}\n` +
+                  `✅ Vincite: ${totalWins}\n` +
+                  `❌ Perdite: ${totalLosses}\n` +
+                  `💰 Puntate totali: €${totalBetAmount.toFixed(2)}\n` +
+                  `🏆 Vincite totali: €${totalWinAmount.toFixed(2)}\n` +
+                  `📈 Profitto netto: €${netProfit.toFixed(2)}`);
         }
 
         // ==================== ADMIN FUNCTIONS ====================
@@ -1387,13 +1653,11 @@
         async function promoteToHead(userId, jobType) {
             if (!confirm(`Promuovere questo utente a Capo Azienda per ${jobType}?`)) return;
             
-            // Remove any existing head for this job type
             await _supabase
                 .from('profiles')
                 .update({ company_role: null })
                 .eq('company_role', 'Capo Azienda');
             
-            // Promote user
             await _supabase
                 .from('profiles')
                 .update({ company_role: 'Capo Azienda' })
@@ -1415,13 +1679,14 @@
         async function loadUsersForCEOSelect() {
             const { data: users } = await _supabase
                 .from('profiles')
-                .select('id, full_name, email')
-                .neq('company_role', 'CEO')
-                .eq('is_banned', false);
+                .select('id, full_name, email, company_role, is_banned, is_admin')
+                .or('company_role.is.null,company_role.neq.CEO')
+                .eq('is_banned', false)
+                .order('full_name', { ascending: true });
             
             const select = document.getElementById('admin-ceo-select');
             select.innerHTML = '<option value="">Seleziona utente</option>' + 
-                (users || []).map(u => `<option value="${u.id}">${escapeHtml(u.full_name || u.email)}</option>`).join('');
+                (users || []).map(u => `<option value="${u.id}">${escapeHtml(u.full_name || u.email)}${u.is_admin ? ' (Admin)' : ''}</option>`).join('');
             
             const { data: ceos } = await _supabase
                 .from('profiles')
@@ -1433,8 +1698,15 @@
                     <p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p>
                     <p class="text-xs">${escapeHtml(u.email)}</p>
                     <p class="text-xs text-purple-600 mt-1">👑 CEO</p>
+                    <button onclick="removeCEO('${u.id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition">Rimuovi CEO</button>
                 </div>
             `).join('');
+        }
+
+        async function removeCEO(userId) {
+            if (!confirm('Rimuovere il CEO?')) return;
+            await _supabase.from('profiles').update({ company_role: null }).eq('id', userId);
+            loadUsersForCEOSelect();
         }
 
         async function adminNominateCEO() {
@@ -1518,13 +1790,17 @@
 
         // ==================== UI FUNCTIONS ====================
         function showSection(section) {
-            ['store', 'sell', 'jobs', 'calendar', 'transactions', 'settings'].forEach(s => {
+            ['store', 'sell', 'jobs', 'calendar', 'transactions', 'casino', 'settings'].forEach(s => {
                 document.getElementById(s + '-section').classList.add('hidden');
             });
             document.getElementById(section + '-section').classList.remove('hidden');
             if (section === 'store') loadProducts();
             if (section === 'calendar') loadEvents();
             if (section === 'transactions') loadUserTransactions();
+            if (section === 'casino') { 
+                loadGamblingHistory(); 
+                updateBalance();
+            }
             if (section === 'jobs') { loadUserJobs(); updateWorkPanel(); }
         }
 

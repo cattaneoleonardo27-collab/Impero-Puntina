@@ -1,75 +1,265 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impero Puntina - Amapunt</title>
+    <title>PuntBay - L'impero delle puntine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
-        .gradient-brand { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
-        .gradient-gold { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
-        .role-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        :root {
+            --bg-primary: #f0f4ff;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --radius: 20px;
+            --gradient-main: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-gold: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+        
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+        
+        .gradient-brand { background: var(--gradient-main); }
+        .gradient-gold { background: var(--gradient-gold); }
+        
+        .role-badge {
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
         .role-Non-Classificato { background: #e2e8f0; color: #475569; }
         .role-Mercante-anziano { background: #dbeafe; color: #1e40af; }
         .role-Vicepresidente { background: #fef9c3; color: #854d0e; }
         .role-Presidente { background: #fee2e2; color: #991b1b; }
         .role-Gold { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
-        .demonic-note { background: #1e1b4b; color: #f0abfc; font-family: monospace; border-left: 4px solid #a855f7; }
-        .card-hover { transition: all 0.2s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.2);
+        }
         
         .calendar-day {
-            min-height: 100px;
-            border: 1px solid #e2e8f0;
-            padding: 8px;
-            background: white;
+            min-height: 80px;
+            border: 1px solid var(--border-color);
+            padding: 6px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
         .calendar-day.today {
-            background: #eff6ff;
-            border: 2px solid #3b82f6;
+            background: #eef2ff;
+            border: 2px solid #6366f1;
         }
         .calendar-day.has-event {
             background: #fef3c7;
         }
+        .calendar-day:hover {
+            transform: scale(1.02);
+            z-index: 2;
+        }
         .event-dot {
             width: 8px;
             height: 8px;
-            background: #3b82f6;
+            background: #6366f1;
             border-radius: 50%;
             display: inline-block;
-            margin-right: 4px;
+        }
+        
+        .demonic-note {
+            background: #1e1b4b;
+            color: #f0abfc;
+            font-family: monospace;
+            border-left: 4px solid #a855f7;
+            border-radius: 8px;
+        }
+        
+        .tab-btn {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .tab-btn.active {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+        }
+        .tab-btn:not(.active) {
+            color: var(--text-secondary);
+        }
+        .tab-btn:not(.active):hover {
+            background: var(--border-color);
+        }
+        
+        .setting-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        .setting-card:hover {
+            border-color: #6366f1;
+        }
+        
+        .input-modern {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            width: 100%;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        .input-modern:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #6366f1;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+        }
+        
+        .work-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+        .work-panel.active {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        
+        .theme-toggle {
+            width: 52px;
+            height: 28px;
+            background: var(--border-color);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle.active {
+            background: #6366f1;
+        }
+        .theme-toggle .knob {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle.active .knob {
+            left: 27px;
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-day {
+                min-height: 60px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <!-- Password Change Overlay (Primo accesso admin) -->
+    <!-- Password Change Overlay -->
     <div id="password-change-overlay" class="hidden fixed inset-0 z-[100] bg-slate-900/95 flex items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center">
-            <h2 class="text-2xl font-extrabold text-slate-800 mb-2">🔐 Primo Accesso Admin</h2>
-            <p class="text-slate-500 text-sm mb-6">Cambia la password temporanea</p>
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center">
+            <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-2">🔐 Primo Accesso Admin</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Cambia la password temporanea</p>
             <div class="space-y-4">
-                <input type="password" id="new-admin-password" placeholder="Nuova password" class="w-full p-4 rounded-2xl bg-slate-100 outline-none">
-                <input type="password" id="confirm-admin-password" placeholder="Conferma password" class="w-full p-4 rounded-2xl bg-slate-100 outline-none">
-                <button onclick="updateAdminPassword()" class="w-full gradient-brand text-white font-bold py-4 rounded-2xl">Salva</button>
+                <input type="password" id="new-admin-password" placeholder="Nuova password" class="input-modern">
+                <input type="password" id="confirm-admin-password" placeholder="Conferma password" class="input-modern">
+                <button onclick="updateAdminPassword()" class="btn-primary w-full">Salva</button>
             </div>
         </div>
     </div>
 
     <!-- PIN Modal -->
     <div id="pin-modal" class="hidden fixed inset-0 z-[90] bg-slate-900/80 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md">
-            <h3 class="font-bold text-xl mb-2">💳 Verifica PIN</h3>
-            <p class="text-sm text-slate-500 mb-6" id="pin-product-name"></p>
-            <input type="password" id="pin-input" maxlength="6" placeholder="PIN a 6 cifre" class="w-full p-4 rounded-2xl bg-slate-100 outline-none mb-4">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md">
+            <h3 class="font-bold text-xl mb-2 text-slate-800 dark:text-white">💳 Verifica PIN</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6" id="pin-product-name"></p>
+            <input type="password" id="pin-input" maxlength="6" placeholder="PIN a 6 cifre" class="input-modern mb-4">
             <input type="hidden" id="pin-product-id">
             <div class="flex gap-3">
-                <button onclick="closePinModal()" class="flex-1 py-3 rounded-xl bg-slate-100 font-bold">Annulla</button>
-                <button onclick="verifyPinAndBuy()" class="flex-1 gradient-brand text-white py-3 rounded-xl font-bold">Conferma</button>
+                <button onclick="closePinModal()" class="btn-secondary flex-1">Annulla</button>
+                <button onclick="verifyPinAndBuy()" class="btn-primary flex-1">Conferma</button>
             </div>
         </div>
     </div>
@@ -77,30 +267,32 @@
     <!-- Login Section -->
     <div id="login-section" class="flex items-center justify-center min-h-screen p-6">
         <div class="glass p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md">
-            <h1 class="text-3xl font-extrabold text-slate-800 text-center mb-2 italic">🏪 AMAPUNT</h1>
-            <p class="text-center text-slate-500 text-sm mb-8">L'impero delle puntine</p>
+            <div class="text-center mb-8">
+                <div class="text-5xl mb-3">🏪</div>
+                <h1 class="text-4xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">PuntBay</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">L'impero delle puntine</p>
+            </div>
             
-            <!-- Solo login con email - Google rimosso -->
             <div class="space-y-4">
-                <input type="email" id="email" placeholder="Email" class="w-full p-4 rounded-2xl bg-white border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="password" id="password" placeholder="Password" class="w-full p-4 rounded-2xl bg-white border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="handleEmailLogin()" class="w-full gradient-brand text-white font-bold py-4 rounded-2xl">Accedi</button>
-                <p class="text-center text-sm text-slate-400">Non hai un account? <button onclick="showRegister()" class="text-blue-600 font-bold">Registrati</button></p>
+                <input type="email" id="email" placeholder="Email" class="input-modern">
+                <input type="password" id="password" placeholder="Password" class="input-modern">
+                <button onclick="handleEmailLogin()" class="btn-primary w-full">Accedi</button>
+                <p class="text-center text-sm text-slate-400">Non hai un account? <button onclick="showRegister()" class="text-indigo-600 font-bold hover:underline">Registrati</button></p>
             </div>
         </div>
     </div>
 
     <!-- Register Section -->
-    <div id="register-section" class="hidden fixed inset-0 z-50 bg-white flex items-center justify-center p-6">
+    <div id="register-section" class="hidden fixed inset-0 z-50 bg-white dark:bg-slate-900 flex items-center justify-center p-6">
         <div class="max-w-md w-full">
-            <button onclick="hideRegister()" class="mb-4 text-slate-400">← Torna al login</button>
-            <div class="bg-slate-50 p-8 rounded-[2.5rem]">
-                <h2 class="text-2xl font-bold mb-6">Registrati</h2>
+            <button onclick="hideRegister()" class="text-slate-400 mb-4 hover:text-slate-600">← Torna al login</button>
+            <div class="glass p-8 rounded-[2.5rem]">
+                <h2 class="text-2xl font-bold mb-6 text-slate-800 dark:text-white">Crea Account</h2>
                 <div class="space-y-4">
-                    <input type="email" id="reg-email" placeholder="Email" class="w-full p-4 rounded-2xl bg-white border border-slate-200 outline-none">
-                    <input type="password" id="reg-password" placeholder="Password" class="w-full p-4 rounded-2xl bg-white border border-slate-200 outline-none">
-                    <input type="text" id="reg-fullname" placeholder="Nome e Cognome" class="w-full p-4 rounded-2xl bg-white border border-slate-200 outline-none">
-                    <button onclick="handleRegister()" class="w-full gradient-brand text-white font-bold py-4 rounded-2xl">Crea Account</button>
+                    <input type="email" id="reg-email" placeholder="Email" class="input-modern">
+                    <input type="password" id="reg-password" placeholder="Password" class="input-modern">
+                    <input type="text" id="reg-fullname" placeholder="Nome e Cognome" class="input-modern">
+                    <button onclick="handleRegister()" class="btn-primary w-full">Crea Account</button>
                 </div>
             </div>
         </div>
@@ -109,64 +301,73 @@
     <!-- Main App -->
     <div id="app-section" class="hidden">
         <!-- Header -->
-        <header class="glass border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <header class="glass sticky top-0 z-50 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <span class="font-extrabold text-slate-800 text-xl tracking-tight italic">🏪 AMAPUNT</span>
-                <span id="user-role-badge" class="text-xs bg-slate-100 px-3 py-1 rounded-full"></span>
+                <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">🏪 PuntBay</span>
+                <span id="user-role-badge" class="role-badge"></span>
             </div>
-            <div class="flex items-center gap-4">
-                <span id="user-email-display" class="text-sm text-slate-500"></span>
-                <a href="#" id="admin-link" onclick="showAdminInterface()" class="hidden text-sm font-bold text-purple-600 bg-purple-50 px-4 py-2 rounded-xl hover:bg-purple-100">🔧 Admin</a>
-                <button onclick="handleLogout()" class="text-sm font-bold text-red-500 bg-red-50 px-4 py-2 rounded-xl">Esci</button>
+            <div class="flex items-center gap-3 flex-wrap">
+                <span id="user-email-display" class="text-sm text-slate-500 dark:text-slate-400 hidden sm:inline"></span>
+                <button onclick="showSection('settings')" class="text-sm font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 px-4 py-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition">⚙️</button>
+                <a href="#" id="admin-link" onclick="showAdminInterface()" class="hidden text-sm font-bold text-purple-600 bg-purple-50 dark:bg-purple-900/30 px-4 py-2 rounded-xl hover:bg-purple-100 dark:hover:bg-purple-900/50 transition">🔧 Admin</a>
+                <button onclick="handleLogout()" class="text-sm font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-4 py-2 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition">Esci</button>
             </div>
         </header>
 
         <!-- Main Content -->
-        <main class="max-w-7xl mx-auto p-6">
-            <!-- User Interface (normale) -->
-            <div id="user-interface" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <main class="max-w-7xl mx-auto p-4 md:p-6">
+            <div id="user-interface" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Sidebar -->
                 <div class="lg:col-span-3 space-y-6">
                     <!-- Profile Card -->
-                    <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-full gradient-brand flex items-center justify-center text-white font-bold text-xl">
-                                👤
-                            </div>
-                            <div>
-                                <div class="font-bold" id="profile-name"></div>
-                                <div class="text-xs text-slate-400" id="profile-email"></div>
-                            </div>
+                    <div class="glass p-6 rounded-[2rem] text-center">
+                        <div class="relative inline-block">
+                            <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff&size=80" 
+                                 class="profile-avatar mx-auto" alt="Avatar">
+                            <button onclick="document.getElementById('avatar-upload').click()" 
+                                    class="absolute bottom-0 right-0 bg-indigo-600 text-white rounded-full p-1.5 text-xs shadow-lg hover:bg-indigo-700 transition">
+                                📷
+                            </button>
+                            <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="uploadAvatar(event)">
+                        </div>
+                        <div class="mt-3">
+                            <div class="font-bold text-lg" id="profile-name"></div>
+                            <div class="text-xs text-slate-400" id="profile-email"></div>
                         </div>
                         
                         <!-- Credit Card -->
-                        <div id="card-info" class="mt-4 p-4 bg-slate-50 rounded-2xl hidden">
-                            <div class="text-xs text-slate-400 mb-1">La tua carta</div>
-                            <div class="font-mono text-sm" id="card-number"></div>
+                        <div id="card-info" class="mt-4 p-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl hidden">
+                            <div class="text-xs text-slate-400 mb-1">💳 La tua carta</div>
+                            <div class="font-mono text-sm font-semibold" id="card-number"></div>
                             <div class="flex justify-between items-center mt-2">
-                                <span class="font-bold" id="card-balance">€ 0</span>
-                                <span class="text-xs px-2 py-1 rounded-full bg-slate-200" id="card-type"></span>
+                                <span class="font-bold text-lg" id="card-balance">€ 0</span>
+                                <span class="text-xs px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-semibold" id="card-type"></span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Navigation -->
-                    <div class="bg-white p-4 rounded-[2rem] shadow-sm border border-slate-100">
+                    <div class="glass p-3 rounded-[2rem]">
                         <nav class="space-y-1">
-                            <button onclick="showSection('store')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center gap-3">🏪 Store</button>
-                            <button onclick="showSection('sell')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center gap-3">📦 Vendi</button>
-                            <button onclick="showSection('jobs')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center gap-3">💼 Lavori</button>
-                            <button onclick="showSection('calendar')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center gap-3">📅 Calendario</button>
-                            <button onclick="showSection('transactions')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center gap-3">💳 Transazioni</button>
+                            <button onclick="showSection('store')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                🏪 Store
+                            </button>
+                            <button onclick="showSection('sell')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                📦 Vendi
+                            </button>
+                            <button onclick="showSection('jobs')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                💼 Lavori
+                            </button>
+                            <button onclick="showSection('calendar')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                📅 Calendario
+                            </button>
+                            <button onclick="showSection('transactions')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                💳 Transazioni
+                            </button>
+                            <button onclick="showSection('settings')" class="w-full text-left p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 flex items-center gap-3 transition font-medium">
+                                ⚙️ Impostazioni
+                            </button>
                         </nav>
-                    </div>
-
-                    <!-- Banker Tools -->
-                    <div id="banker-tools" class="hidden bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                        <h3 class="font-bold text-amber-600 mb-4">🏦 Pannello Bancario</h3>
-                        <button onclick="showTransactionReview()" class="w-full bg-amber-500 text-white py-3 rounded-xl font-bold text-sm mb-3">Revisiona transazioni</button>
-                        <input type="text" id="reset-pin-user" placeholder="Email utente" class="w-full p-2 text-sm bg-slate-50 rounded-xl mb-2">
-                        <button onclick="resetUserPin()" class="w-full bg-slate-800 text-white py-2 rounded-xl text-sm font-bold">Reset PIN</button>
                     </div>
                 </div>
 
@@ -174,93 +375,91 @@
                 <div class="lg:col-span-9 space-y-6">
                     <!-- Store Section -->
                     <div id="store-section" class="block">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-2xl font-bold">🏪 Store</h2>
-                            <select id="category-filter" class="p-2 rounded-xl bg-white border border-slate-200 text-sm" onchange="loadProducts()">
-                                <option value="all">Tutte le categorie</option>
-                                <option value="Amapunt">Amapunt</option>
-                                <option value="Mobili&Arredamenti">Mobili & Arredamenti</option>
-                                <option value="Musicista">Musicista</option>
-                                <option value="Videogames">Videogames</option>
-                            </select>
-                        </div>
-                        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                    </div>
-
-                    <!-- Sell Section -->
-                    <div id="sell-section" class="hidden">
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm">
-                            <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita</h2>
-                            <div class="space-y-4">
-                                <select id="sell-category" class="w-full p-4 rounded-2xl bg-slate-50 outline-none">
-                                    <option value="Amapunt">Amapunt</option>
+                        <div class="glass p-6 rounded-[2rem]">
+                            <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                                <h2 class="text-2xl font-bold">🏪 Store</h2>
+                                <select id="category-filter" class="input-modern w-auto" onchange="loadProducts()">
+                                    <option value="all">Tutte le categorie</option>
+                                    <option value="PuntBay">PuntBay</option>
                                     <option value="Mobili&Arredamenti">Mobili & Arredamenti</option>
                                     <option value="Musicista">Musicista</option>
                                     <option value="Videogames">Videogames</option>
                                 </select>
-                                <input type="text" id="product-name" placeholder="Nome prodotto" class="w-full p-4 rounded-2xl bg-slate-50 outline-none">
-                                <textarea id="product-desc" placeholder="Descrizione" class="w-full p-4 rounded-2xl bg-slate-50 outline-none h-32"></textarea>
-                                <input type="number" id="product-price" placeholder="Prezzo (€)" class="w-full p-4 rounded-2xl bg-slate-50 outline-none">
-                                <input type="file" id="product-image" accept="image/*" class="w-full p-4 bg-slate-50 rounded-2xl">
-                                <div id="file-upload-area" class="hidden">
-                                    <input type="file" id="product-file" accept=".mp3,.wav,.zip" class="w-full p-4 bg-slate-50 rounded-2xl">
-                                </div>
-                                <button onclick="createProduct()" class="w-full gradient-brand text-white font-bold py-4 rounded-2xl">Pubblica in vendita</button>
+                            </div>
+                            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sell Section -->
+                    <div id="sell-section" class="hidden">
+                        <div class="glass p-8 rounded-[2.5rem]">
+                            <h2 class="text-2xl font-bold mb-6">📦 Metti in vendita su <span class="text-indigo-600">PuntBay</span></h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">I tuoi prodotti verranno pubblicati nella categoria PuntBay</p>
+                            <div class="space-y-4">
+                                <input type="text" id="product-name" placeholder="Nome prodotto" class="input-modern">
+                                <textarea id="product-desc" placeholder="Descrizione" class="input-modern h-32 resize-none"></textarea>
+                                <input type="number" id="product-price" placeholder="Prezzo (€)" class="input-modern">
+                                <input type="file" id="product-image" accept="image/*" class="input-modern">
+                                <button onclick="createProduct()" class="btn-primary w-full">Pubblica in vendita</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Jobs Section -->
                     <div id="jobs-section" class="hidden">
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm">
+                        <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">💼 Lavori disponibili</h2>
-                            <div class="grid gap-4">
-                                <div class="p-6 bg-slate-50 rounded-2xl">
-                                    <h3 class="font-bold">Mobili & Arredamenti 3D</h3>
-                                    <p class="text-sm text-slate-500 mb-4">Vendi arredamenti in carta 3D</p>
-                                    <button onclick="applyForJob('Mobili&Arredamenti')" class="gradient-brand text-white px-6 py-2 rounded-xl text-sm font-bold">Candidati</button>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl card-hover">
+                                    <h3 class="font-bold text-lg">🪑 Mobili & Arredamenti 3D</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi arredamenti in carta 3D</p>
+                                    <button onclick="applyForJob('Mobili&Arredamenti')" class="btn-primary text-sm">Candidati</button>
                                 </div>
-                                <div class="p-6 bg-slate-50 rounded-2xl">
-                                    <h3 class="font-bold">Musicista</h3>
-                                    <p class="text-sm text-slate-500 mb-4">Vendi musica (ascolto post-acquisto)</p>
-                                    <button onclick="applyForJob('Musicista')" class="gradient-brand text-white px-6 py-2 rounded-xl text-sm font-bold">Candidati</button>
+                                <div class="p-6 bg-purple-50 dark:bg-purple-900/20 rounded-2xl card-hover">
+                                    <h3 class="font-bold text-lg">🎵 Musicista</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi musica (ascolto post-acquisto)</p>
+                                    <button onclick="applyForJob('Musicista')" class="btn-primary text-sm">Candidati</button>
                                 </div>
-                                <div class="p-6 bg-slate-50 rounded-2xl">
-                                    <h3 class="font-bold">Designer Videogames</h3>
-                                    <p class="text-sm text-slate-500 mb-4">Vendi giochi (download)</p>
-                                    <button onclick="applyForJob('Designer videogames')" class="gradient-brand text-white px-6 py-2 rounded-xl text-sm font-bold">Candidati</button>
+                                <div class="p-6 bg-pink-50 dark:bg-pink-900/20 rounded-2xl card-hover">
+                                    <h3 class="font-bold text-lg">🎮 Designer Videogames</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Vendi giochi (download)</p>
+                                    <button onclick="applyForJob('Designer videogames')" class="btn-primary text-sm">Candidati</button>
                                 </div>
-                                <div class="p-6 bg-slate-50 rounded-2xl">
-                                    <h3 class="font-bold">Bancario</h3>
-                                    <p class="text-sm text-slate-500 mb-4">Gestisci carte e transazioni</p>
-                                    <button onclick="applyForJob('Bancario')" class="gradient-brand text-white px-6 py-2 rounded-xl text-sm font-bold">Candidati</button>
+                                <div class="p-6 bg-amber-50 dark:bg-amber-900/20 rounded-2xl card-hover">
+                                    <h3 class="font-bold text-lg">🏦 Bancario</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Gestisci carte e transazioni</p>
+                                    <button onclick="applyForJob('Bancario')" class="btn-primary text-sm">Candidati</button>
                                 </div>
                             </div>
+                            
+                            <!-- Job Status -->
+                            <div id="job-status" class="mt-6"></div>
+                            
+                            <!-- Work Panel (dinamico) -->
+                            <div id="work-panel-container" class="mt-6"></div>
                         </div>
                     </div>
 
                     <!-- Calendar Section -->
                     <div id="calendar-section" class="hidden">
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm">
-                            <div class="flex justify-between items-center mb-6">
+                        <div class="glass p-8 rounded-[2.5rem]">
+                            <div class="flex flex-wrap justify-between items-center mb-6">
                                 <h2 class="text-2xl font-bold">📅 Calendario eventi</h2>
                                 <div class="flex gap-2">
-                                    <button onclick="previousMonth()" class="px-4 py-2 bg-slate-100 rounded-xl text-sm font-bold">←</button>
+                                    <button onclick="previousMonth()" class="btn-secondary text-sm">←</button>
                                     <span id="current-month" class="px-4 py-2 font-bold"></span>
-                                    <button onclick="nextMonth()" class="px-4 py-2 bg-slate-100 rounded-xl text-sm font-bold">→</button>
+                                    <button onclick="nextMonth()" class="btn-secondary text-sm">→</button>
                                 </div>
                             </div>
-                            
                             <div id="calendar-grid" class="grid grid-cols-7 gap-1">
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Lun</div>
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Mar</div>
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Mer</div>
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Gio</div>
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Ven</div>
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Sab</div>
-                                <div class="text-center font-bold text-sm py-2 bg-slate-50">Dom</div>
+                                <div class="text-center font-bold text-sm py-2">Lun</div>
+                                <div class="text-center font-bold text-sm py-2">Mar</div>
+                                <div class="text-center font-bold text-sm py-2">Mer</div>
+                                <div class="text-center font-bold text-sm py-2">Gio</div>
+                                <div class="text-center font-bold text-sm py-2">Ven</div>
+                                <div class="text-center font-bold text-sm py-2">Sab</div>
+                                <div class="text-center font-bold text-sm py-2">Dom</div>
                             </div>
-                            
                             <div id="selected-day-events" class="mt-6 hidden">
                                 <h3 class="font-bold mb-3" id="selected-day-title"></h3>
                                 <div id="day-events-list" class="space-y-2"></div>
@@ -270,47 +469,93 @@
 
                     <!-- Transactions Section -->
                     <div id="transactions-section" class="hidden">
-                        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm">
+                        <div class="glass p-8 rounded-[2.5rem]">
                             <h2 class="text-2xl font-bold mb-6">💳 Le tue transazioni</h2>
                             <div id="transactions-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div id="settings-section" class="hidden">
+                        <div class="glass p-8 rounded-[2.5rem]">
+                            <h2 class="text-2xl font-bold mb-6">⚙️ Impostazioni</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Account Settings -->
+                                <div class="setting-card">
+                                    <h3 class="font-bold text-lg mb-4">👤 Account</h3>
+                                    <div class="space-y-3">
+                                        <input type="text" id="settings-fullname" placeholder="Nome e Cognome" class="input-modern">
+                                        <button onclick="updateProfile()" class="btn-primary w-full text-sm">Aggiorna profilo</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Password Settings -->
+                                <div class="setting-card">
+                                    <h3 class="font-bold text-lg mb-4">🔒 Password</h3>
+                                    <div class="space-y-3">
+                                        <input type="password" id="settings-new-password" placeholder="Nuova password" class="input-modern">
+                                        <input type="password" id="settings-confirm-password" placeholder="Conferma password" class="input-modern">
+                                        <button onclick="changePassword()" class="btn-primary w-full text-sm">Cambia password</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Card Settings -->
+                                <div class="setting-card">
+                                    <h3 class="font-bold text-lg mb-4">💳 Carta di credito</h3>
+                                    <div class="space-y-3">
+                                        <input type="password" id="settings-new-pin" maxlength="6" placeholder="Nuovo PIN (6 cifre)" class="input-modern">
+                                        <button onclick="changeCardPin()" class="btn-primary w-full text-sm">Cambia PIN</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Theme Settings -->
+                                <div class="setting-card">
+                                    <h3 class="font-bold text-lg mb-4">🎨 Tema</h3>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">🌙 Tema scuro</span>
+                                        <div id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">
+                                            <div class="knob"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Admin Interface (separata) -->
+            <!-- Admin Interface -->
             <div id="admin-interface" class="hidden">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm">
+                <div class="glass p-8 rounded-[2.5rem]">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold">⚡ Pannello di Amministrazione</h2>
-                        <button onclick="showUserInterface()" class="text-sm bg-slate-100 px-4 py-2 rounded-xl">← Torna all'app</button>
+                        <button onclick="showUserInterface()" class="btn-secondary text-sm">← Torna all'app</button>
                     </div>
 
-                    <div class="border-b border-slate-200 mb-6">
-                        <div class="flex gap-4">
-                            <button onclick="showAdminTab('users')" class="px-4 py-2 font-bold text-blue-600 border-b-2 border-blue-600" id="tab-users">Utenti</button>
-                            <button onclick="showAdminTab('events')" class="px-4 py-2 font-bold text-slate-500" id="tab-events">Eventi</button>
-                            <button onclick="showAdminTab('jobs')" class="px-4 py-2 font-bold text-slate-500" id="tab-jobs">Lavori</button>
-                            <button onclick="showAdminTab('ceo')" class="px-4 py-2 font-bold text-slate-500" id="tab-ceo">CEO</button>
-                        </div>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button onclick="showAdminTab('users')" class="tab-btn active" id="tab-users">Utenti</button>
+                        <button onclick="showAdminTab('events')" class="tab-btn" id="tab-events">Eventi</button>
+                        <button onclick="showAdminTab('jobs')" class="tab-btn" id="tab-jobs">Lavori</button>
+                        <button onclick="showAdminTab('ceo')" class="tab-btn" id="tab-ceo">CEO</button>
                     </div>
 
                     <div id="admin-users" class="block">
                         <div class="mb-4 flex gap-2">
-                            <input type="text" id="user-search" placeholder="Cerca utente..." class="flex-1 p-2 rounded-xl bg-slate-50 border border-slate-200">
-                            <button onclick="loadUsers()" class="bg-slate-800 text-white px-4 py-2 rounded-xl">Cerca</button>
+                            <input type="text" id="user-search" placeholder="Cerca utente..." class="input-modern">
+                            <button onclick="loadUsers()" class="btn-primary">Cerca</button>
                         </div>
                         <div id="admin-users-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
                     </div>
 
                     <div id="admin-events" class="hidden">
-                        <div class="mb-6 p-4 bg-slate-50 rounded-2xl">
+                        <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
                             <h3 class="font-bold mb-4">Crea nuovo evento</h3>
                             <div class="space-y-3">
-                                <input type="text" id="admin-event-title" placeholder="Titolo evento" class="w-full p-2 rounded-xl bg-white border border-slate-200">
-                                <input type="date" id="admin-event-date" class="w-full p-2 rounded-xl bg-white border border-slate-200">
-                                <textarea id="admin-event-desc" placeholder="Descrizione" class="w-full p-2 rounded-xl bg-white border border-slate-200 h-20"></textarea>
-                                <button onclick="adminCreateEvent()" class="gradient-brand text-white px-6 py-2 rounded-xl font-bold">Crea evento</button>
+                                <input type="text" id="admin-event-title" placeholder="Titolo evento" class="input-modern">
+                                <input type="date" id="admin-event-date" class="input-modern">
+                                <textarea id="admin-event-desc" placeholder="Descrizione" class="input-modern h-20 resize-none"></textarea>
+                                <button onclick="adminCreateEvent()" class="btn-primary">Crea evento</button>
                             </div>
                         </div>
                         <div id="admin-events-list" class="space-y-3"></div>
@@ -321,12 +566,12 @@
                     </div>
 
                     <div id="admin-ceo" class="hidden">
-                        <div class="p-4 bg-slate-50 rounded-2xl">
+                        <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
                             <h3 class="font-bold mb-4">Nomina CEO</h3>
-                            <select id="admin-ceo-select" class="w-full p-2 rounded-xl bg-white border border-slate-200 mb-3">
+                            <select id="admin-ceo-select" class="input-modern mb-3">
                                 <option value="">Seleziona utente</option>
                             </select>
-                            <button onclick="adminNominateCEO()" class="bg-purple-600 text-white px-6 py-2 rounded-xl font-bold">Nomina CEO</button>
+                            <button onclick="adminNominateCEO()" class="btn-primary">Nomina CEO</button>
                         </div>
                         <div id="admin-ceo-list" class="mt-4 space-y-3"></div>
                     </div>
@@ -347,10 +592,12 @@
         let currentCard = null;
         let isAdmin = false;
         let isBanker = false;
+        let isDarkTheme = false;
+        let userJobs = [];
+        let userJobStatus = [];
         
         let currentDate = new Date();
         let calendarEvents = [];
-        let selectedDate = null;
 
         // ==================== HELPER FUNCTIONS ====================
         function escapeHtml(str) {
@@ -363,9 +610,30 @@
             });
         }
 
-        // ==================== AUTH FUNCTIONS ====================
-        // Google login rimosso
+        // ==================== THEME ====================
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            const html = document.getElementById('html-root');
+            if (isDarkTheme) {
+                html.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-toggle').classList.add('active');
+            } else {
+                html.removeAttribute('data-theme');
+                document.getElementById('theme-toggle').classList.remove('active');
+            }
+            localStorage.setItem('puntbay-theme', isDarkTheme ? 'dark' : 'light');
+        }
 
+        function loadTheme() {
+            const saved = localStorage.getItem('puntbay-theme');
+            if (saved === 'dark') {
+                isDarkTheme = true;
+                document.getElementById('html-root').setAttribute('data-theme', 'dark');
+                document.getElementById('theme-toggle').classList.add('active');
+            }
+        }
+
+        // ==================== AUTH FUNCTIONS ====================
         async function handleEmailLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -389,6 +657,7 @@
         // ==================== APP INIT ====================
         async function initApp(user) {
             currentUser = user;
+            loadTheme();
             
             const { data: profile, error } = await _supabase
                 .from('profiles')
@@ -408,7 +677,6 @@
                     })
                     .select()
                     .single();
-                
                 currentProfile = newProfile;
             } else {
                 currentProfile = profile;
@@ -427,7 +695,7 @@
                     .from('credit_cards')
                     .insert({
                         user_id: user.id,
-                        card_number: 'CARD-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+                        card_number: 'PUNT-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
                         balance: 5000,
                         type: 'normale',
                         pin_hash: '123456'
@@ -439,14 +707,8 @@
                 currentCard = card;
             }
             
-            const { data: bankerApp } = await _supabase
-                .from('job_applications')
-                .select('*')
-                .eq('user_id', user.id)
-                .eq('job_type', 'Bancario')
-                .eq('status', 'accepted')
-                .maybeSingle();
-            isBanker = !!bankerApp;
+            // Load user jobs
+            await loadUserJobs();
             
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('app-section').classList.remove('hidden');
@@ -456,6 +718,11 @@
             document.getElementById('user-email-display').innerText = user.email;
             document.getElementById('profile-name').innerText = currentProfile?.full_name || 'Utente';
             document.getElementById('profile-email').innerText = user.email;
+            document.getElementById('settings-fullname').value = currentProfile?.full_name || '';
+            
+            if (currentProfile?.avatar_url) {
+                document.getElementById('profile-avatar').src = currentProfile.avatar_url;
+            }
             
             const roleBadge = document.getElementById('user-role-badge');
             roleBadge.innerText = currentProfile?.role || 'Non Classificato';
@@ -476,13 +743,272 @@
                 loadUsersForCEOSelect();
             }
             
-            if (isBanker) {
-                document.getElementById('banker-tools').classList.remove('hidden');
-            }
-            
             loadProducts();
             loadEvents();
             loadUserTransactions();
+            updateWorkPanel();
+        }
+
+        // ==================== USER JOBS ====================
+        async function loadUserJobs() {
+            const { data: jobs } = await _supabase
+                .from('job_applications')
+                .select('*')
+                .eq('user_id', currentUser.id);
+            
+            userJobs = jobs || [];
+            userJobStatus = jobs || [];
+            updateJobStatus();
+        }
+
+        function updateJobStatus() {
+            const container = document.getElementById('job-status');
+            if (!userJobs || userJobs.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
+                    <h4 class="font-bold mb-2">📋 Le tue candidature</h4>
+                    ${userJobs.map(j => `
+                        <div class="flex justify-between items-center py-2 border-b border-slate-200 dark:border-slate-700 last:border-0">
+                            <span>${j.job_type}</span>
+                            <span class="text-sm px-3 py-1 rounded-full ${j.status === 'accepted' ? 'bg-green-100 text-green-700' : j.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}">
+                                ${j.status === 'accepted' ? '✅ Accettato' : j.status === 'pending' ? '⏳ In attesa' : '❌ Rifiutato'}
+                            </span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // ==================== WORK PANEL ====================
+        async function updateWorkPanel() {
+            const container = document.getElementById('work-panel-container');
+            
+            // Check if user has accepted jobs
+            const acceptedJobs = userJobs.filter(j => j.status === 'accepted');
+            
+            if (acceptedJobs.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let panels = '';
+            
+            for (const job of acceptedJobs) {
+                if (job.job_type === 'Bancario') {
+                    // Banker panel
+                    panels += `
+                        <div class="work-panel active">
+                            <h3 class="font-bold text-lg mb-3">🏦 Pannello Bancario</h3>
+                            <div class="space-y-3">
+                                <button onclick="showTransactionReview()" class="btn-primary w-full text-sm">Revisiona transazioni</button>
+                                <div class="flex gap-2">
+                                    <input type="text" id="reset-pin-user" placeholder="Email utente" class="input-modern flex-1">
+                                    <button onclick="resetUserPin()" class="btn-secondary">Reset PIN</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (job.job_type === 'Mobili&Arredamenti' || job.job_type === 'Musicista' || job.job_type === 'Designer videogames') {
+                    // Check if user is department head
+                    const { data: headCheck } = await _supabase
+                        .from('profiles')
+                        .select('company_role')
+                        .eq('id', currentUser.id)
+                        .single();
+                    
+                    const isHead = headCheck?.company_role === 'Capo Azienda';
+                    
+                    panels += `
+                        <div class="work-panel active">
+                            <h3 class="font-bold text-lg mb-3">🎨 ${job.job_type}</h3>
+                            <div class="space-y-3">
+                                <input type="text" id="work-product-name" placeholder="Nome prodotto" class="input-modern">
+                                <textarea id="work-product-desc" placeholder="Descrizione" class="input-modern h-24 resize-none"></textarea>
+                                <input type="number" id="work-product-price" placeholder="Prezzo (€)" class="input-modern">
+                                <input type="file" id="work-product-file" class="input-modern">
+                                <button onclick="createWorkProduct('${job.job_type}')" class="btn-primary w-full">Carica prodotto</button>
+                            </div>
+                            ${isHead ? `
+                                <div class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-2xl">
+                                    <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-2">👑 Sei Capo Azienda</h4>
+                                    <div id="workers-list-${job.job_type.replace(/\s+/g, '')}" class="space-y-2"></div>
+                                    <button onclick="loadWorkers('${job.job_type}')" class="btn-secondary text-sm w-full mt-2">Aggiorna lavoratori</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+            }
+            
+            container.innerHTML = panels;
+            
+            // Load workers if user is head
+            for (const job of acceptedJobs) {
+                if (job.job_type !== 'Bancario') {
+                    const { data: headCheck } = await _supabase
+                        .from('profiles')
+                        .select('company_role')
+                        .eq('id', currentUser.id)
+                        .single();
+                    
+                    if (headCheck?.company_role === 'Capo Azienda') {
+                        loadWorkers(job.job_type);
+                    }
+                }
+            }
+        }
+
+        async function loadWorkers(jobType) {
+            // Get all users with accepted job applications for this job type
+            const { data: workers } = await _supabase
+                .from('job_applications')
+                .select('user_id, profiles(full_name, email, company_role)')
+                .eq('job_type', jobType)
+                .eq('status', 'accepted')
+                .neq('user_id', currentUser.id);
+            
+            const container = document.getElementById(`workers-list-${jobType.replace(/\s+/g, '')}`);
+            if (!container) return;
+            
+            if (!workers || workers.length === 0) {
+                container.innerHTML = '<p class="text-sm text-slate-400">Nessun lavoratore nel tuo team</p>';
+                return;
+            }
+            
+            container.innerHTML = workers.map(w => `
+                <div class="flex justify-between items-center p-2 bg-white dark:bg-slate-800 rounded-xl">
+                    <div>
+                        <p class="font-medium text-sm">${w.profiles?.full_name || 'N/A'}</p>
+                        <p class="text-xs text-slate-400">${w.profiles?.email}</p>
+                        ${w.profiles?.company_role === 'Capo Azienda' ? '<span class="text-xs text-amber-600">👑 Capo</span>' : ''}
+                    </div>
+                    <button onclick="fireWorker('${w.user_id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
+                        Licenzia
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function fireWorker(userId) {
+            if (!confirm('Sei sicuro di voler licenziare questo lavoratore?')) return;
+            
+            // Update job application status to 'rejected'
+            await _supabase
+                .from('job_applications')
+                .update({ status: 'rejected', reviewed_at: new Date(), reviewed_by: currentUser.id })
+                .eq('user_id', userId);
+            
+            alert('Lavoratore licenziato!');
+            loadUserJobs();
+            updateWorkPanel();
+        }
+
+        async function createWorkProduct(jobType) {
+            const name = document.getElementById('work-product-name').value;
+            const desc = document.getElementById('work-product-desc').value;
+            const price = document.getElementById('work-product-price').value;
+            const file = document.getElementById('work-product-file').files[0];
+            
+            if (!name || !desc || !price) { alert('Compila tutti i campi!'); return; }
+            
+            let fileUrl = null;
+            if (file) {
+                const path = `work/${jobType}/${Date.now()}_${file.name}`;
+                await _supabase.storage.from('work-files').upload(path, file);
+                fileUrl = _supabase.storage.from('work-files').getPublicUrl(path).data.publicUrl;
+            }
+            
+            const { error } = await _supabase.from('products').insert({
+                seller_id: currentUser.id,
+                category: jobType,
+                name,
+                description: desc,
+                price: parseFloat(price),
+                file_url: fileUrl,
+                is_active: true
+            });
+            
+            if (error) alert('Errore: ' + error.message);
+            else {
+                alert('Prodotto caricato!');
+                document.getElementById('work-product-name').value = '';
+                document.getElementById('work-product-desc').value = '';
+                document.getElementById('work-product-price').value = '';
+                document.getElementById('work-product-file').value = '';
+                loadProducts();
+            }
+        }
+
+        // ==================== SETTINGS ====================
+        async function updateProfile() {
+            const fullName = document.getElementById('settings-fullname').value;
+            if (!fullName) { alert('Inserisci il nome'); return; }
+            
+            const { error } = await _supabase
+                .from('profiles')
+                .update({ full_name: fullName })
+                .eq('id', currentUser.id);
+            
+            if (error) alert('Errore: ' + error.message);
+            else {
+                alert('Profilo aggiornato!');
+                document.getElementById('profile-name').innerText = fullName;
+                currentProfile.full_name = fullName;
+            }
+        }
+
+        async function uploadAvatar(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const path = `avatars/${currentUser.id}/${Date.now()}_${file.name}`;
+            await _supabase.storage.from('avatars').upload(path, file);
+            const avatarUrl = _supabase.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+            
+            await _supabase
+                .from('profiles')
+                .update({ avatar_url: avatarUrl })
+                .eq('id', currentUser.id);
+            
+            document.getElementById('profile-avatar').src = avatarUrl;
+            alert('Avatar aggiornato!');
+        }
+
+        async function changePassword() {
+            const newPw = document.getElementById('settings-new-password').value;
+            const confirmPw = document.getElementById('settings-confirm-password').value;
+            
+            if (newPw !== confirmPw) { alert('Le password non coincidono'); return; }
+            if (newPw.length < 6) { alert('Minimo 6 caratteri'); return; }
+            
+            const { error } = await _supabase.auth.updateUser({ password: newPw });
+            if (error) alert('Errore: ' + error.message);
+            else {
+                alert('Password aggiornata!');
+                document.getElementById('settings-new-password').value = '';
+                document.getElementById('settings-confirm-password').value = '';
+            }
+        }
+
+        async function changeCardPin() {
+            const newPin = document.getElementById('settings-new-pin').value;
+            if (!newPin || newPin.length !== 6) { alert('Inserisci un PIN di 6 cifre'); return; }
+            if (!/^\d{6}$/.test(newPin)) { alert('Il PIN deve contenere solo numeri'); return; }
+            
+            const { error } = await _supabase
+                .from('credit_cards')
+                .update({ pin_hash: newPin })
+                .eq('user_id', currentUser.id);
+            
+            if (error) alert('Errore: ' + error.message);
+            else {
+                alert('PIN aggiornato!');
+                document.getElementById('settings-new-pin').value = '';
+            }
         }
 
         // ==================== STORE FUNCTIONS ====================
@@ -513,15 +1039,15 @@
             }
             
             grid.innerHTML = products.map(p => `
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 card-hover">
+                <div class="glass p-4 rounded-2xl card-hover">
                     ${p.image_url ? `<img src="${p.image_url}" class="w-full h-40 object-cover rounded-xl mb-3">` : ''}
                     <h3 class="font-bold text-lg">${escapeHtml(p.name)}</h3>
                     <p class="text-xs text-slate-400 mb-2">👤 ${escapeHtml(p.seller?.full_name || 'Anonimo')}</p>
-                    <p class="text-sm text-slate-600 line-clamp-2">${escapeHtml(p.description || '')}</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">${escapeHtml(p.description || '')}</p>
                     <div class="flex justify-between items-center mt-4">
-                        <span class="font-bold text-xl text-blue-600">€ ${p.price}</span>
+                        <span class="font-bold text-xl text-indigo-600">€ ${p.price}</span>
                         <button onclick="openPinModal('${p.id}', '${escapeHtml(p.name)}')" 
-                                class="gradient-brand text-white px-5 py-2 rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition">
+                                class="btn-primary text-sm">
                             🛒 Acquista
                         </button>
                     </div>
@@ -530,7 +1056,6 @@
         }
 
         async function createProduct() {
-            const category = document.getElementById('sell-category').value;
             const name = document.getElementById('product-name').value;
             const desc = document.getElementById('product-desc').value;
             const price = document.getElementById('product-price').value;
@@ -546,18 +1071,18 @@
             }
             
             const { error } = await _supabase.from('products').insert({
-                seller_id: currentUser.id, 
-                category, 
+                seller_id: currentUser.id,
+                category: 'PuntBay',
                 name,
-                description: desc, 
-                price: parseFloat(price), 
+                description: desc,
+                price: parseFloat(price),
                 image_url: imageUrl,
                 is_active: true
             });
             
             if (error) alert('Errore: ' + error.message);
             else {
-                alert('Prodotto pubblicato!');
+                alert('Prodotto pubblicato su PuntBay!');
                 document.getElementById('product-name').value = '';
                 document.getElementById('product-desc').value = '';
                 document.getElementById('product-price').value = '';
@@ -565,37 +1090,6 @@
                 showSection('store');
                 loadProducts();
             }
-        }
-
-        // ==================== INTERFACE SWITCHING ====================
-        function showAdminInterface() {
-            document.getElementById('user-interface').classList.add('hidden');
-            document.getElementById('admin-interface').classList.remove('hidden');
-            loadUsers();
-            loadAdminEvents();
-            loadJobApplications();
-            loadUsersForCEOSelect();
-        }
-
-        function showUserInterface() {
-            document.getElementById('user-interface').classList.remove('hidden');
-            document.getElementById('admin-interface').classList.add('hidden');
-        }
-
-        function showAdminTab(tab) {
-            ['users', 'events', 'jobs', 'ceo'].forEach(t => {
-                document.getElementById(`admin-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-                document.getElementById(`tab-${t}`).classList.add('text-slate-500');
-            });
-            document.getElementById(`admin-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
-            document.getElementById(`tab-${tab}`).classList.remove('text-slate-500');
-            
-            if (tab === 'users') loadUsers();
-            if (tab === 'events') loadAdminEvents();
-            if (tab === 'jobs') loadJobApplications();
-            if (tab === 'ceo') loadUsersForCEOSelect();
         }
 
         // ==================== PIN MODAL ====================
@@ -633,11 +1127,25 @@
 
         // ==================== JOB FUNCTIONS ====================
         async function applyForJob(jobType) {
+            // Check if already applied
+            const existing = userJobs.find(j => j.job_type === jobType);
+            if (existing) {
+                alert('Hai già fatto richiesta per questo lavoro!');
+                return;
+            }
+            
             const { error } = await _supabase.from('job_applications').insert({
-                user_id: currentUser.id, job_type: jobType
+                user_id: currentUser.id,
+                job_type: jobType,
+                status: 'pending'
             });
+            
             if (error) alert('Errore: ' + error.message);
-            else alert('Candidatura inviata!');
+            else {
+                alert('Candidatura inviata!');
+                await loadUserJobs();
+                updateWorkPanel();
+            }
         }
 
         // ==================== CALENDAR FUNCTIONS ====================
@@ -668,7 +1176,7 @@
             let calendarHTML = '';
             
             for (let i = 0; i < startOffset; i++) {
-                calendarHTML += '<div class="calendar-day bg-slate-50 text-slate-400"></div>';
+                calendarHTML += '<div class="calendar-day bg-slate-50 dark:bg-slate-800 text-slate-400"></div>';
             }
             
             for (let day = 1; day <= totalDays; day++) {
@@ -677,7 +1185,7 @@
                 const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
                 
                 calendarHTML += `
-                    <div class="calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''} cursor-pointer hover:bg-slate-100" 
+                    <div class="calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''} cursor-pointer hover:shadow-md" 
                          onclick="showDayEvents('${dateStr}')">
                         <div class="font-bold">${day}</div>
                         ${hasEvent ? '<div class="event-dot"></div>' : ''}
@@ -688,17 +1196,17 @@
             const totalCells = Math.ceil((startOffset + totalDays) / 7) * 7;
             const remainingCells = totalCells - (startOffset + totalDays);
             for (let i = 0; i < remainingCells; i++) {
-                calendarHTML += '<div class="calendar-day bg-slate-50"></div>';
+                calendarHTML += '<div class="calendar-day bg-slate-50 dark:bg-slate-800"></div>';
             }
             
             document.getElementById('calendar-grid').innerHTML = `
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Lun</div>
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Mar</div>
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Mer</div>
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Gio</div>
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Ven</div>
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Sab</div>
-                <div class="text-center font-bold text-sm py-2 bg-slate-50">Dom</div>
+                <div class="text-center font-bold text-sm py-2">Lun</div>
+                <div class="text-center font-bold text-sm py-2">Mar</div>
+                <div class="text-center font-bold text-sm py-2">Mer</div>
+                <div class="text-center font-bold text-sm py-2">Gio</div>
+                <div class="text-center font-bold text-sm py-2">Ven</div>
+                <div class="text-center font-bold text-sm py-2">Sab</div>
+                <div class="text-center font-bold text-sm py-2">Dom</div>
                 ${calendarHTML}
             `;
         }
@@ -721,9 +1229,9 @@
             
             if (dayEvents.length > 0) {
                 document.getElementById('day-events-list').innerHTML = dayEvents.map(e => `
-                    <div class="p-3 bg-slate-50 rounded-xl">
+                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
                         <h4 class="font-bold">${escapeHtml(e.title)}</h4>
-                        <p class="text-sm text-slate-600">${escapeHtml(e.description || '')}</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">${escapeHtml(e.description || '')}</p>
                         <p class="text-xs text-slate-400 mt-1">Creato da: ${escapeHtml(e.created_by)}</p>
                     </div>
                 `).join('');
@@ -745,20 +1253,21 @@
             const { data: users } = await query;
             
             document.getElementById('admin-users-list').innerHTML = users.map(u => `
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <div class="flex justify-between">
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
+                    <div class="flex flex-wrap justify-between gap-4">
                         <div class="flex-1">
                             <p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p>
                             <p class="text-xs text-slate-400">${escapeHtml(u.email)}</p>
-                            <div class="flex items-center gap-2 mt-2">
+                            <div class="flex flex-wrap items-center gap-2 mt-2">
                                 <span class="role-badge role-${u.role?.replace(/\s+/g, '-') || 'Non-Classificato'}">${u.role || 'Non Classificato'}</span>
                                 ${u.is_banned ? '<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">🚫 Bannato</span>' : ''}
                                 ${u.company_role === 'CEO' ? '<span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">👑 CEO</span>' : ''}
+                                ${u.company_role === 'Capo Azienda' ? '<span class="text-xs bg-amber-100 text-amber-600 px-2 py-1 rounded-full">👔 Capo Azienda</span>' : ''}
                             </div>
                             ${u.demonic_note ? `<p class="demonic-note text-xs p-2 rounded-xl mt-2">👿 ${escapeHtml(u.demonic_note)}</p>` : ''}
                         </div>
                         <div class="space-y-2">
-                            <select onchange="changeUserRole('${u.id}', this.value)" class="text-xs p-1 rounded border">
+                            <select onchange="changeUserRole('${u.id}', this.value)" class="input-modern text-sm">
                                 <option value="Non Classificato" ${u.role === 'Non Classificato' ? 'selected' : ''}>Non Classificato</option>
                                 <option value="Mercante anziano" ${u.role === 'Mercante anziano' ? 'selected' : ''}>Mercante anziano</option>
                                 <option value="Vicepresidente" ${u.role === 'Vicepresidente' ? 'selected' : ''}>Vicepresidente</option>
@@ -767,9 +1276,9 @@
                             </select>
                             <div class="flex gap-2">
                                 ${!u.is_banned ? 
-                                    `<button onclick="banUser('${u.id}')" class="text-xs bg-red-500 text-white px-2 py-1 rounded">Ban</button>` : 
-                                    `<button onclick="unbanUser('${u.id}')" class="text-xs bg-green-500 text-white px-2 py-1 rounded">Unban</button>`}
-                                <button onclick="addDemonicNote('${u.id}')" class="text-xs bg-purple-600 text-white px-2 py-1 rounded">👿 Nota</button>
+                                    `<button onclick="banUser('${u.id}')" class="text-xs bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">Ban</button>` : 
+                                    `<button onclick="unbanUser('${u.id}')" class="text-xs bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition">Unban</button>`}
+                                <button onclick="addDemonicNote('${u.id}')" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 transition">👿 Nota</button>
                             </div>
                         </div>
                     </div>
@@ -810,15 +1319,15 @@
                 .order('event_date', { ascending: true });
             
             document.getElementById('admin-events-list').innerHTML = events.map(e => `
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <div class="flex justify-between">
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
+                    <div class="flex flex-wrap justify-between gap-2">
                         <div>
                             <h4 class="font-bold">${escapeHtml(e.title)}</h4>
                             <p class="text-xs text-slate-400">${new Date(e.event_date).toLocaleDateString()}</p>
                             <p class="text-sm mt-2">${escapeHtml(e.description || '')}</p>
                             <p class="text-xs text-slate-400 mt-1">Creato da: ${escapeHtml(e.profiles?.full_name || e.created_by)}</p>
                         </div>
-                        <button onclick="deleteEvent('${e.id}')" class="text-red-500 text-sm">Elimina</button>
+                        <button onclick="deleteEvent('${e.id}')" class="text-red-500 text-sm hover:underline">Elimina</button>
                     </div>
                 </div>
             `).join('');
@@ -861,17 +1370,37 @@
                 .order('applied_at', { ascending: false });
             
             document.getElementById('admin-jobs-list').innerHTML = apps.map(a => `
-                <div class="p-4 bg-slate-50 rounded-2xl">
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
                     <p class="font-bold">${escapeHtml(a.profiles?.full_name)}</p>
                     <p class="text-xs">${escapeHtml(a.profiles?.email)}</p>
                     <p class="text-sm mt-2">Richiesta: ${a.job_type}</p>
                     <p class="text-xs text-slate-400">Inviata: ${new Date(a.applied_at).toLocaleString()}</p>
-                    <div class="flex gap-2 mt-3">
-                        <button onclick="handleApplication('${a.id}', 'accepted')" class="bg-green-500 text-white px-4 py-2 rounded-xl text-sm">Accetta</button>
-                        <button onclick="handleApplication('${a.id}', 'rejected')" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm">Rifiuta</button>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <button onclick="handleApplication('${a.id}', 'accepted')" class="btn-primary text-sm">Accetta</button>
+                        <button onclick="handleApplication('${a.id}', 'rejected')" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-red-600 transition">Rifiuta</button>
+                        <button onclick="promoteToHead('${a.user_id}', '${a.job_type}')" class="bg-amber-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-amber-600 transition">👔 Promuovi a Capo</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        async function promoteToHead(userId, jobType) {
+            if (!confirm(`Promuovere questo utente a Capo Azienda per ${jobType}?`)) return;
+            
+            // Remove any existing head for this job type
+            await _supabase
+                .from('profiles')
+                .update({ company_role: null })
+                .eq('company_role', 'Capo Azienda');
+            
+            // Promote user
+            await _supabase
+                .from('profiles')
+                .update({ company_role: 'Capo Azienda' })
+                .eq('id', userId);
+            
+            alert('Utente promosso a Capo Azienda!');
+            loadJobApplications();
         }
 
         async function handleApplication(appId, status) {
@@ -879,6 +1408,8 @@
                 .update({ status, reviewed_at: new Date(), reviewed_by: currentUser.id })
                 .eq('id', appId);
             loadJobApplications();
+            loadUserJobs();
+            updateWorkPanel();
         }
 
         async function loadUsersForCEOSelect() {
@@ -898,7 +1429,7 @@
                 .eq('company_role', 'CEO');
             
             document.getElementById('admin-ceo-list').innerHTML = (ceos || []).map(u => `
-                <div class="p-4 bg-slate-50 rounded-2xl">
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
                     <p class="font-bold">${escapeHtml(u.full_name || 'N/A')}</p>
                     <p class="text-xs">${escapeHtml(u.email)}</p>
                     <p class="text-xs text-purple-600 mt-1">👑 CEO</p>
@@ -943,13 +1474,13 @@
             }
             
             const t = transactions[0];
-            const legal = confirm(`Verifica transazione:\nProdotto: ${t.products?.name}\nImporto: €${t.amount}\nVenditore: ${t.seller?.full_name}\nCompratore: ${t.buyer?.full_name}\n\nÈ legale?`);
+            const legal = confirm(`Verifica transazione:\n📦 Prodotto: ${t.products?.name}\n💰 Importo: €${t.amount}\n👤 Venditore: ${t.seller?.full_name}\n👤 Compratore: ${t.buyer?.full_name}\n\n✅ È legale?`);
             
             if (legal !== null) {
                 await _supabase.from('transactions')
                     .update({ is_legal: legal, reviewed_by_banker: currentUser.id })
                     .eq('id', t.id);
-                alert('Transazione ' + (legal ? 'approvata' : 'segnalata'));
+                alert('Transazione ' + (legal ? 'approvata ✅' : 'segnalata ❌'));
             }
         }
 
@@ -968,26 +1499,33 @@
             }
             
             list.innerHTML = transactions.map(t => `
-                <div class="p-4 bg-slate-50 rounded-2xl">
-                    <p class="text-sm">${t.buyer_id === currentUser.id ? '💰 Acquisto' : '💸 Vendita'} - ${escapeHtml(t.products?.name)}</p>
-                    <p class="text-xs text-slate-400">${new Date(t.created_at).toLocaleString()}</p>
-                    <p class="font-bold mt-1">€ ${t.amount}</p>
-                    ${t.is_legal !== null ? 
-                        `<p class="text-xs mt-1 ${t.is_legal ? 'text-green-600' : 'text-red-600'}">${t.is_legal ? '✅ Verificata' : '❌ Sospetta'}</p>` : 
-                        '<p class="text-xs text-amber-500">⏳ In attesa verifica</p>'}
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-medium">${t.buyer_id === currentUser.id ? '💰 Acquisto' : '💸 Vendita'} - ${escapeHtml(t.products?.name)}</p>
+                            <p class="text-xs text-slate-400">${new Date(t.created_at).toLocaleString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-lg">€ ${t.amount}</p>
+                            ${t.is_legal !== null ? 
+                                `<p class="text-xs ${t.is_legal ? 'text-green-600' : 'text-red-600'}">${t.is_legal ? '✅ Verificata' : '❌ Sospetta'}</p>` : 
+                                '<p class="text-xs text-amber-500">⏳ In attesa verifica</p>'}
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
 
         // ==================== UI FUNCTIONS ====================
         function showSection(section) {
-            ['store', 'sell', 'jobs', 'calendar', 'transactions'].forEach(s => {
+            ['store', 'sell', 'jobs', 'calendar', 'transactions', 'settings'].forEach(s => {
                 document.getElementById(s + '-section').classList.add('hidden');
             });
             document.getElementById(section + '-section').classList.remove('hidden');
             if (section === 'store') loadProducts();
             if (section === 'calendar') loadEvents();
             if (section === 'transactions') loadUserTransactions();
+            if (section === 'jobs') { loadUserJobs(); updateWorkPanel(); }
         }
 
         function showRegister() {
@@ -1018,6 +1556,35 @@
         async function handleLogout() {
             await _supabase.auth.signOut();
             location.reload();
+        }
+
+        // ==================== INTERFACE SWITCHING ====================
+        function showAdminInterface() {
+            document.getElementById('user-interface').classList.add('hidden');
+            document.getElementById('admin-interface').classList.remove('hidden');
+            loadUsers();
+            loadAdminEvents();
+            loadJobApplications();
+            loadUsersForCEOSelect();
+        }
+
+        function showUserInterface() {
+            document.getElementById('user-interface').classList.remove('hidden');
+            document.getElementById('admin-interface').classList.add('hidden');
+        }
+
+        function showAdminTab(tab) {
+            ['users', 'events', 'jobs', 'ceo'].forEach(t => {
+                document.getElementById(`admin-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('active');
+            });
+            document.getElementById(`admin-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            if (tab === 'users') loadUsers();
+            if (tab === 'events') loadAdminEvents();
+            if (tab === 'jobs') loadJobApplications();
+            if (tab === 'ceo') loadUsersForCEOSelect();
         }
 
         // ==================== INIT ====================

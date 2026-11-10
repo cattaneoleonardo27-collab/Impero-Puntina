@@ -1188,12 +1188,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
           <select class="select" id="store-category" style="width:auto" onchange="Store.reload()">
             <option value="all">Tutte le categorie</option>
             <option value="PuntBay">PuntBay</option>
-            <option value="Amapunt">Amapunt</option>
             <option value="Mobili&Arredamenti">Mobili &amp; Arredamenti</option>
             <option value="Musicista">Musicista</option>
-            <option value="Videogames">Videogames</option>
             <option value="Designer videogames">Designer videogames</option>
-            <option value="Bancario">Bancario</option>
           </select>
           <select class="select" id="store-sort" style="width:auto" onchange="Store.render()">
             <option value="recent">Più recenti</option>
@@ -2488,9 +2485,13 @@ const Store = {
           <div class="product__foot">
             <span class="product__price">${esc(money(p.price))}</span>
             <div class="product__actions">
-              ${p.seller_id === State.user.id ? '' : `<button class="btn btn--sm btn--ghost" onclick="Store.offer('${p.id}')">Offerta</button>
-              <button class="btn btn--sm btn--ghost" onclick="Chat.openWith('${p.seller_id}', '${p.id}', '${esc(p.name)}')">Contatta</button>`}
-              <button class="btn btn--sm" onclick="Store.buy('${p.id}')">Acquista</button>
+              ${State.user && p.seller_id === State.user.id
+                ? `<span class="pill">Tuo annuncio</span>
+              <button class="btn btn--sm btn--ghost" onclick="Router.go('sell')">Gestisci</button>
+              <button class="btn btn--sm btn--ghost" style="color:#b3261e" onclick="Listings.remove('${p.id}')">Elimina</button>`
+                : `<button class="btn btn--sm btn--ghost" onclick="Store.offer('${p.id}')">Offerta</button>
+              <button class="btn btn--sm btn--ghost" onclick="Chat.openWith('${p.seller_id}', '${p.id}', '${esc(p.name)}')">Contatta</button>
+              <button class="btn btn--sm" onclick="Store.buy('${p.id}')">Acquista</button>`}
             </div>
           </div>
         </div>
@@ -4116,8 +4117,11 @@ const Listings = {
   },
 
   async remove(id) {
-    const product = this.data.find((p) => p.id === id);
-    if (!product) return;
+    let product = this.data.find((p) => p.id === id);
+    if (!product) {
+      const { data } = await sb.from('products').select('name').eq('id', id).maybeSingle();
+      product = data || { name: 'questo annuncio' };
+    }
     const ok = await confirmAction({
       title: 'Eliminare l\'annuncio?',
       message: `"${product.name}" sparisce dalla vetrina e dal tuo elenco. L\'operazione non si puo annullare.`,
@@ -4778,3 +4782,4 @@ Object.assign(Admin, {
 </script>
 </body>
 </html>
+ù

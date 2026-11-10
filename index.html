@@ -1264,6 +1264,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
                   <input class="input" id="sell-image" type="file" accept="image/*">
                 </label>
               </div>
+              <label class="field" style="margin-top:14px">
+                <span class="field__label">Link del contenuto, sbloccato dopo l'acquisto (opzionale)</span>
+                <input class="input" id="sell-preview" type="url" placeholder="https://open.spotify.com/… oppure il link del gioco">
+              </label>
+              <label class="field">
+                <span class="field__label">…oppure carica l'mp3 / video (opzionale)</span>
+                <input class="input" id="sell-preview-file" type="file" accept="audio/*,video/*">
+              </label>
               <button class="btn btn--block" type="submit" id="sell-submit" style="margin-top:20px">Pubblica in vetrina</button>
             </div>
           </form>
@@ -2510,23 +2518,31 @@ const Store = {
     }
 
     const rows = data || [];
+    this.purchases = rows;
     if (!rows.length) {
       box.innerHTML = '<div class="empty"><span class="empty__text">Non hai ancora comprato niente.</span></div>';
       return;
     }
 
-    box.innerHTML = `<div class="list">${rows.map((r) => `
+    box.innerHTML = `<div class="list">${rows.map((r, i) => `
       <div class="list__item">
         <div class="list__main">
           <div class="list__title">${esc(r.name || 'Prodotto')}</div>
           <div class="list__meta">${esc(r.category || 'PuntBay')} · ${esc(r.seller_name || 'venditore')} · ${esc(fmtWhen(r.sold_at))}</div>
         </div>
         <div class="list__side">
+          ${r.preview_url ? `<button class="btn btn--sm btn--ghost" onclick="Store.openPurchase(${i})">${previewLabel(r.category)}</button>` : ''}
           ${r.file_url
-            ? `<a class="btn btn--sm" href="${esc(r.file_url)}" target="_blank" rel="noopener">Apri file</a>`
+            ? `<a class="btn btn--sm" href="${esc(r.file_url)}" target="_blank" rel="noopener" download>Scarica</a>`
             : `<span class="tiny faint">${esc(money(r.price || 0))}</span>`}
         </div>
       </div>`).join('')}</div>`;
+  },
+
+  openPurchase(i) {
+    const row = (this.purchases || [])[i];
+    if (!row) return;
+    Preview.show({ name: row.name, category: row.category, preview_url: row.preview_url });
   },
 
   buy(id) {
@@ -2586,13 +2602,20 @@ const Store = {
       this.loadPurchases();
       if (State.view === 'transactions') Tx.load();
 
-      if (product.file_url) {
+      if (product.file_url || product.preview_url) {
+        State.lastPurchase = { name: product.name, category: product.category, preview_url: product.preview_url };
+        const fileBtn = product.file_url
+          ? `<a class="btn btn--gold btn--block" href="${esc(product.file_url)}" target="_blank" rel="noopener" download style="margin-top:14px">Scarica il file</a>`
+          : '';
+        const previewBtn = product.preview_url
+          ? `<button class="btn btn--block ${product.file_url ? 'btn--ghost' : 'btn--gold'}" style="margin-top:10px" onclick="Preview.show(State.lastPurchase)">${previewLabel(product.category)}</button>`
+          : '';
         Dialog.open({
           title: 'Il tuo acquisto è pronto',
           sub: product.name,
           content: `
-            <p class="tiny faint">Il download è tuo per sempre: lo ritrovi in Store → I miei acquisti.</p>
-            <a class="btn btn--gold btn--block" href="${esc(product.file_url)}" target="_blank" rel="noopener" style="margin-top:14px">Apri il file</a>
+            <p class="tiny faint">Il contenuto è tuo per sempre: lo ritrovi in Store → I miei acquisti.</p>
+            ${fileBtn}${previewBtn}
             <div class="modal__foot">
               <button class="btn btn--ghost" onclick="Dialog.close()">Chiudi</button>
             </div>`
@@ -2791,6 +2814,73 @@ const Secret = {
 
 /* ---------- vendi ---------- */
 
+function normalizePreviewUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return null;
+  return /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+}
+
+function previewLabel(category) {
+  if (category === 'Musicista') return 'Ascolta';
+  if (category === 'Designer videogames') return 'Prova';
+  return 'Anteprima';
+}
+
+function spotifyEmbed(url) {
+  const m = String(url || '').match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(track|album|playlist|episode|artist|show)\/([A-Za-z0-9]+)/i);
+  return m ? `https://open.spotify.com/embed/${m[1]}/${m[2]}` : null;
+}
+
+function youtubeEmbed(url) {
+  const m = String(url || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);
+  return m ? `https://www.youtube.com/embed/${m[1]}` : null;
+}
+
+function previewKind(url) {
+  if (!url) return null;
+  if (spotifyEmbed(url)) return 'spotify';
+  if (youtubeEmbed(url)) return 'youtube';
+  if (/\.(mp3|wav|ogg|m4a|aac|flac|opus)(\?|#|$)/i.test(url)) return 'audio';
+  if (/\.(mp4|webm|mov)(\?|#|$)/i.test(url)) return 'video';
+  return 'link';
+}
+
+const Preview = {
+  async open(id) {
+    let product = (Store.data || []).find((p) => p.id === id) || (Listings.data || []).find((p) => p.id === id) || null;
+    if (!product) {
+      const { data } = await sb.from('products').select('id, name, category, preview_url').eq('id', id).maybeSingle();
+      product = data;
+    }
+    this.show(product);
+  },
+
+  show(product) {
+    if (!product || !product.preview_url) { toast('Nessun contenuto da aprire.', 'error'); return; }
+
+    const url = product.preview_url;
+    const kind = previewKind(url);
+    let body;
+    if (kind === 'spotify') {
+      body = `<iframe title="Anteprima Spotify" style="width:100%;height:152px;border:0;border-radius:12px" src="${esc(spotifyEmbed(url))}" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+    } else if (kind === 'youtube') {
+      body = `<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden"><iframe title="Anteprima video" style="position:absolute;inset:0;width:100%;height:100%;border:0" src="${esc(youtubeEmbed(url))}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
+    } else if (kind === 'audio') {
+      body = `<audio controls autoplay style="width:100%" src="${esc(url)}"></audio><p class="tiny faint" style="margin-top:10px">Ascolti l'anteprima prima di comprare.</p>`;
+    } else if (kind === 'video') {
+      body = `<video controls autoplay playsinline style="width:100%;border-radius:12px" src="${esc(url)}"></video>`;
+    } else {
+      body = `<a class="btn btn--gold btn--block" href="${esc(url)}" target="_blank" rel="noopener">Apri la prova</a><p class="tiny faint" style="margin-top:10px">Si apre in una scheda nuova.</p>`;
+    }
+
+    Dialog.open({
+      title: previewLabel(product.category || ''),
+      sub: product.name || '',
+      content: body + '<div class="modal__foot"><button class="btn btn--ghost" onclick="Dialog.close()">Chiudi</button></div>'
+    });
+  }
+};
+
 const Sell = {
   bindPreview() {
     const name = $('#sell-name');
@@ -2823,6 +2913,8 @@ const Sell = {
     const desc = $('#sell-desc').value.trim();
     const price = Number($('#sell-price').value);
     const file = $('#sell-image').files[0];
+    let previewUrl = normalizePreviewUrl($('#sell-preview') ? $('#sell-preview').value : '');
+    const previewFile = $('#sell-preview-file') ? $('#sell-preview-file').files[0] : null;
 
     if (!name || !desc || !price) { toast('Compila nome, descrizione e prezzo.', 'error'); return; }
     if (price <= 0) { toast('Il prezzo deve essere maggiore di zero.', 'error'); return; }
@@ -2842,12 +2934,24 @@ const Sell = {
       imageUrl = sb.storage.from('product-images').getPublicUrl(path).data.publicUrl;
     }
 
+    if (previewFile) {
+      const previewPath = `previews/${Date.now()}_${previewFile.name.replace(/[^\w.\-]/g, '_')}`;
+      const { error: previewError } = await sb.storage.from('work-files').upload(previewPath, previewFile);
+      if (previewError) {
+        setLoading(btn, false);
+        toast('Caricamento anteprima fallito: ' + previewError.message, 'error', 6000);
+        return;
+      }
+      previewUrl = sb.storage.from('work-files').getPublicUrl(previewPath).data.publicUrl;
+    }
+
     const { error } = await sb.from('products').insert({
       seller_id: State.user.id,
       category: 'PuntBay',
       name, description: desc,
       price,
       image_url: imageUrl,
+      preview_url: previewUrl,
       is_active: true
     });
 
@@ -2858,6 +2962,8 @@ const Sell = {
     $('#sell-desc').value = '';
     $('#sell-price').value = '';
     $('#sell-image').value = '';
+    if ($('#sell-preview')) $('#sell-preview').value = '';
+    if ($('#sell-preview-file')) $('#sell-preview-file').value = '';
     $('#sell-preview-media').innerHTML = '<span class="product__ph">PuntBay</span>';
     Sell.bindPreview();
     $('#sell-preview-name').textContent = 'Titolo del prodotto';
@@ -2985,6 +3091,14 @@ const Jobs = {
                 <input class="input" id="wp-file-${key}" type="file">
               </label>
             </div>
+            <label class="field" style="margin-top:14px">
+              <span class="field__label">Link del contenuto, sbloccato dopo l'acquisto (opzionale)</span>
+              <input class="input" id="wp-preview-${key}" type="url" placeholder="https://open.spotify.com/… oppure il link del gioco">
+            </label>
+            <label class="field">
+              <span class="field__label">…oppure carica l'mp3 / video (opzionale)</span>
+              <input class="input" id="wp-preview-file-${key}" type="file" accept="audio/*,video/*">
+            </label>
             <button class="btn btn--block btn--sm" type="submit" style="margin-top:16px">Pubblica nel canale</button>
           </form>
           <div>
@@ -3097,6 +3211,10 @@ const Jobs = {
     const desc = $('#wp-desc-' + key).value.trim();
     const price = Number($('#wp-price-' + key).value);
     const file = $('#wp-file-' + key).files[0];
+    const previewEl = document.getElementById('wp-preview-' + key);
+    let previewUrl = normalizePreviewUrl(previewEl ? previewEl.value : '');
+    const previewFileEl = document.getElementById('wp-preview-file-' + key);
+    const previewFile = previewFileEl ? previewFileEl.files[0] : null;
 
     if (!name || !desc || !price) { toast('Compila tutti i campi.', 'error'); return; }
 
@@ -3108,12 +3226,20 @@ const Jobs = {
       fileUrl = sb.storage.from('work-files').getPublicUrl(path).data.publicUrl;
     }
 
+    if (previewFile) {
+      const previewPath = `previews/${Date.now()}_${previewFile.name.replace(/[^\w.\-]/g, '_')}`;
+      const { error: previewError } = await sb.storage.from('work-files').upload(previewPath, previewFile);
+      if (previewError) { toast('Caricamento anteprima fallito: ' + previewError.message, 'error', 6000); return; }
+      previewUrl = sb.storage.from('work-files').getPublicUrl(previewPath).data.publicUrl;
+    }
+
     const { error } = await sb.from('products').insert({
       seller_id: State.user.id,
       category: jobType,
       name, description: desc,
       price,
       file_url: fileUrl,
+      preview_url: previewUrl,
       is_active: true
     });
     if (error) { toast('Pubblicazione fallita: ' + error.message, 'error', 6000); return; }
@@ -3122,6 +3248,8 @@ const Jobs = {
     $('#wp-desc-' + key).value = '';
     $('#wp-price-' + key).value = '';
     $('#wp-file-' + key).value = '';
+    if (previewEl) previewEl.value = '';
+    if (previewFileEl) previewFileEl.value = '';
     toast('Prodotto caricato nel canale ' + jobType + '.', 'ok');
     Store.data = [];
   },
@@ -4782,4 +4910,4 @@ Object.assign(Admin, {
 </script>
 </body>
 </html>
-ù
+

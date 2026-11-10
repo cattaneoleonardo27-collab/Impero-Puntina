@@ -4099,8 +4099,9 @@ const Listings = {
         </div>
         <div class="list__side" style="display:flex;align-items:center;gap:8px">
           ${state}
-          ${sold ? '' : `<button class="btn btn--xs btn--ghost" onclick="Listings.editPrice('${p.id}')">Prezzo</button>
-          <button class="btn btn--xs btn--ghost" onclick="Listings.toggle('${p.id}', ${p.is_active ? 'false' : 'true'})">${p.is_active ? 'Archivia' : 'Ripubblica'}</button>`}
+          ${sold ? '<span class="list__meta">nello storico dell\'acquirente</span>' : `<button class="btn btn--xs btn--ghost" onclick="Listings.editPrice('${p.id}')">Prezzo</button>
+          <button class="btn btn--xs btn--ghost" onclick="Listings.toggle('${p.id}', ${p.is_active ? 'false' : 'true'})">${p.is_active ? 'Archivia' : 'Ripubblica'}</button>
+          <button class="btn btn--xs btn--ghost" style="color:#b3261e" onclick="Listings.remove('${p.id}')">Elimina</button>`}
         </div>
       </div>`;
     }).join('')}</div>`;
@@ -4112,6 +4113,34 @@ const Listings = {
     toast(active ? 'Annuncio di nuovo in vetrina.' : 'Annuncio archiviato.', 'ok');
     this.load();
     Store.data = [];
+  },
+
+  async remove(id) {
+    const product = this.data.find((p) => p.id === id);
+    if (!product) return;
+    const ok = await confirmAction({
+      title: 'Eliminare l\'annuncio?',
+      message: `"${product.name}" sparisce dalla vetrina e dal tuo elenco. L\'operazione non si puo annullare.`,
+      confirm: 'Elimina',
+      danger: true
+    });
+    if (!ok) return;
+
+    const { error } = await sb.from('products').delete().eq('id', id).eq('seller_id', State.user.id);
+    if (error) {
+      if (/foreign key|violates/i.test(error.message)) {
+        toast('Annuncio gia venduto: resta nello storico dell\'acquirente.', 'error');
+      } else {
+        toast('Errore: ' + error.message, 'error');
+      }
+      return;
+    }
+
+    toast('Annuncio eliminato.', 'ok');
+    this.data = this.data.filter((p) => p.id !== id);
+    Store.data = [];
+    this.load();
+    if (document.getElementById('store-grid')) Store.reload();
   },
 
   async editPrice(id) {

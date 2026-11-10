@@ -3114,8 +3114,8 @@ const Calendar = {
       return;
     }
     body.innerHTML = `<div class="list">${events.map((e) => {
-      const going = (State.participation || []).some((x) => x.event_id === e.id && x.user_id === State.user.id && x.status === 'going');
-      const count = (State.participation || []).filter((x) => x.event_id === e.id && x.status === 'going').length;
+      const going = (State.participation || []).some((x) => x.event_id === e.id && x.user_id === State.user.id && x.status === 'partecipo');
+      const count = (State.participation || []).filter((x) => x.event_id === e.id && x.status === 'partecipo').length;
       return `<div class="list__item" style="display:block">
         <div class="list__title" style="white-space:normal">${esc(e.title)}</div>
         <div style="font-size:13px;color:var(--ink-soft);margin-top:4px">${esc(e.description || 'Nessuna descrizione')}</div>
@@ -3967,7 +3967,7 @@ Object.assign(Calendar, {
       if (error) { toast('Errore: ' + error.message, 'error'); return; }
     } else {
       const { error } = await sb.from('event_participation')
-        .insert({ event_id: eventId, user_id: State.user.id, status: 'going' });
+        .insert({ event_id: eventId, user_id: State.user.id, status: 'partecipo' });
       if (error) { toast('Errore: ' + error.message, 'error'); return; }
     }
     await this.load();

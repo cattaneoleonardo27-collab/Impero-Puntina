@@ -893,14 +893,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
       { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any' }
     ]
   };
-  var manifestLink = document.createElement('link');
-  manifestLink.rel = 'manifest';
-  manifestLink.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest));
-  document.head.appendChild(manifestLink);
-
   var touchIcon = document.createElement('link');
   touchIcon.rel = 'apple-touch-icon';
-  touchIcon.href = icon192;
+  touchIcon.href = 'icons/icon-192.png';
   document.head.appendChild(touchIcon);
 })();
 </script>
@@ -908,6 +903,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="PuntBay">
+<link rel="manifest" href="manifest.webmanifest">
 
 <script>try { document.documentElement.dataset.theme = localStorage.getItem('puntbay-theme') || 'light'; } catch (e) {}</script>
 </head>
@@ -992,6 +988,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
         </label>
         <button class="btn btn--block" type="submit" id="login-submit" style="margin-top:18px">Accedi</button>
         <p class="form-msg" id="login-msg" role="status"></p>
+        <button class="linkbtn" type="button" style="margin-top:4px" onclick="Auth.forgotPassword()">Password dimenticata?</button>
       </form>
 
       <form id="form-register" onsubmit="Auth.register(event)" novalidate hidden>
@@ -1177,7 +1174,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
             <h2 class="display">Store</h2>
             <p>Tutto ciò che l'impero mette in vetrina, dalle puntine ai progetti fatti a mano.</p>
           </div>
-          <button class="btn btn--sm" onclick="Router.go('sell')"><svg style="width:14px;height:14px"><use href="#i-plus"/></svg> Pubblica</button>
+          <div class="row" style="align-items:center;gap:10px">
+            <div style="position:relative;display:inline-flex">
+              <button class="iconbtn" id="store-cart-btn" onclick="Cart.open()" aria-label="Carrello" title="Carrello">
+                <svg><use href="#i-store"/></svg>
+              </button>
+              <span id="store-cart-badge" style="position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#c9a24a;color:#1b1a17;font-family:var(--font-sans, inherit);font-size:11px;font-weight:700;line-height:18px;text-align:center;display:none">0</span>
+            </div>
+            <button class="btn btn--sm" onclick="Router.go('sell')"><svg style="width:14px;height:14px"><use href="#i-plus"/></svg> Pubblica</button>
+          </div>
         </div>
 
         <div class="toolbar">
@@ -1185,14 +1190,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
             <svg><use href="#i-search"/></svg>
             <input class="input" id="store-search" type="search" placeholder="Cerca un prodotto o un venditore…" oninput="Store.onSearch()">
           </div>
-          <select class="select" id="store-category" style="width:auto" onchange="Store.reload()">
+          <select class="select" id="store-category" aria-label="Categoria" style="width:auto" onchange="Store.reload()">
             <option value="all">Tutte le categorie</option>
             <option value="PuntBay">PuntBay</option>
             <option value="Mobili&Arredamenti">Mobili &amp; Arredamenti</option>
             <option value="Musicista">Musicista</option>
             <option value="Designer videogames">Designer videogames</option>
           </select>
-          <select class="select" id="store-sort" style="width:auto" onchange="Store.render()">
+          <select class="select" id="store-sort" aria-label="Ordina per" style="width:auto" onchange="Store.render()">
             <option value="recent">Più recenti</option>
             <option value="price-asc">Prezzo crescente</option>
             <option value="price-desc">Prezzo decrescente</option>
@@ -1215,6 +1220,20 @@ button, input, select, textarea { font: inherit; color: inherit; }
       </section>
 
       <!-- PUNTINE RUSSE (sezione segreta) -->
+      <!-- CARRELLO -->
+      <section class="view" id="view-carrello" hidden>
+        <div class="page-head">
+          <div>
+            <h2 class="display">Carrello</h2>
+            <p>Gli articoli scelti, con il subtotale pronto per il pagamento.</p>
+          </div>
+          <button class="btn btn--sm btn--ghost" onclick="Router.go('store')">← Torna allo Store</button>
+        </div>
+        <div class="card">
+          <div class="card__body" id="cart-page-body"></div>
+        </div>
+      </section>
+
       <section class="view" id="view-roulette" hidden>
         <div class="page-head">
           <div>
@@ -1264,14 +1283,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
                   <input class="input" id="sell-image" type="file" accept="image/*">
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
-                <span class="field__label">Link del contenuto, sbloccato dopo l'acquisto (opzionale)</span>
-                <input class="input" id="sell-preview" type="url" placeholder="https://open.spotify.com/… oppure il link del gioco">
-              </label>
-              <label class="field">
-                <span class="field__label">…oppure carica l'mp3 / video (opzionale)</span>
-                <input class="input" id="sell-preview-file" type="file" accept="audio/*,video/*">
-              </label>
+              <p class="tiny faint" style="margin-top:14px">Il link del contenuto si può allegare solo nei canali Musicista e Designer videogames.</p>
               <button class="btn btn--block" type="submit" id="sell-submit" style="margin-top:20px">Pubblica in vetrina</button>
             </div>
           </form>
@@ -1455,7 +1467,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
           </div>
           <button class="btn btn--sm btn--ghost" onclick="Ledger.company(document.getElementById('company-overview'))">Aggiorna</button>
         </div>
+        <div id="company-dashboard"></div>
         <div id="company-overview"></div>
+        <div id="my-loans"></div>
       </section>
 
       <!-- IMPOSTAZIONI -->
@@ -1477,7 +1491,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
                 <button class="iconbtn" onclick="document.getElementById('avatar-file').click()" style="position:absolute;right:-4px;bottom:-4px;width:26px;height:26px" aria-label="Cambia avatar">
                   <svg style="width:12px;height:12px"><use href="#i-camera"/></svg>
                 </button>
-                <input type="file" id="avatar-file" accept="image/*" hidden onchange="Settings.uploadAvatar(event)">
+                <input type="file" id="avatar-file" accept="image/*" hidden aria-label="Carica la foto del profilo" onchange="Settings.uploadAvatar(event)">
               </div>
               <div>
                 <div style="font-weight:600" id="settings-email">—</div>
@@ -1515,6 +1529,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
               </div>
               <div class="money" style="font-weight:600" id="settings-card-balance">€ 0,00</div>
             </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px">
+              <div>
+                <div class="eyebrow">PIN attuale</div>
+                <div class="money" style="font-size:16px;letter-spacing:.3em" id="settings-card-pin">—</div>
+              </div>
+              <span class="tiny faint">lo vedi solo tu</span>
+            </div>
             <label class="field">
               <span class="field__label">Nuovo PIN</span>
               <input class="input" type="password" inputmode="numeric" maxlength="6" id="settings-new-pin" placeholder="6 cifre">
@@ -1539,6 +1560,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
                 <div class="tiny faint">Conferme sonore dell'interfaccia</div>
               </div>
               <button class="switch__btn" id="pref-sound" role="switch" aria-checked="true" onclick="UI.toggleSound()" aria-label="Effetti sonori"></button>
+            </div>
+            <hr class="hairline" style="margin:14px 0">
+            <hr class="hairline" style="margin:14px 0">
+            <div id="install-row" hidden>
+              <div style="font-weight:600;font-size:14px">Installa l'app</div>
+              <div class="tiny faint" style="margin-bottom:8px">Aggiungila alla schermata home, si apre come un'app</div>
+              <button class="btn btn--ghost btn--block btn--sm" onclick="PWA.prompt()">Installa PuntBay</button>
             </div>
             <hr class="hairline" style="margin:14px 0">
             <button class="btn btn--ghost btn--block btn--sm" onclick="Auth.logout()" style="color:var(--red);border-color:var(--line-strong)">
@@ -2049,6 +2077,51 @@ const Auth = {
     }
   },
 
+  async forgotPassword() {
+    const email = ($('#login-email').value || '').trim();
+    if (!email) { this.error('login-msg', 'Scrivi la tua email qui sopra, poi tocca di nuovo il pulsante.'); $('#login-email').focus(); return; }
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: location.origin + location.pathname
+    });
+    if (error) { this.error('login-msg', error.message); return; }
+    const box = $('#login-msg');
+    box.className = 'form-msg is-ok';
+    box.textContent = 'Ti ho mandato un link a ' + email + ': aprilo e scegli la nuova password.';
+  },
+
+  openResetDialog() {
+    UI.showAuth();
+    Dialog.open({
+      title: 'Nuova password',
+      sub: 'Scegli la password per rientrare nel tuo conto.',
+      content: `
+        <label class="field">
+          <span class="field__label">Password</span>
+          <input class="input" type="password" id="reset-password" autocomplete="new-password" placeholder="Almeno 6 caratteri">
+        </label>
+        <label class="field">
+          <span class="field__label">Ripeti la password</span>
+          <input class="input" type="password" id="reset-password-2" autocomplete="new-password" placeholder="Ripeti la password">
+        </label>
+        <p class="form-msg" id="reset-msg" role="status"></p>
+        <div class="modal__foot"><button class="btn btn--block" onclick="Auth.saveNewPassword()">Salva la nuova password</button></div>`
+    });
+  },
+
+  async saveNewPassword() {
+    const pw = $('#reset-password').value;
+    const pw2 = $('#reset-password-2').value;
+    if (!pw || pw.length < 6) { this.error('reset-msg', 'La password deve avere almeno 6 caratteri.'); return; }
+    if (pw !== pw2) { this.error('reset-msg', 'Le due password non coincidono.'); return; }
+    const { data, error } = await sb.auth.updateUser({ password: pw });
+    if (error) { this.error('reset-msg', error.message); return; }
+    try { history.replaceState(null, '', location.pathname); } catch (e) { /* ignora */ }
+    Dialog.close();
+    toast('Password aggiornata.', 'ok');
+    if (data && data.user) await Boot.start(data.user);
+    else UI.showAuth();
+  },
+
   async logout() {
     await sb.auth.signOut();
     State.user = null;
@@ -2073,6 +2146,7 @@ const Boot = {
     try { if (localStorage.getItem(key)) return; } catch (e) { return; }
     const { error } = await sb.rpc('run_payroll');
     if (error) return;
+    await sb.rpc('run_loan_installments');
     try { localStorage.setItem(key, '1'); } catch (e) { /* ignora */ }
   },
 
@@ -2082,14 +2156,12 @@ const Boot = {
     let { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
 
     if (!profile) {
-      const email = (user.email || '').toLowerCase();
-      const isAdmin = email.includes('admin') || email.includes('leonardo.cattaneo') || email.includes('marina.nicolodi');
       const payload = {
         id: user.id,
         email: user.email,
         full_name: (user.user_metadata && user.user_metadata.full_name) || email.split('@')[0],
         role: 'Non Classificato',
-        is_admin: isAdmin
+        is_admin: false
       };
       const inserted = await sb.from('profiles').insert(payload).select().single();
       if (inserted.error) {
@@ -2109,26 +2181,28 @@ const Boot = {
     }
 
     let { data: card } = await sb.from('credit_cards').select('*').eq('user_id', user.id).maybeSingle();
-    let freshPin = null;
 
     if (!card) {
-      freshPin = String(Math.floor(100000 + Math.random() * 900000));
-      const type = profile.is_admin ? 'gold' : 'normale';
-      const inserted = await sb.from('credit_cards').insert({
-        user_id: user.id,
-        card_number: 'PUNT-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
-        balance: profile.is_admin ? 25000 : 5000,
-        type,
-        pin_hash: freshPin
-      }).select().single();
-      if (inserted.error) {
-        toast('Impossibile creare la carta: ' + inserted.error.message, 'error', 6000);
-      } else {
-        card = inserted.data;
+      // la carta nasce dal trigger sul profilo: lascio al database il tempo del commit
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      const retry = await sb.from('credit_cards').select('*').eq('user_id', user.id).maybeSingle();
+      card = retry.data || null;
+    }
+
+    // il PIN lo genera il database: qui mostro quello vero, una sola volta per dispositivo
+    let freshPin = null;
+    if (card && card.pin_hash) {
+      const seenKey = 'puntbay-welcome-' + user.id;
+      let seen = false;
+      try { seen = localStorage.getItem(seenKey) === '1'; } catch (e) { seen = true; }
+      if (!seen) {
+        freshPin = String(card.pin_hash);
+        try { localStorage.setItem(seenKey, '1'); } catch (e) { /* ignora */ }
       }
     }
 
     State.card = card;
+    Cart.load();
     await Jobs.loadMine();
     this.maybeRunPayroll();
 
@@ -2172,6 +2246,7 @@ const Boot = {
       $('#sidebar-card-number').textContent = c.card_number || '—';
       $('#sidebar-card-type').textContent = (c.type || 'normale').toUpperCase();
       $('#settings-card-number').textContent = c.card_number || '—';
+      if ($('#settings-card-pin')) $('#settings-card-pin').textContent = c.pin_hash ? String(c.pin_hash) : '—';
       $('#hero-card-number').textContent = c.card_number || '—';
     }
 
@@ -2277,6 +2352,7 @@ const VIEWS = {
   movimenti: { hash: 'movimenti', title: 'Movimenti', sub: 'Entrate, uscite e stipendi' },
   messaggi: { hash: 'messaggi', title: 'Messaggi', sub: 'Conversazioni con il mercato' },
   azienda: { hash: 'azienda', title: 'Azienda', sub: 'Il tuo canale e il tuo team' },
+  carrello: { hash: 'carrello', title: 'Carrello', sub: 'Gli articoli scelti, pronti al pagamento' },
   roulette: { hash: 'roulette', title: 'Puntine russe', sub: 'Sei camere, una punta' },
   admin: { hash: 'admin', title: 'Amministrazione', sub: 'Persone, eventi e vertice' }
 };
@@ -2336,13 +2412,14 @@ const Router = {
     switch (view) {
       case 'overview': Overview.load(); break;
       case 'store': Store.reload(); Store.loadPurchases(); break;
+      case 'carrello': Cart.render(); break;
       case 'sell': Listings.load(); Offers.received(); break;
       case 'jobs': Jobs.render(); break;
       case 'calendar': Calendar.load(); break;
       case 'transactions': Tx.load(); break;
       case 'movimenti': Ledger.load(); break;
       case 'messaggi': Chat.load(); break;
-      case 'azienda': Ledger.company($('#company-overview')); break;
+      case 'azienda': Ledger.finance(); Ledger.company($('#company-overview')); break;
       case 'settings': Settings.fill(); break;
       case 'admin': Admin.load(); break;
       default: break;
@@ -2428,6 +2505,171 @@ const Overview = {
 
 /* ---------- store ---------- */
 
+const Cart = {
+  items: [],
+
+  key() { return 'puntbay-cart-' + (State.user ? State.user.id : 'anon'); },
+
+  load() {
+    try { this.items = JSON.parse(localStorage.getItem(this.key()) || '[]') || []; } catch (e) { this.items = []; }
+    if (!Array.isArray(this.items)) this.items = [];
+    this.render();
+  },
+
+  save() {
+    try { localStorage.setItem(this.key(), JSON.stringify(this.items)); } catch (e) { /* ignora */ }
+  },
+
+  has(id) { return this.items.some((i) => i.id === id); },
+
+  total() { return this.items.reduce((s, i) => s + Number(i.price || 0), 0); },
+
+  toggle(id) {
+    const p = (Store.data || []).find((x) => x.id === id);
+    if (!p) return;
+    if (this.has(id)) {
+      this.items = this.items.filter((i) => i !== id && i.id !== id);
+      toast('Tolto dal carrello.', 'info');
+    } else {
+      this.items.push({ id: p.id, name: p.name, price: Number(p.price), category: p.category });
+      toast('Aggiunto al carrello.', 'ok');
+    }
+    this.save();
+    this.render();
+    Store.render();
+  },
+
+  remove(id) {
+    this.items = this.items.filter((i) => i.id !== id);
+    this.save();
+    this.render();
+    Store.render();
+  },
+
+  clear() {
+    this.items = [];
+    this.save();
+    this.render();
+    Store.render();
+  },
+
+  badge() {
+    const node = $('#store-cart-badge');
+    if (!node) return;
+    const n = this.items.length;
+    node.textContent = String(n);
+    node.style.display = n ? 'block' : 'none';
+  },
+
+  open() {
+    Router.go('carrello');
+  },
+
+  render() {
+    this.badge();
+    const box = $('#cart-page-body');
+    if (!box) return;
+
+    if (!this.items.length) {
+      box.innerHTML = `<div class="empty">
+        <span class="empty__icon">＋</span>
+        <span class="empty__text">Il carrello è vuoto: aggiungi un prodotto con il tasto ＋ nella vetrina.</span>
+        <button class="btn btn--sm" style="margin-top:14px" onclick="Router.go('store')">Torna allo Store</button>
+      </div>`;
+      return;
+    }
+    box.innerHTML = `<div class="list">${this.items.map((i) => `
+      <div class="list__item">
+        <div class="list__main">
+          <div class="list__title">${esc(i.name)}</div>
+          <div class="list__meta">${esc(i.category || 'PuntBay')}</div>
+        </div>
+        <div class="list__side">
+          <div class="money" style="font-weight:600">${esc(money(i.price))}</div>
+          <button class="btn btn--quiet btn--xs" onclick="Cart.remove('${i.id}')">Togli</button>
+        </div>
+      </div>`).join('')}</div>
+      <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:14px">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <span class="tiny faint">Subtotale · ${this.items.length} articol${this.items.length === 1 ? 'o' : 'i'}</span>
+          <span class="money">${esc(money(this.total()))}</span>
+        </div>
+        <div class="row" style="justify-content:space-between;align-items:center;margin-top:6px">
+          <span style="font-weight:600">Totale</span>
+          <span class="money" style="font-weight:700;font-size:19px">${esc(money(this.total()))}</span>
+        </div>
+      </div>
+      <div class="row" style="justify-content:flex-end;margin-top:18px">
+        <button class="btn btn--ghost btn--sm" onclick="Cart.clear()">Svuota</button>
+        <button class="btn btn--gold btn--sm" onclick="Cart.pay()">Paga tutto con il PIN</button>
+      </div>`;
+  },
+
+  pay() {
+    if (!this.items.length) return;
+    const items = this.items.slice();
+    const total = this.total();
+
+    const d = Dialog.open({
+      title: 'Paga il carrello',
+      sub: `${items.length} articoli · ${money(total)}`,
+      content: `
+        <label class="field">
+          <span class="field__label">PIN della carta (6 cifre)</span>
+          <input class="input pin-input" id="cart-pin" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="······">
+        </label>
+        <p class="form-msg" id="cart-msg"></p>
+        <div class="modal__foot">
+          <button class="btn btn--ghost" data-cancel>Annulla</button>
+          <button class="btn btn--gold" data-pay>Paga ${esc(money(total))}</button>
+        </div>`
+    });
+
+    const input = $('#cart-pin', d.el);
+    const msg = $('#cart-msg', d.el);
+    const btn = $('[data-pay]', d.el);
+    input.addEventListener('input', () => { input.value = input.value.replace(/\D/g, '').slice(0, 6); });
+    $('[data-cancel]', d.el).onclick = () => d.close();
+
+    btn.onclick = async () => {
+      if (input.value.length !== 6) { msg.className = 'form-msg is-error'; msg.textContent = 'Il PIN deve avere 6 cifre.'; return; }
+      setLoading(btn, true, 'Pagamento…');
+      const { data, error } = await sb.rpc('purchase_cart', {
+        p_product_ids: items.map((i) => i.id),
+        p_pin: input.value
+      });
+      setLoading(btn, false);
+      if (error) { msg.className = 'form-msg is-error'; msg.textContent = 'Pagamento rifiutato: ' + error.message; return; }
+
+      d.close();
+      this.clear();
+      toast('Carrello pagato.', 'ok');
+      playWinSound();
+      await App.refreshCard();
+      Store.reload();
+      await Store.loadPurchases();
+      if (State.view === 'transazioni') Tx.load();
+      this.receipt(data || []);
+    };
+  },
+
+  receipt(rows) {
+    const tot = rows.reduce((s, r) => s + Number(r.amount || 0), 0);
+    Dialog.open({
+      title: 'Il tuo acquisto è pronto',
+      sub: `${rows.length} articol${rows.length === 1 ? 'o' : 'i'} · ${money(tot)}`,
+      content: `
+        <p class="tiny faint">Il contenuto è tuo per sempre: lo ritrovi in Store → I miei acquisti.</p>
+        <div class="list" style="margin-top:12px">${rows.map((r) => `
+          <div class="list__item">
+            <div class="list__main"><div class="list__title">${esc(r.product_name || 'Prodotto')}</div><div class="list__meta">pagato</div></div>
+            <div class="list__side"><div class="money">${esc(money(r.amount || 0))}</div></div>
+          </div>`).join('')}</div>
+        <div class="modal__foot"><button class="btn btn--block" onclick="Dialog.close()">Chiudi</button></div>`
+    });
+  }
+};
+
 const Store = {
   data: [],
   loading: false,
@@ -2497,7 +2739,8 @@ const Store = {
                 ? `<span class="pill">Tuo annuncio</span>
               <button class="btn btn--sm btn--ghost" onclick="Router.go('sell')">Gestisci</button>
               <button class="btn btn--sm btn--ghost" style="color:#b3261e" onclick="Listings.remove('${p.id}')">Elimina</button>`
-                : `<button class="btn btn--sm btn--ghost" onclick="Store.offer('${p.id}')">Offerta</button>
+                : `<button class="btn btn--sm btn--ghost" onclick="Cart.toggle('${p.id}')" aria-label="Aggiungi al carrello" title="Aggiungi al carrello">＋</button>
+              <button class="btn btn--sm btn--ghost" onclick="Store.offer('${p.id}')">Offerta</button>
               <button class="btn btn--sm btn--ghost" onclick="Chat.openWith('${p.seller_id}', '${p.id}', '${esc(p.name)}')">Contatta</button>
               <button class="btn btn--sm" onclick="Store.buy('${p.id}')">Acquista</button>`}
             </div>
@@ -2599,16 +2842,21 @@ const Store = {
       playWinSound();
       await App.refreshCard();
       this.reload();
-      this.loadPurchases();
+      await this.loadPurchases();
       if (State.view === 'transactions') Tx.load();
 
-      if (product.file_url || product.preview_url) {
-        State.lastPurchase = { name: product.name, category: product.category, preview_url: product.preview_url };
-        const fileBtn = product.file_url
-          ? `<a class="btn btn--gold btn--block" href="${esc(product.file_url)}" target="_blank" rel="noopener" download style="margin-top:14px">Scarica il file</a>`
+      // la vetrina non espone il contenuto: lo leggo dalla riga del mio acquisto
+      const bought = (this.purchases || []).find((r) => r.id === product.id) || {};
+      const fileUrl = bought.file_url || '';
+      const previewUrl = bought.preview_url || '';
+
+      if (fileUrl || previewUrl) {
+        State.lastPurchase = { name: product.name, category: product.category, preview_url: previewUrl };
+        const fileBtn = fileUrl
+          ? `<a class="btn btn--gold btn--block" href="${esc(fileUrl)}" target="_blank" rel="noopener" download style="margin-top:14px">Scarica il file</a>`
           : '';
-        const previewBtn = product.preview_url
-          ? `<button class="btn btn--block ${product.file_url ? 'btn--ghost' : 'btn--gold'}" style="margin-top:10px" onclick="Preview.show(State.lastPurchase)">${previewLabel(product.category)}</button>`
+        const previewBtn = previewUrl
+          ? `<button class="btn btn--block ${fileUrl ? 'btn--ghost' : 'btn--gold'}" style="margin-top:10px" onclick="Preview.show(State.lastPurchase)">${previewLabel(product.category)}</button>`
           : '';
         Dialog.open({
           title: 'Il tuo acquisto è pronto',
@@ -2913,8 +3161,9 @@ const Sell = {
     const desc = $('#sell-desc').value.trim();
     const price = Number($('#sell-price').value);
     const file = $('#sell-image').files[0];
-    let previewUrl = normalizePreviewUrl($('#sell-preview') ? $('#sell-preview').value : '');
-    const previewFile = $('#sell-preview-file') ? $('#sell-preview-file').files[0] : null;
+    // il link del contenuto esiste solo per Musicista e Designer videogames
+    let previewUrl = null;
+    const previewFile = null;
 
     if (!name || !desc || !price) { toast('Compila nome, descrizione e prezzo.', 'error'); return; }
     if (price <= 0) { toast('Il prezzo deve essere maggiore di zero.', 'error'); return; }
@@ -3066,6 +3315,24 @@ const Jobs = {
             </label>
             <button class="btn btn--ghost" onclick="Jobs.resetPin()">Rigenera PIN</button>
           </div>
+          <hr class="hairline" style="margin:16px 0">
+          <div class="eyebrow" style="margin-bottom:8px">Prestiti</div>
+          <div class="row" style="align-items:flex-end">
+            <label class="field grow">
+              <span class="field__label">Cliente</span>
+              <select class="select" id="loan-client"><option value="">Carico i clienti…</option></select>
+            </label>
+            <label class="field" style="width:112px">
+              <span class="field__label">Importo €</span>
+              <input class="input" id="loan-amount" type="number" min="10" step="10" value="100">
+            </label>
+            <label class="field" style="width:92px">
+              <span class="field__label">Rate</span>
+              <input class="input" id="loan-installments" type="number" min="1" max="36" value="6">
+            </label>
+            <button class="btn btn--sm" onclick="Jobs.grantLoan()">Concedi</button>
+          </div>
+          <div id="loan-list" class="stack stack--tight" style="margin-top:12px"></div>
         </div>`;
       }
       const key = slug(job.job_type);
@@ -3091,6 +3358,7 @@ const Jobs = {
                 <input class="input" id="wp-file-${key}" type="file">
               </label>
             </div>
+            ${['Musicista', 'Designer videogames'].includes(job.job_type) ? `
             <label class="field" style="margin-top:14px">
               <span class="field__label">Link del contenuto, sbloccato dopo l'acquisto (opzionale)</span>
               <input class="input" id="wp-preview-${key}" type="url" placeholder="https://open.spotify.com/… oppure il link del gioco">
@@ -3098,7 +3366,7 @@ const Jobs = {
             <label class="field">
               <span class="field__label">…oppure carica l'mp3 / video (opzionale)</span>
               <input class="input" id="wp-preview-file-${key}" type="file" accept="audio/*,video/*">
-            </label>
+            </label>` : ''}
             <button class="btn btn--block btn--sm" type="submit" style="margin-top:16px">Pubblica nel canale</button>
           </form>
           <div>
@@ -3117,6 +3385,68 @@ const Jobs = {
     accepted
       .filter((j) => j.job_type !== 'Bancario')
       .forEach((j) => this.loadWorkers(j.job_type));
+
+    if (accepted.some((j) => j.job_type === 'Bancario')) {
+      this.loadLoanClients();
+      this.loadLoans();
+    }
+  },
+
+  async loadLoanClients() {
+    const sel = $('#loan-client');
+    if (!sel) return;
+    const { data, error } = await sb.rpc('bank_customers');
+    if (error) { sel.innerHTML = '<option value="">Clienti non disponibili</option>'; return; }
+    sel.innerHTML = '<option value="">Scegli un cliente</option>' +
+      (data || []).map((c) => `<option value="${c.id}">${esc(c.full_name || c.email)}</option>`).join('');
+  },
+
+  async loadLoans() {
+    const box = $('#loan-list');
+    if (!box) return;
+    const { data } = await sb.rpc('my_loans');
+    const rows = data || [];
+    if (!rows.length) { box.innerHTML = '<div class="tiny faint">Nessun prestito attivo.</div>'; return; }
+    box.innerHTML = rows.map((l) => `<div class="list__item">
+        <div class="list__main">
+          <div class="list__title">${esc(l.counterparty || 'utente')}</div>
+          <div class="list__meta">${l.role === 'lender' ? 'concesso' : 'ricevuto'} · ${esc(String(l.paid))}/${esc(String(l.installments))} rate · ${esc(l.status)}</div>
+        </div>
+        <div class="list__side">
+          <div class="money">${esc(money(l.monthly))}</div>
+          <div class="tiny faint">resta ${esc(money(l.remaining))}</div>
+        </div>
+      </div>`).join('');
+  },
+
+  async grantLoan() {
+    const sel = $('#loan-client');
+    const amount = Number(($('#loan-amount') || {}).value);
+    const installments = Number(($('#loan-installments') || {}).value);
+    if (!sel || !sel.value) { toast('Scegli un cliente.', 'error'); return; }
+    if (!amount || amount < 10) { toast('Importo minimo 10 €.', 'error'); return; }
+    if (!installments || installments < 1 || installments > 36) { toast('Rate tra 1 e 36.', 'error'); return; }
+
+    const nome = sel.options[sel.selectedIndex].textContent;
+    const ok = await confirmAction({
+      title: 'Concedi il prestito',
+      message: `${money(amount)} a ${nome} in ${installments} rate con il 10% di interesse. L'importo esce dal tuo saldo.`,
+      confirm: 'Concedi'
+    });
+    if (!ok) return;
+
+    const { data, error } = await sb.rpc('grant_loan', {
+      p_borrower: sel.value,
+      p_amount: amount,
+      p_installments: installments
+    });
+    if (error) { toast('Prestito non concesso: ' + error.message, 'error', 6000); return; }
+
+    const row = (data && data[0]) || {};
+    toast(`Prestito concesso: ${money(row.total || 0)} in ${installments} rate da ${money(row.monthly || 0)}.`, 'ok', 6000);
+    await App.refreshCard();
+    this.loadLoans();
+    if (State.view === 'azienda') Ledger.finance();
   },
 
   async createCompany() {
@@ -3520,6 +3850,7 @@ const Settings = {
     $('#settings-role').textContent = p.role || 'Non classificato';
     $('#settings-name').value = p.full_name || '';
     $('#settings-card-number').textContent = c.card_number || '—';
+    $('#settings-card-pin').textContent = c.pin_hash ? String(c.pin_hash) : '—';
     UI.syncTheme();
     UI.syncSound();
   },
@@ -3573,6 +3904,9 @@ const Settings = {
     const { error } = await sb.from('credit_cards').update({ pin_hash: pin }).eq('user_id', State.user.id);
     if (error) { toast('Errore: ' + error.message, 'error'); return; }
 
+    if (State.card) State.card.pin_hash = pin;
+    const shown = $('#settings-card-pin');
+    if (shown) shown.textContent = pin;
     $('#settings-new-pin').value = '';
     toast('PIN aggiornato.', 'ok');
   },
@@ -4578,6 +4912,58 @@ const Ledger = {
     </div></div>`;
   },
 
+  async finance() {
+    const dash = $('#company-dashboard');
+    const loans = $('#my-loans');
+    if (!State.user || !dash || !loans) return;
+
+    const isBoss = (State.profile || {}).company_role === 'Capo Azienda';
+    if (!isBoss) {
+      dash.innerHTML = '';
+    } else {
+      const { data, error } = await sb.rpc('company_dashboard');
+      if (error) {
+        dash.innerHTML = `<div class="card" style="margin-bottom:18px"><div class="card__body"><div class="empty"><span class="empty__text">${esc(error.message)}</span></div></div></div>`;
+      } else {
+        const d = data || {};
+        const top = Array.isArray(d.top) ? d.top : [];
+        const last = Array.isArray(d.last) ? d.last : [];
+        const ln = Array.isArray(d.loans) ? d.loans : [];
+        dash.innerHTML = `<div class="card" style="margin-bottom:18px">
+          <div class="card__head">
+            <div><h3 class="card__title">Cruscotto aziendale</h3><p class="card__sub">Incassi, prodotti e prestiti del tuo canale</p></div>
+            <button class="btn btn--quiet btn--sm" onclick="Ledger.finance()">Aggiorna</button>
+          </div>
+          <div class="card__body">
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px">
+              <div class="stat" style="padding:14px"><span class="eyebrow">Incasso del mese</span><div class="stat__value money">${esc(money(d.revenue_month || 0))}</div></div>
+              <div class="stat" style="padding:14px"><span class="eyebrow">Incasso totale</span><div class="stat__value money">${esc(money(d.revenue_total || 0))}</div></div>
+              <div class="stat" style="padding:14px"><span class="eyebrow">Vendite</span><div class="stat__value">${esc(String(d.sales || 0))}</div></div>
+              <div class="stat" style="padding:14px"><span class="eyebrow">Stipendi / mese</span><div class="stat__value money">${esc(money(d.payroll || 0))}</div></div>
+            </div>
+            ${top.length ? `<div class="eyebrow" style="margin-bottom:8px">Prodotti che rendono</div>
+              <div class="list">${top.map((t) => `<div class="list__item"><div class="list__main"><div class="list__title">${esc(t.nome)}</div><div class="list__meta">${esc(String(t.pezzi))} vendite</div></div><div class="list__side"><div class="money">${esc(money(t.incasso))}</div></div></div>`).join('')}</div>` : ''}
+            ${last.length ? `<div class="eyebrow" style="margin:16px 0 8px">Ultime vendite</div>
+              <div class="list">${last.map((t) => `<div class="list__item"><div class="list__main"><div class="list__title">${esc(t.nome)}</div><div class="list__meta">${esc(fmtWhen(t.quando))}</div></div><div class="list__side"><div class="money">${esc(money(t.importo))}</div></div></div>`).join('')}</div>` : ''}
+            ${ln.length ? `<div class="eyebrow" style="margin:16px 0 8px">Prestiti in corso</div>
+              <div class="list">${ln.map((l) => `<div class="list__item"><div class="list__main"><div class="list__title">${esc(l.cliente)}</div><div class="list__meta">rata ${esc(money(l.rata))} · ${esc(l.stato)}</div></div><div class="list__side"><div class="money">${esc(money(l.residuo))}</div></div></div>`).join('')}</div>` : ''}
+            ${!top.length && !last.length ? '<div class="empty"><span class="empty__text">Ancora nessuna vendita: pubblica qualcosa o assumi chi sa farlo.</span></div>' : ''}
+          </div>
+        </div>`;
+      }
+    }
+
+    const { data: loanRows } = await sb.rpc('my_loans');
+    const rows = loanRows || [];
+    if (!rows.length) { loans.innerHTML = ''; return; }
+    loans.innerHTML = `<div class="card"><div class="card__head"><div><h3 class="card__title">Prestiti e rate</h3><p class="card__sub">Le rate vengono trattenute quando si eseguono gli stipendi</p></div></div>
+      <div class="card__body"><div class="list">${rows.map((l) => `<div class="list__item">
+        <div class="list__main"><div class="list__title">${esc(l.counterparty)}</div>
+          <div class="list__meta">${l.role === 'lender' ? 'prestito concesso' : 'prestito ricevuto'} · ${esc(String(l.paid))}/${esc(String(l.installments))} rate · ${esc(l.status)}</div></div>
+        <div class="list__side"><div class="money">${esc(money(l.monthly))}</div><div class="tiny faint">resta ${esc(money(l.remaining))}</div></div>
+      </div>`).join('')}</div></div></div>`;
+  },
+
   async paySalaries() {
     const ok = await confirmAction({
       title: 'Paga gli stipendi',
@@ -4601,6 +4987,12 @@ const Ledger = {
     );
     await App.refreshCard();
     this.load();
+    const rate = await sb.rpc('run_loan_installments');
+    if (!rate.error && (rate.data || []).length) {
+      const pagate = (rate.data || []).filter((r) => r.status === 'paid').length;
+      toast(`Rate del mese: ${pagate} addebitate.`, 'info', 5000);
+    }
+    this.finance();
   }
 };
 
@@ -4865,6 +5257,7 @@ Object.assign(Admin, {
     const failed = rows.filter((r) => r.status === 'failed').length;
     const hint = $('#admin-payroll-hint');
     if (hint) hint.textContent = `Ultima esecuzione: ${paid} pagati, ${failed} non coperti.`;
+    await sb.rpc('run_loan_installments');
     await this.logAction('run_payroll', null, `${paid} pagati, ${failed} falliti`);
     toast(rows.length ? `${paid} stipendi pagati${failed ? ' · ' + failed + ' non coperti' : ''}.` : 'Niente da pagare.', failed ? 'info' : 'ok', 5000);
   }
@@ -4872,10 +5265,43 @@ Object.assign(Admin, {
 
 /* ---------- avvio ---------- */
 
+const PWA = {
+  deferred: null,
+
+  init() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.deferred = e;
+      const row = $('#install-row');
+      if (row) row.hidden = false;
+    });
+    window.addEventListener('appinstalled', () => {
+      this.deferred = null;
+      const row = $('#install-row');
+      if (row) row.hidden = true;
+      toast('PuntBay installata.', 'ok');
+    });
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      navigator.serviceWorker.register('sw.js').catch(() => { /* offline solo se il browser lo consente */ });
+    }
+  },
+
+  async prompt() {
+    if (!this.deferred) {
+      toast('Il browser non propone l\'installazione: usa il menu → "Installa app".', 'info', 6000);
+      return;
+    }
+    this.deferred.prompt();
+    const choice = await this.deferred.userChoice;
+    if (choice && choice.outcome === 'accepted') this.deferred = null;
+  }
+};
+
 (function init() {
   UI.boot();
   UI.showAuth();
   Secret.start();
+  PWA.init();
   if (Secret.unlocked()) Secret.reveal();
 
   $$('.auth__tab').forEach((tab) => {
@@ -4896,6 +5322,10 @@ Object.assign(Admin, {
   });
 
   sb.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      Auth.openResetDialog();
+      return;
+    }
     if (event === 'SIGNED_OUT' && State.user) {
       State.user = null;
       UI.showAuth();

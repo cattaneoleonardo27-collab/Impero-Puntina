@@ -1009,7 +1009,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
         <p class="form-msg" id="reg-msg" role="status"></p>
       </form>
 
-      <p class="auth__foot">Alla creazione ricevi una carta PuntBay con saldo iniziale e un PIN personale: conservalo, ti serve per ogni acquisto.</p>
+      <p class="auth__foot">Alla creazione ricevi una carta PuntBay con saldo iniziale, un PIN personale e un codice di recupero: conservali, servono per acquistare e per rientrare se dimentichi la password.</p>
     </div>
   </div>
 </section>
@@ -1542,6 +1542,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
               <input class="input" type="password" inputmode="numeric" maxlength="6" id="settings-new-pin" placeholder="6 cifre">
             </label>
             <button class="btn btn--block btn--sm" style="margin-top:14px" onclick="Settings.changePin()">Aggiorna PIN</button>
+          </div>
+
+          <div class="setting">
+            <h3>Codice di recupero</h3>
+            <p class="sub">Se dimentichi la password e la tua email non è reale, con questo codice ne scegli una nuova senza aspettare nessuna mail.</p>
+            <button class="btn btn--block btn--sm" onclick="Recovery.mine()">Genera un nuovo codice</button>
+            <p class="tiny faint" style="margin-top:10px">Un codice nuovo annulla quello precedente. Mostralo solo a te stesso.</p>
           </div>
 
           <div class="setting">
@@ -2086,16 +2093,77 @@ const Auth = {
     }
   },
 
-  async forgotPassword() {
-    const email = ($('#login-email').value || '').trim();
-    if (!email) { this.error('login-msg', 'Scrivi la tua email qui sopra, poi tocca di nuovo il pulsante.'); $('#login-email').focus(); return; }
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: location.origin + location.pathname
+  forgotPassword() {
+    const prefill = ($('#login-email').value || '').trim();
+    const d = Dialog.open({
+      title: 'Reimposta la password',
+      sub: 'Con il codice di recupero non serve nessuna email: funziona anche se l\'indirizzo è inventato.',
+      content: `
+        <label class="field">
+          <span class="field__label">Email del conto</span>
+          <input class="input" type="email" id="rec-email" autocomplete="email" value="${esc(prefill)}" placeholder="nome@esempio.it">
+        </label>
+        <label class="field">
+          <span class="field__label">Codice di recupero</span>
+          <input class="input money" id="rec-code" maxlength="16" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="Es. 06D4FBF8BA">
+        </label>
+        <label class="field">
+          <span class="field__label">Nuova password</span>
+          <input class="input" type="password" id="rec-pw" autocomplete="new-password" placeholder="Almeno 6 caratteri">
+        </label>
+        <label class="field">
+          <span class="field__label">Ripeti la password</span>
+          <input class="input" type="password" id="rec-pw2" autocomplete="new-password" placeholder="Ripeti la password">
+        </label>
+        <p class="form-msg" id="rec-msg" role="status"></p>
+        <div class="modal__foot"><button class="btn btn--block" id="rec-save">Salva e accedi</button></div>
+        <button class="linkbtn" type="button" id="rec-mail" style="margin-top:10px">Non hai il codice? Ricevi il link via email</button>`
     });
-    if (error) { this.error('login-msg', error.message); return; }
-    const box = $('#login-msg');
-    box.className = 'form-msg is-ok';
-    box.textContent = 'Ti ho mandato un link a ' + email + ': aprilo e scegli la nuova password.';
+
+    const msg = $('#rec-msg', d.el);
+    const btn = $('#rec-save', d.el);
+    const fail = (text) => { msg.className = 'form-msg is-error'; msg.textContent = text; };
+
+    btn.onclick = async () => {
+      const email = $('#rec-email', d.el).value.trim();
+      const code = $('#rec-code', d.el).value.trim();
+      const pw = $('#rec-pw', d.el).value;
+      const pw2 = $('#rec-pw2', d.el).value;
+      if (!email) return fail('Scrivi l\'email del conto.');
+      if (!code) return fail('Scrivi il codice di recupero.');
+      if (!pw || pw.length < 6) return fail('La password deve avere almeno 6 caratteri.');
+      if (pw !== pw2) return fail('Le due password non coincidono.');
+
+      setLoading(btn, true, 'Verifico…');
+      const { error } = await sb.rpc('reset_password_with_code', {
+        p_email: email, p_code: code, p_new_password: pw
+      });
+      if (error) { setLoading(btn, false); return fail(error.message); }
+
+      const { data: signIn, error: signInError } = await sb.auth.signInWithPassword({ email, password: pw });
+      if (signInError) {
+        setLoading(btn, false);
+        msg.className = 'form-msg is-ok';
+        msg.textContent = 'Password aggiornata: ora accedi con quella nuova.';
+        return;
+      }
+      d.close();
+      toast('Password aggiornata, sei entrato.', 'ok');
+      await Boot.start(signIn.user);
+    };
+
+    $('#rec-mail', d.el).onclick = async () => {
+      const email = $('#rec-email', d.el).value.trim();
+      if (!email) return fail('Scrivi l\'email del conto.');
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: location.origin + location.pathname
+      });
+      if (error) return fail(error.message);
+      msg.className = 'form-msg is-ok';
+      msg.textContent = 'Link inviato a ' + email + ': se l\'indirizzo è finto non arriverà nulla, usa il codice.';
+    };
+
+    setTimeout(() => { const el = $('#rec-code', d.el); if (el) el.focus(); }, 40);
   },
 
   openResetDialog() {
@@ -2141,6 +2209,44 @@ const Auth = {
     UI.showAuth();
     $('#login-password').value = '';
     toast('Sei uscito dal conto.');
+  }
+};
+
+/* ---------- codice di recupero (reset password senza email) ---------- */
+
+const Recovery = {
+  async issue(userId) {
+    const { data, error } = await sb.rpc('issue_recovery_code', userId ? { p_user: userId } : {});
+    if (error) { toast('Errore: ' + error.message, 'error', 6000); return null; }
+    return String(data || '');
+  },
+
+  show(code, forOther) {
+    const d = Dialog.open({
+      title: forOther ? 'Codice di recupero' : 'Il tuo codice di recupero',
+      sub: forOther
+        ? 'Comunicalo in privato: serve a scegliere una nuova password senza email.'
+        : 'Annotalo adesso: non te lo mostro più. Serve a reimpostare la password senza email.',
+      content: `
+        <div class="money" style="text-align:center;font-size:22px;letter-spacing:.24em;padding:18px;border:1px dashed var(--line-strong);border-radius:var(--r);user-select:all">${esc(code)}</div>
+        <p class="tiny faint" style="margin-top:14px">Vale per un solo recupero: usandolo viene consumato. Se lo perdi, puoi generarne un altro da qui o chiederlo a un amministratore.</p>
+        <div class="modal__foot">
+          <button class="btn btn--ghost" id="rec-copy" type="button">Copia</button>
+          <button class="btn btn--gold" type="button" onclick="Dialog.close()">Ho preso nota</button>
+        </div>`
+    });
+    const copy = $('#rec-copy', d.el);
+    if (copy) {
+      copy.onclick = async () => {
+        try { await navigator.clipboard.writeText(code); toast('Codice copiato.', 'ok'); }
+        catch (e) { toast('Codice: ' + code, 'info', 8000); }
+      };
+    }
+  },
+
+  async mine() {
+    const code = await this.issue(null);
+    if (code) this.show(code, false);
   }
 };
 
@@ -2234,6 +2340,23 @@ const Boot = {
             <div class="modal__foot"><button class="btn btn--block" onclick="Dialog.close()">Ho preso nota</button></div>`
         });
       }, 700);
+    }
+
+    // codice di recupero: si mostra una volta sola, poi resta solo l'impronta nel database
+    if (!profile.recovery_code_hash && !profile.needs_password_change) {
+      const seenKey = 'puntbay-recovery-' + user.id;
+      let seen = false;
+      try { seen = localStorage.getItem(seenKey) === '1'; } catch (e) { seen = true; }
+      if (!seen) {
+        setTimeout(async () => {
+          // niente sovrapposizioni: se c'è già una finestra aperta lo ripropongo al prossimo accesso
+          if (document.querySelector('#modal-root .modal')) return;
+          const code = await Recovery.issue(null);
+          if (!code) return;
+          try { localStorage.setItem(seenKey, '1'); } catch (e) { /* ignora */ }
+          Recovery.show(code, false);
+        }, freshPin ? 1800 : 1100);
+      }
     }
   },
 
@@ -4049,10 +4172,16 @@ const Admin = {
             ? `<button class="btn btn--xs btn--ghost" onclick="Admin.unban('${u.id}')">Riattiva</button>`
             : `<button class="btn btn--xs btn--danger" onclick="Admin.ban('${u.id}')">Sospendi</button>`}
           <button class="btn btn--xs btn--ghost" onclick="Admin.toggleFreeze('${u.id}', ${frozen ? 'false' : 'true'})">${frozen ? 'Sblocca carta' : 'Congela carta'}</button>
+          <button class="btn btn--xs btn--ghost" onclick="Admin.recoveryCode('${u.id}')">Codice recupero</button>
           <button class="btn btn--xs btn--ghost" onclick="Admin.toggleAdmin('${u.id}', ${u.is_admin ? 'false' : 'true'})">${u.is_admin ? 'Rimuovi admin' : 'Rendi admin'}</button>
         </div>
       </div>`;
     }).join('');
+  },
+
+  async recoveryCode(userId) {
+    const code = await Recovery.issue(userId);
+    if (code) Recovery.show(code, true);
   },
 
   async setRole(userId, role) {

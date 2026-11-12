@@ -913,6 +913,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   <defs>
     <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></symbol>
     <symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1 11H5L4 9Z"/><path d="M8.5 9V6a3.5 3.5 0 0 1 7 0v3"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 10.5h11L21 7H6"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17.5" cy="19" r="1.4"/></symbol>
     <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.5V4h8.5L21 13.5 13.5 21 3 12.5Z"/><circle cx="7.5" cy="8" r="1.3"/></symbol>
     <symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12.5" rx="2.5"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M3 13h18"/></symbol>
     <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
@@ -1982,21 +1983,29 @@ const UI = {
   },
 
   openMenuSheet() {
+    const p = State.profile || {};
+    const cart = Array.isArray(Cart.items) ? Cart.items.length : 0;
+    // Da telefono questa è l'unica porta d'accesso alle sezioni fuori dalla barra: ci vanno tutte.
     const items = [
       ['overview', 'Panoramica', 'i-home'],
       ['store', 'Store', 'i-store'],
       ['sell', 'Vendi', 'i-tag'],
       ['jobs', 'Lavori', 'i-briefcase'],
+      ['carrello', 'Carrello' + (cart ? ` (${cart})` : ''), 'i-cart'],
       ['calendar', 'Calendario', 'i-calendar'],
+      ['messaggi', 'Messaggi', 'i-mail'],
+      ['movimenti', 'Movimenti', 'i-receipt'],
+      ['azienda', 'Azienda', 'i-users'],
       ['transactions', 'Transazioni', 'i-card'],
       ['settings', 'Impostazioni', 'i-settings']
     ];
-    const adminItem = State.profile && State.profile.is_admin ? [['admin', 'Amministrazione', 'i-shield']] : [];
-    const rows = items.concat(adminItem).map(([view, label, icon]) =>
+    if (p.is_admin) items.push(['admin', 'Amministrazione', 'i-shield']);
+    if (Secret.unlocked()) items.push(['roulette', 'Puntine russe', 'i-plus']);
+    const rows = items.map(([view, label, icon]) =>
       `<button class="nav__item" onclick="Dialog.close(); Router.go('${view}')">
          <svg><use href="#${icon}"/></svg>${esc(label)}
        </button>`).join('');
-    Dialog.open({ title: 'Vai a', content: `<div class="list">${rows}</div>` });
+    Dialog.open({ title: 'Tutte le sezioni', sub: 'Ogni pagina dell\'app, anche quelle fuori dalla barra in basso', content: `<div class="list">${rows}</div>` });
   },
 
   blocked(reason) {
@@ -3246,10 +3255,12 @@ const Jobs = {
     const grid = $('#jobs-grid');
     if (!grid) return;
 
+    const ownDivision = Jobs.ownDivision();
     grid.innerHTML = JOB_TYPES.map((job) => {
       const mine = State.jobs.find((j) => j.job_type === job.key);
       let action;
-      if (!mine) action = `<button class="btn btn--sm" onclick="Jobs.requestJob('${esc(job.key)}')">Cercasi lavoro</button>`;
+      if (ownDivision === job.key) action = '<span class="pill pill--gold">Titolare</span>';
+      else if (!mine) action = `<button class="btn btn--sm" onclick="Jobs.requestJob('${esc(job.key)}')">Cercasi lavoro</button>`;
       else if (mine.status === 'pending') action = '<span class="pill pill--amber">In attesa</span>';
       else if (mine.status === 'accepted') action = '<span class="pill pill--green">Accettato</span>';
       else action = '<span class="pill pill--red">Rifiutato</span>';
@@ -3295,9 +3306,20 @@ const Jobs = {
       </div>`;
   },
 
+  ownDivision() {
+    const p = State.profile || {};
+    return p.company_role === 'Capo Azienda' && p.company_division ? p.company_division : null;
+  },
+
   renderPanels() {
     const box = $('#work-panels');
-    const accepted = State.jobs.filter((j) => j.status === 'accepted');
+    if (!box) return;
+    const accepted = State.jobs.filter((j) => j.status === 'accepted').slice();
+    // Il titolare lavora nel suo canale come gli altri: nessuna candidatura da aspettare.
+    const ownDivision = this.ownDivision();
+    if (ownDivision && !accepted.some((j) => j.job_type === ownDivision)) {
+      accepted.unshift({ job_type: ownDivision, status: 'accepted', owner: true });
+    }
     if (!accepted.length) { box.innerHTML = ''; return; }
 
     box.innerHTML = accepted.map((job) => {
@@ -3337,7 +3359,8 @@ const Jobs = {
       }
       const key = slug(job.job_type);
       return `<div class="workpanel">
-        <div class="workpanel__title"><span>${esc((JOB_TYPES.find((j) => j.key === job.job_type) || {}).icon || '🎨')}</span><h3>${esc(job.job_type)}</h3></div>
+        <div class="workpanel__title"><span>${esc((JOB_TYPES.find((j) => j.key === job.job_type) || {}).icon || '🎨')}</span><h3>${esc(job.job_type)}</h3>${job.owner ? '<span class="pill pill--gold">Titolare</span>' : ''}</div>
+        ${job.owner ? '<p class="tiny faint" style="margin:-4px 0 14px">Sei il titolare: pubblichi qui nel tuo canale senza candidatura, e le vendite passano dalla tua azienda.</p>' : ''}
         <div class="split">
           <form onsubmit="Jobs.createWorkProduct(event, '${esc(job.job_type)}')">
             <label class="field">
@@ -3596,7 +3619,7 @@ const Jobs = {
       .neq('user_id', State.user.id);
 
     if (error) { box.innerHTML = `<p class="tiny faint">Team non disponibile.</p>`; return; }
-    if (!data || !data.length) { box.innerHTML = `<p class="tiny faint">Nessun collaboratore in questo canale.</p>`; return; }
+    if (!data || !data.length) { box.innerHTML = await this.staffFallback(jobType); return; }
 
     box.innerHTML = data.map((w) => `
       <div class="list__item" style="padding:10px 0">
@@ -3610,6 +3633,22 @@ const Jobs = {
             ? '<span class="pill pill--gold">Capo</span>'
             : `<button class="btn btn--xs btn--ghost" onclick="Jobs.fire('${w.user_id}')">Licenzia</button>`}
         </div>
+      </div>`).join('');
+  },
+
+  async staffFallback(jobType) {
+    if (this.ownDivision() !== jobType) return '<p class="tiny faint">Nessun collaboratore in questo canale.</p>';
+    const { data, error } = await sb.rpc('company_staff');
+    if (error) return '<p class="tiny faint">Team non disponibile.</p>';
+    const rows = data || [];
+    if (!rows.length) return '<p class="tiny faint">Nessun collaboratore: chi cerca lavoro in questo canale ti scrive dalla scheda qui accanto.</p>';
+    return rows.map((u) => `
+      <div class="list__item" style="padding:10px 0">
+        <div class="list__main">
+          <div class="list__title">${esc(u.full_name || 'Collaboratore')}</div>
+          <div class="list__meta">${esc(u.company_role || 'Staff')} · ${esc(money(u.salary || 0))} al mese</div>
+        </div>
+        <div class="list__side"><span class="pill pill--gold">Nel team</span></div>
       </div>`).join('');
   },
 
